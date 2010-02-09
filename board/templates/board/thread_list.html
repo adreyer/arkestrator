@@ -10,7 +10,8 @@
     {% for thread in object_list %}
         <tr>
             <td>{{ thread.creator.username }}</td>
-            <td>{{ thread.subject }}</td>
+            <td><a href="{% url view-thread thread.id %}">
+                {{ thread.subject }}</a></td>
             <td>{{ thread.last_post|date:"P d-M-Y"}} by {{ thread.last_post_by.username }}</td>
         </tr>
     {% endfor %}
