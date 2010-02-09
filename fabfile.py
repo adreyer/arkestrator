@@ -1,4 +1,4 @@
-from fabric.api import run, env
+from fabric.api import run, env, sudo
 import datetime
 
 env.hosts = ['mdc2.org']
@@ -21,4 +21,8 @@ def deploy():
 
     # remove all but the last 5 releases
     run("cd %s/releases; rm -fr `ls -t | awk 'NR>5'`"%remote_dir)
+
+    # graceful the web servers
+    run("sudo /etc/init.d/julep graceful")
+    run("sudo /etc/init.d/apache2 reload")
 
