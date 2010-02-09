@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <table>
+    <tr>
+        <th>Username</th>
+        <th>Subject</th>
+        <th>Last Post</th>
+    </tr>
+    {% for thread in object_list %}
+        <tr>
+            <td>{{ thread.creator.username }}</td>
+            <td>{{ thread.subject }}</td>
+            <td>{{ thread.last_post|date:"P d-M-Y"}} by {{ thread.last_post_by.username }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}

@@ -3,7 +3,7 @@
 <head>
 <title>{{ site_name }}</title>
 {% block style %}
-    <link rel="stylesheet" href="{{ MEDIA_URL}}/media/css/site.css" 
+    <link rel="stylesheet" href="{{ MEDIA_URL }}css/site.css" 
         type="text/css" media="screen" />
     {% if user_style %}
 
@@ -27,7 +27,7 @@
 
 <div id="footer">
 {% block footer %}
-    <img src="eor.png">
+    <img src="{{ MEDIA_URL }}images/eor.png">
 {% endblock %}
 </div>
 </body>
