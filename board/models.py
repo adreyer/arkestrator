@@ -31,10 +31,9 @@ class Post(models.Model):
         return "%s: %s"%(str(self.thread),self.body[:20])
     
     def update_thread(self,**kwargs):
-        if self.thread.last_post < self.updated_at:
-            self.thread.last_post = self.updated_at
-            self.thread.last_post_by = self.creator
-            self.thread.save()
+        self.thread.last_post = self.updated_at
+        self.thread.last_post_by = self.creator
+        self.thread.save()
 
 post_save.connect(Post.update_thread,sender=Post)
 
