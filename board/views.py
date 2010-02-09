@@ -13,7 +13,7 @@ def view_thread(request,id=None):
     
     return list_detail.object_list(
         request,
-        queryset=thread.post_set.order_by("-updated_at").select_related(),
+        queryset=thread.post_set.order_by("updated_at").select_related(),
         paginate_by = 25,
         page = page,
         extra_context = {
