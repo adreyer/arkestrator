@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<title>{{ site_name }}</title>
+{% block style %}
+    <link rel="stylesheet" href="{{ MEDIA_URL}}/media/css/site.css" 
+        type="text/css" media="screen" />
+    {% if user_style %}
+
+    {% else %}
+
+    {% endif %}
+{% endblock %}
+</head>
+<body>
+<div id="header">
+{% block header %}
+    <h1>{{ site_name }}</h1>
+{% endblock %}
+</div>
+
+<div id="content">
+{% block content %}
+
+{% endblock %}
+</div>
+
+<div id="footer">
+{% block footer %}
+    <img src="eor.png">
+{% endblock %}
+</div>
+</body>
+
