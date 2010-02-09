@@ -30,10 +30,12 @@ class Post(models.Model):
     def __str__(self):
         return "%s: %s"%(str(self.thread),self.body[:20])
     
-    def update_thread(self,**kwargs):
-        self.thread.last_post = self.updated_at
-        self.thread.last_post_by = self.creator
-        self.thread.save()
 
-post_save.connect(Post.update_thread,sender=Post)
+def update_thread(sender, instance, signal, *args, **kwargs):
+    if instance.updated_at > instance.thread.last_post:
+        instance.thread.last_post = instance.updated_at
+        instance.thread.last_post_by = instance.creator
+        instance.thread.save()
+
+post_save.connect(update_thread,sender=Post)
 
