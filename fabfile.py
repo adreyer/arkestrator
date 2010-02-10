@@ -1,51 +1,96 @@
-from fabric.api import run, env, sudo
+# "I am from the future!" -Sayid Jarrah
+from __future__ import with_statement
+
+from fabric.api import run, env, sudo, require, cd
 import datetime
 
 env.hosts = ['mdc2.org']
 env.user = 'deploy'
 
-# this values should be project specific
-remote_dir = '/var/mdc3'
-repo = '/var/cache/hg/repos/mdc3'
-settings_module = "mdc3.settings_dev"
+def dev():
+    "The Development Environment"
+    env.remote_dir = '/var/mdc3_dev'
+    env.repo = '/var/cache/hg/repos/mdc3'
+    env.settings_module = "mdc3.settings_dev"
+    _set_extra_dirs()
 
-#these should be computed based on the project specific settings
-releases_dir = "%s/releases"%remote_dir
-current_dir = "%s/current" % remote_dir
-package_dir = "%s/packages"%remote_dir
+def prod():
+    "The Production Environment"
+    env.remote_dir = '/var/mdc3'
+    env.repo = '/var/cache/hg/repos/mdc3'
+    env.settings_module = "mdc3.settings_prod"
+    _set_extra_dirs()
+
+def _set_extra_dirs():
+    require('remote_dir',
+        provided_by=['dev','prod'])
+
+    env.releases_dir = "%(remote_dir)s/releases"%env
+    env.current_symlink = "%(remote_dir)s/current"%env
+    env.package_dir = "%(remote_dir)s/packages"%env
+
+def graceful_servers():
+    "Gracefully restart the web servers"
+    # graceful the web servers
+    sudo("/etc/init.d/julep graceful",shell=False)
+    sudo("/etc/init.d/apache2 reload",shell=False)
 
 def deploy():
-    ts = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+    "Deploy the code and gracefully restart the web servers"
 
-    release_dir = "%s/%s"%(releases_dir,ts)
+    require('releases_dir','repo','current_symlink',
+        provided_by=['dev','prod'])
+
+    # the release dir is named after the timestamp
+    env.ts = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
+    env.release_dir = "%(releases_dir)s/%(ts)s"%env
 
     # clone the repo
-    run("hg clone %s %s"%(repo,release_dir))
+    run("hg clone %(repo)s %(release_dir)s"%env)
 
     # change the symlink for the current release
-    run("ln -fsT %s %s"%(release_dir,current_dir))
+    run("ln -fsT %(release_dir)s %(current_symlink)s"%env)
 
-    # remove all but the last 5 releases
-    run("cd %s/releases; rm -fr `ls -t | awk 'NR>5'`"%remote_dir)
-
-    # graceful the web servers
-    run("sudo /etc/init.d/julep graceful")
-    run("sudo /etc/init.d/apache2 reload")
+    cleanup()
+    graceful_servers()
 
 def rollback():
-    run("cd %s; ln -fsT `ls -t | awk 'NR>1'| head -n 1` %s"%
-        (releases_dir,current_dir))
+    "Roll back the code to the previous released version"
 
-    run("cd %s; rm -fr `ls -t | head -n 1`"%releases_dir)
+    require('releases_dir','current_symlink',
+        provided_by=['dev','prod'])
 
-    # graceful the web servers
-    run("sudo /etc/init.d/julep graceful")
-    run("sudo /etc/init.d/apache2 reload")
+    with cd("%(releases_dir)s"%env):
+        # change symlink to previous release
+        run("ln -fsT `ls -t | awk 'NR>1'| head -n 1` %(current_symlink)s"%env)
+
+        # remove latest release
+        run("rm -fr `ls -t | head -n 1`")
+
+    graceful_servers()
 
 def list_releases():
-    run("ls -t %s"%releases_dir)
+    "List the releases on the server"
+
+    require('releases_dir',
+        provided_by=['dev','prod'])
+
+    run("ls -t %(releases_dir)s"%env)
 
 def syncdb():
-    run("export PYTHONPATH=%s; django-admin.py syncdb --settings=%s"%
-        (package_dir,settings_module))
+    "Run the django syncdb process"
+    require('settings_module','package_dir',
+        provided_by=['dev','prod'])
+
+    run("django-admin.py syncdb --settings=%(settings_module)s "
+        "--pythonpath=%(package_dir)s"%env)
+
+def cleanup():
+    "Remove all but the 5 most recent releases"
+    require('releases_dir',
+        provided_by=['dev','prod'])
+
+    # remove all but the last 5 releases
+    with cd("%(releases_dir)s"%env):
+        run("rm -fr `ls -t | awk 'NR>5'`")
 
