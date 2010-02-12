@@ -1,23 +1,27 @@
-"""
-This file demonstrates two different styles of tests (one doctest and one
-unittest). These will both pass when you run "manage.py test".
-
-Replace these with more appropriate tests for your application.
-"""
-
 from django.test import TestCase
+from models import Thread, Post
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.failUnlessEqual(1 + 1, 2)
+from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
 
-__test__ = {"doctest": """
-Another way to test that 1 + 1 is equal to 2.
+class ThreadTest(TestCase):
+    def setUp(self):
+        self.user = User.objects.create_user('foo','foo@bar.net','badpassword')
+        self.site = Site.objects.get_current()
 
->>> 1 + 1 == 2
-True
-"""}
+    def test_create_thread(self): 
+        thread = Thread.on_site.create(
+            subject="Hello, World",
+            creator=self.user,
+            last_post_by=self.user,
+            site=self.site)
+
+    def test_str(self):
+        thread = Thread.on_site.create(
+            subject="Hello, World",
+            creator=self.user,
+            last_post_by=self.user,
+            site=self.site)
+
+        self.assertEquals(thread.subject,"Hello, World")
 
