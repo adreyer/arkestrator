@@ -22,7 +22,8 @@
     </div>
     <div id="menu">
         <a href="/">Index</a> |
-        <a href="{% url new-thread %}">New Thread</a>
+        <a href="{% url new-thread %}">New Thread</a> |
+        <a href="{% url edit-theme %}">Edit Theme</a>
         {% if user.is_staff %}
             | <a href="/admin/">Admin</a>
         {% endif %}

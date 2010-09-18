@@ -18,12 +18,12 @@ def invert_color(color):
 class Theme(models.Model):
     user = models.OneToOneField(User)
 
-    background = models.CharField(max_length=6)
-    row1 = models.CharField(max_length=6)
-    row2 = models.CharField(max_length=6)
-    form_background = models.CharField(max_length=6)
-    my_posts = models.CharField(max_length=6)
-    font_face = models.CharField(max_length=64)
+    background = models.CharField(max_length=6, default="202030")
+    row1 = models.CharField(max_length=6, default="303040")
+    row2 = models.CharField(max_length=6, default="404050")
+    form_background = models.CharField(max_length=6, default="606070")
+    my_posts = models.CharField(max_length=6, default="505060")
+    font_face = models.CharField(max_length=64, default="sans-serif")
     font_size = models.IntegerField(default=100)
 
     def text_color(self):
