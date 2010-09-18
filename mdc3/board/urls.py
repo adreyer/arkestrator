@@ -1,5 +1,8 @@
 from django.conf.urls.defaults import *
 
+from django.contrib.auth.decorators import login_required
+from django.views.generic.list_detail import object_list
+
 import views
 import models
 
@@ -10,7 +13,7 @@ threads_dict = {
 }
 
 urlpatterns = patterns('',
-    url(r"^$",'django.views.generic.list_detail.object_list',
+    url(r"^$",login_required(object_list),
         threads_dict,name='list-threads'),
     url(r"^threads/(?P<id>\d+)/$",views.view_thread,name='view-thread'),
 )

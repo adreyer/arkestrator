@@ -1,10 +1,12 @@
 
+from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.shortcuts import render_to_response,get_object_or_404
 from django.views.generic import list_detail
 
 import models
 
+@login_required
 def view_thread(request,id=None):
     thread = get_object_or_404(models.Thread,pk=id,
         site=Site.objects.get_current())
