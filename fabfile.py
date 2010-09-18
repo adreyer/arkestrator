@@ -94,8 +94,10 @@ def syncdb():
 
     run("""
     source %(virtualenv)s/bin/activate;
-    django-admin.py syncdb --no-input --migrate --settings=%(settings_module)s \
-    --pythonpath=%(current_symlink)s
+    django-admin.py syncdb --no-input --settings=%(settings_module)s \
+        --pythonpath=%(current_symlink)s
+    django-admin.py migrate --settings=%(settings_module)s \
+        --pythonpath=%(current_symlink)s
     """%env)
 
 def cleanup():
