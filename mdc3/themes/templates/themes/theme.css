@@ -15,5 +15,8 @@ a:hover { text-decoration: underline; }
 
 .my_posts { background-color: #{{ object.my_posts }}; }
 
-textarea, input { background-color: #{{ object.form_background }}; }
+textarea, input { 
+    color: #{{ object.text_color }}; 
+    background-color: #{{ object.form_background }}; 
+}
 
