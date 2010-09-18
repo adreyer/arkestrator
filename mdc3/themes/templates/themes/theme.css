@@ -1,7 +1,7 @@
 
 body {
     background-color: #{{ object.background }};
-    font: {{ object.font_face }};
+    font-family: {{ object.font_face }};
     font-size: {{ object.font_size }}%;
     color: #{{ object.text_color }};
 }
