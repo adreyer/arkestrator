@@ -15,4 +15,5 @@ urlpatterns = patterns('',
         {'next_page': '/accounts/login/'}),
     (r'^themes/', include('mdc3.themes.urls')),
     (r'', include('mdc3.board.urls')),
+    (r'^profiles/', include('mdc3.profiles.urls')),
 )

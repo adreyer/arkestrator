@@ -11,8 +11,7 @@ import forms
 
 @login_required
 def view_thread(request,id=None):
-    thread = get_object_or_404(models.Thread,pk=id,
-        site=Site.objects.get_current())
+    thread = get_object_or_404(models.Thread,pk=id)
 
     if request.method == 'POST':
         form = forms.PostForm(request.POST)

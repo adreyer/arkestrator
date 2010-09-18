@@ -97,4 +97,5 @@ INSTALLED_APPS = (
     'south',
     'mdc3.board',
     'mdc3.themes',
+    'mdc3.profiles',
 )

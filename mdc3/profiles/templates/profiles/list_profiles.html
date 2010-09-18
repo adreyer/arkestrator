@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Profiles</h2>
+    <table>
+    {% for profile in profile_list %}
+            <tr class="{% cycle "row1" "row2" %}">
+            <td><a href="{% url view-profile profile.id %}">{{ profile.username }}</a></td>
+            <td>joined on {{ profile.date_joined }}</td>
+        </tr>
+    {% endfor %}
+    </table>
+{% endblock %}
+
