@@ -5,10 +5,9 @@
 {% block style %}
     <link rel="stylesheet" href="{{ MEDIA_URL }}css/site.css" 
         type="text/css" media="screen" />
-    {% if user_style %}
-
-    {% else %}
-
+    {% if user.theme %}
+        <link rel="stylesheet" href="{% url theme-css user.theme.id %}"
+            type="text/css" media="screen" />
     {% endif %}
 {% endblock %}
 </head>
@@ -19,7 +18,12 @@
     <div id="user">Logged in as {{ user.username }} | 
         <a href="{% url django.contrib.auth.views.logout %}">Log out</a>
     </div>
-    <div id="menu"><a href="{% url new-thread %}">New Thread</a> |</div>
+    <div id="menu">
+        <a href="{% url new-thread %}">New Thread</a>
+        {% if user.is_staff %}
+            | <a href="/admin/">Admin</a>
+        {% endif %}
+    </div>
 {% endblock %}
 </div>
 

@@ -13,5 +13,6 @@ urlpatterns = patterns('',
         {'template_name': 'login.html'}),
     (r'^accounts/logout/$', 'django.contrib.auth.views.logout',
         {'next_page': '/accounts/login/'}),
+    (r'^themes/', include('mdc3.themes.urls')),
     (r'', include('mdc3.board.urls')),
 )

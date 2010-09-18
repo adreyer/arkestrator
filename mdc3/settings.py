@@ -96,4 +96,5 @@ INSTALLED_APPS = (
 	'django.contrib.admin',
     'south',
     'mdc3.board',
+    'mdc3.themes',
 )
