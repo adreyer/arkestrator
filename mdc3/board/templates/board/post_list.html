@@ -21,7 +21,9 @@
     <a name="post" />
     <form method="post" action="{% url view-thread thread.id %}#post">
         {% csrf_token %}
-        {{ form.as_ul }}
+        <table>
+        {{ form.as_table }}
+        </table>
         <input type="submit" value="Say It" />
     </form>
 {% endblock %}
