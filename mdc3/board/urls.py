@@ -16,5 +16,6 @@ urlpatterns = patterns('',
     url(r"^$",login_required(object_list),
         threads_dict,name='list-threads'),
     url(r"^threads/(?P<id>\d+)/$",views.view_thread,name='view-thread'),
+    url(r"^threads/new/$",views.new_thread,name='new-thread'),
 )
 
