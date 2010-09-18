@@ -1,6 +1,8 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+from django.template.loader import get_template
+from django.template import Context
 
 import re
 import colorsys
@@ -38,3 +40,8 @@ class Theme(models.Model):
             return "000000"
         else:
             return "ffffff"
+
+    def render(self):
+        template = get_template("themes/theme.css")
+        return template.render(Context({'object': self}))
+        

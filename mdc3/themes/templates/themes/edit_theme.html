@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block user_theme %}
+    <style type="text/css">
+        {% if theme %}
+            {{ theme.render }}
+        {% endif %}
+    </style>
+{% endblock %}
+
+{% block content %}
+<form method="post" action="{% url edit-theme %}">
+    {% csrf_token %}
+    {{ form.as_ul }}
+    <input type="submit" name="submit" value="Save" />
+    <input type="submit" name="submit" value="Preview" />
+</form>
+{% endblock %}

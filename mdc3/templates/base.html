@@ -5,10 +5,12 @@
 {% block style %}
     <link rel="stylesheet" href="{{ MEDIA_URL }}css/site.css" 
         type="text/css" media="screen" />
-    {% if user.theme %}
-        <link rel="stylesheet" href="{% url theme-css user.theme.id %}"
-            type="text/css" media="screen" />
-    {% endif %}
+    {% block user_theme %}
+        {% if user.theme %}
+            <link rel="stylesheet" href="{% url theme-css user.theme.id %}"
+                type="text/css" media="screen" />
+        {% endif %}
+    {% endblock %}
 {% endblock %}
 </head>
 <body>
@@ -30,7 +32,7 @@
 
 <div id="content">
 {% block content %}
-
+Put content here, motherfucker.
 {% endblock %}
 </div>
 
