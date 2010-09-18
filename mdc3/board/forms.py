@@ -13,9 +13,20 @@ class ThreadForm(forms.Form):
             subject = self.cleaned_data['subject'],
             site = Site.objects.get_current(),
         )
-        Post.objects.create(
+        post = Post.objects.create(
             thread = thread,
             creator = user,
             body = self.cleaned_data['body']
         )
-        return thread
+        return thread, post
+
+class PostForm(forms.Form):
+    body = forms.CharField(widget=forms.Textarea, required=True)
+
+    def save(self, thread, user):
+        post = Post.objects.create(
+            thread = thread,
+            creator = user,
+            body = self.cleaned_data['body']
+        )
+        return post
