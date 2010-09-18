@@ -9,6 +9,9 @@
         {% if user.theme %}
             <link rel="stylesheet" href="{% url theme-css user.theme.id %}"
                 type="text/css" media="screen" />
+        {% else %}
+            <link rel="stylesheet" href="{% url default-theme-css %}"
+                type="text/css" media="screen" />
         {% endif %}
     {% endblock %}
 {% endblock %}

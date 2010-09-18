@@ -1,16 +1,19 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.http import HttpResponseRedirect
 from forms import ThemeForm
 from models import Theme
 
 @login_required
-def edit_theme(request):
-    try:
-        theme = request.user.theme
-    except Theme.DoesNotExist:
-        theme = Theme(user = request.user)
+def edit_theme(request, theme_id=None):
+    if not theme_id:
+        try:
+            theme = request.user.theme
+        except Theme.DoesNotExist:
+            theme = Theme(user = request.user)
+    else:
+        get_object_or_404(Theme, pk=theme_id)
 
     if request.method == 'POST':
         if request.POST['submit'] == 'Save':
