@@ -8,7 +8,11 @@
         <th>Last Post</th>
     </tr>
     {% for thread in object_list %}
-        <tr>
+        {% if thread.creator == user %}
+            <tr class="my_post">
+        {% else %}
+            <tr class="{% cycle "row1" "row2" %}">
+        {% endif %}
             <td>{{ thread.creator.username }}</td>
             <td><a href="{% url view-thread thread.id %}">
                 {{ thread.subject }}</a></td>
