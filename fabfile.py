@@ -28,7 +28,17 @@ def _set_extra_dirs():
     env.releases_dir = "%(remote_dir)s/releases"%env
     env.current_symlink = "%(remote_dir)s/current"%env
     env.package_dir = "%(remote_dir)s/packages"%env
+    env.virtualenv = "%(remote_dir)s/virtualenv"%env
 
+def rebuild_virtualenv():
+    with cd("%(remote_dir)s"%env):
+        run("rm -fr %(virtualenv)s"%env)
+        run("virtualenv --no-site-packages %(virtualenv)s"%env)
+        run("""
+        source %(virtualenv)s/bin/activate;
+        pip install -r %(current_symlink)s/requirements.txt
+        """%env)
+    
 def graceful_servers():
     "Gracefully restart the web servers"
     # graceful the web servers
@@ -82,7 +92,7 @@ def syncdb():
     require('settings_module','package_dir',
         provided_by=['dev','prod'])
 
-    run("django-admin.py syncdb --settings=%(settings_module)s "
+    run("django-admin.py syncdb --migrate --settings=%(settings_module)s "
         "--pythonpath=%(package_dir)s"%env)
 
 def cleanup():
