@@ -7,7 +7,7 @@
             {% if post.creator == user %}
                 <div class="my_post">
             {% else %}
-                <div class="row1">
+                <div class="row2">
             {% endif %}
                 {{ post.creator.username }} posted this on
                 {{ post.updated_at|date:"D, d-M-Y \a\t h:m:si a"}}

@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block content %}
+<div id="theme_editor">
 <form method="post" action="{% url edit-theme %}">
     {% csrf_token %}
     <table>
@@ -17,4 +18,57 @@
     <input type="submit" name="submit" value="Save" />
     <input type="submit" name="submit" value="Preview" />
 </form>
+</div>
+
+{% if extra_themes %}
+<div id="known_themes">
+    {% for theme in extra_themes %}
+    <a href="{% url edit-existing-theme theme.id %}">[{{ theme.name }}]</a>
+    {% endfor %}
+</div>
+{% endif %}
+
+<h3>This is what the index page will look like:</h3>
+<table class="thread_list">
+<tr>
+    <th>Username</th>
+    <th>Subject</th>
+    <th>Last Post</th>
+</tr>
+<tr class="row1">
+    <td>ian</td>
+    <td>Now Playing 1337 - hack the planet</td>
+    <td>4:22 p.m. 20-Apr-2010 by ian</td>
+</tr>
+<tr class="row2">
+    <td>numberwang</td>
+    <td>Vote to ban {{ user.username }}</td>
+    <td>4:21 p.m. 20-Apr-2010 by ian</td>
+</tr>
+<tr class="my_post">
+    <td>{{ user.username }}</td>
+    <td>Nude pictures of myself</td>
+    <td>4:20 p.m. 20-Apr-2010 by {{ user.username }}</td>
+</tr>
+</table>
+
+<h3>This is what threads will look like:</h3>
+
+<div class="post">
+    <div class="row2">
+        ian posted this on Tue, 20-Apr-2010 at 4:20 pm
+    </div>
+    <div class="body">
+        Fucking magnets
+    </div>
+</div>
+<div class="post">
+    <div class="my_post">
+        {{ user.username }} posted this on Tue, 20-Apr-2010 at 4:21 pm
+    </div>
+    <div class="body">
+        How do they work?
+    </div>
+</div>
+
 {% endblock %}

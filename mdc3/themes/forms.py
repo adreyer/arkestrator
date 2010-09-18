@@ -16,7 +16,7 @@ def color_cleaner(name):
 class ThemeForm(forms.ModelForm):
     class Meta:
         model = Theme
-        exclude = ('user',)
+        exclude = ('user','name')
 
     clean_background = color_cleaner('background')
     clean_row1 = color_cleaner('row1')

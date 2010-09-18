@@ -13,7 +13,7 @@ def edit_theme(request, theme_id=None):
         except Theme.DoesNotExist:
             theme = Theme(user = request.user)
     else:
-        get_object_or_404(Theme, pk=theme_id)
+        theme = get_object_or_404(Theme, pk=theme_id)
 
     if request.method == 'POST':
         if request.POST['submit'] == 'Save':
@@ -30,4 +30,5 @@ def edit_theme(request, theme_id=None):
     return render_to_response("themes/edit_theme.html", { 
         'form' : form,
         'theme' : theme,
+        'extra_themes' : Theme.objects.exclude(name="").all(),
     }, context_instance = RequestContext(request))

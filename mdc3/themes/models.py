@@ -16,7 +16,8 @@ def invert_color(color):
         return "ffffff"
 
 class Theme(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, blank=True, null=True)
+    name = models.CharField(max_length=32, blank=True)
 
     background = models.CharField(max_length=6, default="202030")
     row1 = models.CharField(max_length=6, default="303040")
