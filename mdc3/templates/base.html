@@ -16,6 +16,9 @@
 <div id="header">
 {% block header %}
     <h1>{{ site_name }}</h1>
+    <div>Logged in as {{ user.username }} | 
+        <a href="{% url django.contrib.auth.views.logout %}">Log out</a>
+    </div>
 {% endblock %}
 </div>
 

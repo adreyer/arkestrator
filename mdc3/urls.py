@@ -11,5 +11,7 @@ urlpatterns = patterns('',
         {'document_root': settings.MEDIA_ROOT}),
     (r'^accounts/login/$', 'django.contrib.auth.views.login',
         {'template_name': 'login.html'}),
+    (r'^accounts/logout/$', 'django.contrib.auth.views.logout',
+        {'next_page': '/accounts/login/'}),
     (r'', include('mdc3.board.urls')),
 )
