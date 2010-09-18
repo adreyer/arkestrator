@@ -33,7 +33,7 @@ def _set_extra_dirs():
 def rebuild_virtualenv():
     with cd("%(remote_dir)s"%env):
         run("rm -fr %(virtualenv)s"%env)
-        run("virtualenv --no-site-packages %(virtualenv)s"%env)
+        run("virtualenv %(virtualenv)s"%env)
         run("""
         source %(virtualenv)s/bin/activate;
         pip install -r %(current_symlink)s/requirements.txt
@@ -92,8 +92,11 @@ def syncdb():
     require('settings_module','package_dir',
         provided_by=['dev','prod'])
 
-    run("django-admin.py syncdb --migrate --settings=%(settings_module)s "
-        "--pythonpath=%(package_dir)s"%env)
+    run("""
+    source %(virtualenv)s/bin/activate;
+    django-admin.py syncdb --migrate --settings=%(settings_module)s \
+    --pythonpath=%(current_symlink)s
+    """%env)
 
 def cleanup():
     "Remove all but the 5 most recent releases"
