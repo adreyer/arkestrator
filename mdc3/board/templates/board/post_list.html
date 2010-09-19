@@ -15,7 +15,7 @@
                 {{ post.updated_at|date:"D, d-M-Y \a\t h:m:si a"}}
             </div>
             <div class="body">
-                {{ post.body }}
+                {{ post.body|linebreaksbr }}
             </div>
         </div>
     {% endfor %}
