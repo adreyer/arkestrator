@@ -12,6 +12,7 @@ from django.contrib.auth.models import User
 ##    last_profile_update = models.DateTimeField()
 ##    profile_views = models.IntegerField()
 ##    last_events_view = models.DateTimeField()
+##    banned = models.BooleanField(default=False)
 ##    #info
 ##    zip_code = models.CharField(max_lenth=50)
 ##    city = models.CharField(max_lenth=50)
@@ -26,5 +27,8 @@ from django.contrib.auth.models import User
 ##    show_images = models.BooleanField(default=True)
 ##    #fuck hidden
 ##    photo_url = models.URLField()
+##
+##    def __str__(self):
+##        return self.id.username
     
     
