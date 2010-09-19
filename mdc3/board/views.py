@@ -1,3 +1,4 @@
+import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
@@ -9,11 +10,11 @@ from django.db.models.signals import post_save
 from django.core.cache import cache
 from django.core.paginator import Paginator, InvalidPage
 
-from models import Thread
+from models import Thread, LastRead
 import forms
 
 @login_required
-def view_thread(request,id=None):
+def view_thread(request,id=None,expand=False):
     thread = get_object_or_404(Thread,pk=id)
 
     if request.method == 'POST':
@@ -24,13 +25,30 @@ def view_thread(request,id=None):
     else:
         form = forms.PostForm()
 
-    page = request.GET.get('page','1')
+    queryset=thread.post_set.order_by("updated_at").select_related(
+        'creator')
+
+    try:
+        lastread = LastRead.objects.get(
+            user = request.user,
+            thread = thread
+        )
+        queryset = queryset.filter(id__gte=lastread.post.id)
+    except LastRead.DoesNotExist:
+        lastread = LastRead(user = request.user,
+            thread = thread,
+        )
+
+    lastread.date = datetime.datetime.now()
+    lastread.post = thread.post_set.order_by("id")[0]
+    lastread.save()
+
+    if queryset.count() < 25:
+        queryset = thread.default_post_list
 
     return list_detail.object_list(
         request,
-        queryset=thread.post_set.order_by("updated_at").select_related(),
-        paginate_by = 25,
-        page = page,
+        queryset = queryset,
         extra_context = {
             "thread" : thread,
             "form" : form,
