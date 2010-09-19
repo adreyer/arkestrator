@@ -33,7 +33,8 @@ def view_thread(request,id=None,expand=False):
             user = request.user,
             thread = thread
         )
-        queryset = queryset.filter(id__gte=lastread.post.id)
+        if not expand:
+            queryset = queryset.filter(id__gte=lastread.post.id)
     except LastRead.DoesNotExist:
         lastread = LastRead(user = request.user,
             thread = thread,
@@ -43,7 +44,7 @@ def view_thread(request,id=None,expand=False):
     lastread.post = thread.post_set.order_by("id")[0]
     lastread.save()
 
-    if queryset.count() < 25:
+    if not expand and queryset.count() < 25:
         queryset = thread.default_post_list
 
     return list_detail.object_list(
