@@ -45,11 +45,23 @@ class InstanceMethodCache(property):
 
         return result
 
-    def __delete__(self, instance):
+    def __delete__(self, instance): # epic haxx
         key = "%s:%d"%(self.key, instance.id)
         cache.delete(key)
+        instance_cache = getattr(instance, '_instance_cache', {})
+
+        try:
+            del instance_cache[self.key]
+        except KeyError:
+            pass
 
 def instance_memcache(key):
+    """This decorator takes a key and expects to be used on an instance method
+    with no parameters.  It sticks the id of the instance at the end of the
+    key and uses that as a cache key for getting/setting data in memcache.
+
+    It overrides the del statement to clear the cache.
+    """
     def _instance_memcache(fn):
         return InstanceMethodCache(key, fn)
     return _instance_memcache
