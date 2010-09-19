@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load cache %}
+
 {% block content %}
     <table class="thread_list">
     <tr>
@@ -7,7 +9,7 @@
         <th>Subject</th>
         <th>Last Post</th>
     </tr>
-    {% for thread in object_list %}
+    {% for thread in thread_list %}
         {% if thread.creator == user %}
             <tr class="my_post">
         {% else %}

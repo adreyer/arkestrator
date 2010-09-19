@@ -2,16 +2,19 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.shortcuts import render_to_response,get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.template import RequestContext
 from django.views.generic import list_detail
+from django.db.models.signals import post_save
+from django.core.cache import cache
+from django.core.paginator import Paginator, InvalidPage
 
-import models
+from models import Thread
 import forms
 
 @login_required
 def view_thread(request,id=None):
-    thread = get_object_or_404(models.Thread,pk=id)
+    thread = get_object_or_404(Thread,pk=id)
 
     if request.method == 'POST':
         form = forms.PostForm(request.POST)
@@ -46,3 +49,27 @@ def new_thread(request):
     return render_to_response("board/new_thread.html",
         { 'form' : form },
         context_instance = RequestContext(request))
+
+@login_required
+def list_threads(request):
+    try:
+        page = int(request.GET.get('page', 1))
+    except ValueError:
+        raise Http404
+
+    cache_key = "thread-list-page:%d:%d"%(Site.objects.get_current().id, page)
+    page_obj = cache.get(cache_key, None)
+    if page_obj is None:
+        queryset = Thread.on_site.order_by("-last_post").select_related(
+            "creator","last_post_by")
+        paginator = Paginator(queryset, 50, allow_empty_first_page=True)
+        page_obj = paginator.page(page)
+        cache.set(cache_key, page_obj)
+
+    thread_list = page_obj.object_list
+
+    return render_to_response("board/thread_list.html", {
+        'thread_list' : thread_list,
+        'page_obj' : page_obj
+    }, context_instance = RequestContext(request))
+

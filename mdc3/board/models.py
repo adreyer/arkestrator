@@ -3,6 +3,7 @@ from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.contrib.sites.managers import CurrentSiteManager
+from django.core.cache import cache
 
 import datetime
 
@@ -37,5 +38,10 @@ def update_thread(sender, instance, signal, *args, **kwargs):
         instance.thread.last_post_by = instance.creator
         instance.thread.save()
 
+def invalidate_front_page(sender, instance, signal, *args, **kwargs):
+    cache_key = "thread-list-page:%d:1"%Site.objects.get_current().id
+    cache.delete(cache_key)
+
 post_save.connect(update_thread,sender=Post)
+post_save.connect(invalidate_front_page,sender=Thread)
 
