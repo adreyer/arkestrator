@@ -9,7 +9,7 @@ urlpatterns = patterns('',
     url(r"^threads/(?P<id>\d+)/$",views.view_thread,name='view-thread'),
     url(r"^threads/(?P<id>\d+)/full/$",views.view_thread,{
         'expand' : True,
-    }, name='view-thread'),
+    }, name='view-thread-full'),
     url(r"^threads/new/$",views.new_thread,name='new-thread'),
 )
 

@@ -41,7 +41,7 @@ def view_thread(request,id=None,expand=False):
         )
 
     lastread.date = datetime.datetime.now()
-    lastread.post = thread.post_set.order_by("id")[0]
+    lastread.post = thread.post_set.order_by("-id")[0]
     lastread.save()
 
     if not expand and queryset.count() < 25:
