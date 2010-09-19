@@ -98,4 +98,5 @@ INSTALLED_APPS = (
     'mdc3.board',
     'mdc3.themes',
     'mdc3.profiles',
+    'mdc3.invites',
 )
