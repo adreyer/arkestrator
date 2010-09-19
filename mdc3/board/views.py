@@ -40,7 +40,7 @@ def view_thread(request,id=None,expand=False):
             thread = thread,
         )
 
-    lastread.date = datetime.datetime.now()
+    lastread.timestamp = datetime.datetime.now()
     lastread.post = thread.post_set.order_by("-id")[0]
     lastread.save()
 
@@ -90,5 +90,17 @@ def list_threads(request):
     return render_to_response("board/thread_list.html", {
         'thread_list' : thread_list,
         'page_obj' : page_obj
+    }, context_instance = RequestContext(request))
+
+@login_required
+def thread_history(request,id=None,expand=False):
+    thread = get_object_or_404(Thread,pk=id)
+
+    queryset = LastRead.objects.filter(thread = thread).order_by("-timestamp")
+    queryset = queryset.select_related('user')
+
+    return render_to_response("board/thread_history.html", {
+        'thread' : thread,
+        'read_list' : queryset.all(),
     }, context_instance = RequestContext(request))
 

@@ -54,7 +54,7 @@ class Post(models.Model):
 class LastRead(models.Model):
     user = models.ForeignKey(User)
     thread = models.ForeignKey(Thread)
-    date = models.DateField(default = datetime.datetime.now)
+    timestamp = models.DateTimeField(default = datetime.datetime.now)
     post = models.ForeignKey(Post)
 
 def update_thread(sender, instance, signal, *args, **kwargs):
