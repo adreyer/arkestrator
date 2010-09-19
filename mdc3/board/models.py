@@ -5,6 +5,8 @@ from django.contrib.sites.models import Site
 from django.contrib.sites.managers import CurrentSiteManager
 from django.core.cache import cache
 
+from mdc3.decorators import instance_memcache
+
 import datetime
 
 class Thread(models.Model):
@@ -26,20 +28,11 @@ class Thread(models.Model):
     def __str__(self):
         return self.subject
 
-    @property
+    @instance_memcache('default-posts-list')
     def default_post_list(self):
-        key = "default-post-list:%d"%self.id
-        post_list = cache.get(key, None)
-        if post_list is None:
-            post_list = self.post_set.select_related('creator').order_by("id")
-            post_list = post_list[max(0,post_list.count()-25):]
-            cache.set(key, post_list)
+        post_list = self.post_set.select_related('creator').order_by("id")
+        post_list = post_list[max(0,post_list.count()-25):]
         return post_list
-
-    def invalidate_default_post_list(self):
-        key = "default-post-list:%d"%self.id
-        print "invalidating",key
-        cache.delete(key)
 
 class Post(models.Model):
     thread = models.ForeignKey(Thread, null=False)
@@ -56,6 +49,7 @@ class LastRead(models.Model):
     thread = models.ForeignKey(Thread)
     timestamp = models.DateTimeField(default = datetime.datetime.now)
     post = models.ForeignKey(Post)
+    read_count = models.IntegerField(default=0)
 
 def update_thread(sender, instance, signal, *args, **kwargs):
     if instance.updated_at > instance.thread.last_post:
@@ -66,7 +60,7 @@ def update_thread(sender, instance, signal, *args, **kwargs):
 def invalidate_front_page(sender, instance, signal, *args, **kwargs):
     cache_key = "thread-list-page:%d:1"%Site.objects.get_current().id
     cache.delete(cache_key)
-    instance.invalidate_default_post_list()
+    del instance.default_post_list
 
 post_save.connect(update_thread,sender=Post)
 post_save.connect(invalidate_front_page,sender=Thread)

@@ -26,3 +26,30 @@ def better_cache(urlname, duration):
         return BetterCacher(urlname, duration, fn)
     return _better_cache
 
+class InstanceMethodCache(property):
+    def __init__(self, key, fn):
+        self.key = key
+        self.fn = fn
+
+    def __get__(self,instance,owner):
+        instance_cache = getattr(instance, '_instance_cache', {})
+        result = instance_cache.get(self.key)
+        if result is None:
+            key = "%s:%d"%(self.key, instance.id)
+            result = cache.get(key, None)
+            if result is None:
+                result = self.fn(instance)
+                cache.set(key, result)
+        instance_cache[self.key] = result
+        instance._instance_cache = instance_cache
+
+        return result
+
+    def __delete__(self, instance):
+        key = "%s:%d"%(self.key, instance.id)
+        cache.delete(key)
+
+def instance_memcache(key):
+    def _instance_memcache(fn):
+        return InstanceMethodCache(key, fn)
+    return _instance_memcache
