@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.template import RequestContext
 from django.views.generic import list_detail
 from django.db.models.signals import post_save
+from django.db.models import Sum, Count
 from django.core.cache import cache
 from django.core.paginator import Paginator, InvalidPage
 
@@ -103,6 +104,10 @@ def list_threads(request):
     if page_obj is None:
         queryset = Thread.on_site.order_by("-last_post").select_related(
             "creator","last_post_by")
+        queryset = queryset.annotate(
+            Count('post'),
+            Sum('lastread__read_count'),
+        )
         paginator = Paginator(queryset, 50, allow_empty_first_page=True)
         page_obj = paginator.page(page)
         cache.set(cache_key, page_obj)

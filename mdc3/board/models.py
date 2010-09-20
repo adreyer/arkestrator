@@ -36,10 +36,14 @@ class Thread(models.Model):
 
     @instance_memcache('total-posts', 1800)
     def total_posts(self):
+        if getattr(self, 'post__count', None):
+            return self.post__count
         return self.post_set.count()
 
     @instance_memcache('total-views', 1800)
     def total_views(self):
+        if getattr(self, 'lastread__read_count__sum', None):
+            return self.lastread__read_count__sum
         queryset = LastRead.objects.filter(thread=self)
         agg = queryset.aggregate(models.Sum('read_count'))
         total = agg['read_count__sum']
