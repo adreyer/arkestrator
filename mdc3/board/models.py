@@ -16,7 +16,8 @@ class Thread(models.Model):
     last_post_by = models.ForeignKey(User,null=False,
         related_name='last_post_by')
     last_post = models.DateTimeField('Last Post',
-        default=datetime.datetime.now) # w00t denormalization
+        default = datetime.datetime.now,
+        db_index = True) # w00t denormalization
     site = models.ForeignKey(Site, null=False)
     
     last_read = models.ManyToManyField(User,
@@ -56,7 +57,8 @@ class Post(models.Model):
     creator = models.ForeignKey(User,null=False)
     body = models.TextField(blank=False)
     updated_at = models.DateTimeField('Created at',
-        default=datetime.datetime.now)
+        default = datetime.datetime.now, 
+        db_index = True)
 
     def __str__(self):
         return "%s: %s"%(str(self.thread),self.body[:20])
@@ -64,7 +66,8 @@ class Post(models.Model):
 class LastRead(models.Model):
     user = models.ForeignKey(User)
     thread = models.ForeignKey(Thread)
-    timestamp = models.DateTimeField(default = datetime.datetime.now)
+    timestamp = models.DateTimeField(default = datetime.datetime.now,
+        db_index = True)
     post = models.ForeignKey(Post)
     read_count = models.IntegerField(default=0)
 
