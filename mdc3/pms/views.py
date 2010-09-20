@@ -21,5 +21,19 @@ def new_pm(request):
     return render_to_response('pms/new_pm.html',
             { 'form' : form },
             context_instance = RequestContext(request))
+
+
+
+def outbox(request):
+    mess_list = PM.objects.filter(sender=request.user).order_by('-created_on
+
+@login_required
+def inbox(request):
+    recieved _
+    return list_detail.object_list(
+        request,
+        queryset=PM.objects.filter(recipients=request.user).order_by("-created_on"),
+        )
+        
             
         

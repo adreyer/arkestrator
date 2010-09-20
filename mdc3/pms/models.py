@@ -11,7 +11,7 @@ class PM(models.Model):
     recipients = models.ManyToManyField(User,
             related_name='recieved_pms',
             through='Recipient')
-    created_at = models.DateTimeField(default=datetime.datetime.now)
+    created_on = models.DateTimeField(default=datetime.datetime.now)
     parent = models.ForeignKey('self',null=True)
 
     def __str__(self):
