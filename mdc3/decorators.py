@@ -27,9 +27,10 @@ def better_cache(urlname, duration):
     return _better_cache
 
 class InstanceMethodCache(property):
-    def __init__(self, key, fn):
+    def __init__(self, key, fn, timeout=None):
         self.key = key
         self.fn = fn
+        self.timeout = timeout
 
     def __get__(self,instance,owner):
         instance_cache = getattr(instance, '_instance_cache', {})
@@ -39,7 +40,10 @@ class InstanceMethodCache(property):
             result = cache.get(key, None)
             if result is None:
                 result = self.fn(instance)
-                cache.set(key, result)
+                if self.timeout:
+                    cache.set(key, result, self.timeout)
+                else:
+                    cache.set(key, result)
         instance_cache[self.key] = result
         instance._instance_cache = instance_cache
 
@@ -55,7 +59,7 @@ class InstanceMethodCache(property):
         except KeyError:
             pass
 
-def instance_memcache(key):
+def instance_memcache(key, timeout=None):
     """This decorator takes a key and expects to be used on an instance method
     with no parameters.  It sticks the id of the instance at the end of the
     key and uses that as a cache key for getting/setting data in memcache.
@@ -63,5 +67,5 @@ def instance_memcache(key):
     It overrides the del statement to clear the cache.
     """
     def _instance_memcache(fn):
-        return InstanceMethodCache(key, fn)
+        return InstanceMethodCache(key, fn, timeout)
     return _instance_memcache

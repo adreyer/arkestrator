@@ -28,13 +28,13 @@ class Thread(models.Model):
     def __str__(self):
         return self.subject
 
-    @instance_memcache('default-posts-list')
+    @instance_memcache('default-posts-list', 1800)
     def default_post_list(self):
         post_list = self.post_set.select_related('creator').order_by("id")
         post_list = post_list[max(0,post_list.count()-25):]
         return post_list
 
-    @instance_memcache('total-views')
+    @instance_memcache('total-views', 1800)
     def total_views(self):
         queryset = LastRead.objects.filter(thread=self)
         agg = queryset.aggregate(models.Sum('read_count'))
