@@ -4,7 +4,8 @@
     <form method="post" action="{% url new-thread %}">
         {% csrf_token %}
         <table>
-        {{ form.as_table }}
+        {{ thread_form.as_table }}
+        {{ post_form.as_table }}
         </table>
         <input type="submit" value="Say It" />
     </form>
