@@ -7,7 +7,7 @@ from django.db import models
 class Migration(SchemaMigration):
 
     depends_on = (
-        ("invites", "0002_auto__chg_field_invite_approved_on.py")
+        ("invites", "0002_auto__chg_field_invite_approved_on.py"),
         )
 
     def forwards(self, orm):

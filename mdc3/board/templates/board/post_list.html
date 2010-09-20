@@ -12,7 +12,7 @@
                 <div class="row2">
             {% endif %}
                 {{ post.creator.username }} posted this on
-                {{ post.updated_at|date:"D, d-M-Y \a\t h:m:si a"}}
+                {{ post.updated_at|date:"D, d-M-Y \a\t h:m a"}}
             </div>
             <div class="body">
                 {{ post.body|linebreaksbr }}
