@@ -3,7 +3,7 @@
 {% block content %}
     <h2>{{ thread.subject }}</h2>
     <a href="{% url view-thread-full thread.id %}">Show all 
-        {{ thread.post_set.count }} replies</a>
+        {{ thread.total_posts }} replies</a>
     {% for post in object_list %}
         <div class="post">
             {% if post.creator == user %}

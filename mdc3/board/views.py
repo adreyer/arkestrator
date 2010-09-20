@@ -104,15 +104,14 @@ def list_threads(request):
     if page_obj is None:
         queryset = Thread.on_site.order_by("-last_post").select_related(
             "creator","last_post_by")
-        queryset = queryset.annotate(
-            Count('post'),
-            Sum('lastread__read_count'),
-        )
         paginator = Paginator(queryset, 50, allow_empty_first_page=True)
         page_obj = paginator.page(page)
         cache.set(cache_key, page_obj)
 
-    thread_list = page_obj.object_list
+    thread_list = page_obj.object_list.annotate(
+        Count('post'),
+        Sum('lastread__read_count'),
+    )
 
     return render_to_response("board/thread_list.html", {
         'thread_list' : thread_list,
