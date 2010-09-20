@@ -33,22 +33,24 @@ def register(request,code):
         user_form = forms.UserRegistrationForm(request.POST)
         profile_form = forms.ProfileRegistrationForm(request.POST,
                 instance=temp_profile)
-        if user_form.is_valid():
-            if profile_form.is_valid():
+        if user_form.is_valid() and profile_form.is_valid():
                 user = user_form.save()
+                #this is really ugly at the least add a
+                #password feild not attached to the model
+                #then clean them and set
                 user.set_password(user.password)
                 user.save()
                 temp_profile.user = user
                 profile_form = forms.ProfileRegistrationForm(request.POST,
                 instance=temp_profile)
                 profile_form.save(user)
-##                invite.used = True
-##                invite.save()
+                invite.used = True
+                invite.save()
                 return HttpResponseRedirect("/")
-
-    user_form = forms.UserRegistrationForm()
-    profile_form = forms.ProfileRegistrationForm(
-            instance = temp_profile)
+    else:
+        user_form = forms.UserRegistrationForm()
+        profile_form = forms.ProfileRegistrationForm(
+                instance = temp_profile)
     return render_to_response ("invites/register.html",
         { 'user_form' : user_form,
           'profile_form' : profile_form,
