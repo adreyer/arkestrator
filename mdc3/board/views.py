@@ -108,10 +108,7 @@ def list_threads(request):
         page_obj = paginator.page(page)
         cache.set(cache_key, page_obj)
 
-    thread_list = page_obj.object_list.annotate(
-        Count('post'),
-        Sum('lastread__read_count'),
-    )
+    thread_list = page_obj.object_list
 
     return render_to_response("board/thread_list.html", {
         'thread_list' : thread_list,
