@@ -45,6 +45,7 @@ def view_thread(request,id=None,expand=False):
     lastread.post = thread.post_set.order_by("-id")[0]
     lastread.read_count += 1
     lastread.save()
+    del thread.total_views
 
     if not expand and queryset.count() < 25:
         queryset = thread.default_post_list
