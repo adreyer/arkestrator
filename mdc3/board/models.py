@@ -34,6 +34,10 @@ class Thread(models.Model):
         post_list = post_list[max(0,post_list.count()-25):]
         return post_list
 
+    @instance_memcache('total-posts', 1800)
+    def total_posts(self):
+        return self.post_set.count()
+
     @instance_memcache('total-views', 1800)
     def total_views(self):
         queryset = LastRead.objects.filter(thread=self)
@@ -70,6 +74,7 @@ def invalidate_front_page(sender, instance, signal, *args, **kwargs):
     cache_key = "thread-list-page:%d:1"%Site.objects.get_current().id
     cache.delete(cache_key)
     del instance.default_post_list
+    del instance.total_posts
 
 post_save.connect(update_thread,sender=Post)
 post_save.connect(invalidate_front_page,sender=Thread)
