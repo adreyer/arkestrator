@@ -38,7 +38,10 @@ class Thread(models.Model):
     def total_views(self):
         queryset = LastRead.objects.filter(thread=self)
         agg = queryset.aggregate(models.Sum('read_count'))
-        return agg['read_count__sum']
+        total = agg['read_count__sum']
+        if not total:
+            return 0
+        return total
 
 class Post(models.Model):
     thread = models.ForeignKey(Thread, null=False)
