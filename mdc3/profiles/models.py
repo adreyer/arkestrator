@@ -1,32 +1,34 @@
 from django.db import models
 from django.contrib.auth.models import User
+from mdc3.invites.models import Invite
+
+import datetime
 
 class Profile(models.Model):
     #data
     user = models.OneToOneField(User,null=False)
     ip_signup = models.IPAddressField()
-    new_message = models.BooleanField()
-    last_login = models.DateTimeField()
-    last_view = models.DateTimeField()
-    last_post = models.DateTimeField()
-    last_profile_update = models.DateTimeField()
-    profile_views = models.IntegerField()
-    last_events_view = models.DateTimeField()
+    new_message = models.BooleanField(default=False)
+    last_login = models.DateTimeField(default=datetime.datetime.now)
+    last_view = models.DateTimeField(default=datetime.datetime.now)
+    last_post = models.DateTimeField(default=datetime.datetime.now)
+    last_profile_update = models.DateTimeField(default=datetime.datetime.now)
+    profile_views = models.IntegerField(default=0)
+    last_events_view = models.DateTimeField(default=datetime.datetime.now)
     banned = models.BooleanField(default=False)
+    invite_used = models.ForeignKey(Invite, null=True)
     #info
-    zip_code = models.CharField(max_length=50)
-    city = models.CharField(max_length=50)
-    location = models.CharField(max_length=50)
-    aim_name = models.CharField(max_length=50)
-    gchat_name = models.CharField(max_length=50)
-    website = models.URLField(max_length=150)
-    info = models.CharField(max_length=2500)
+    name = models.CharField(max_length=50, blank=True)
+    location = models.CharField(max_length=50, blank=True)
+    aim_name = models.CharField(max_length=50, blank=True)
+    gtalk_name = models.CharField(max_length=50, blank=True)
+    website = models.URLField(max_length=150, blank=True)
+    info = models.CharField(max_length=2500, blank=True)
+    email_public = models.EmailField(blank=True)
     #preferences
-    email_public = models.BooleanField(default=False)
-    security_answer = models.CharField(max_length=32)
     show_images = models.BooleanField(default=True)
     #fuck hidden
-    photo_url = models.URLField()
+    photo_url = models.URLField(blank=True)
     
 
     def __str__(self):
