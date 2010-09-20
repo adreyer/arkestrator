@@ -11,16 +11,13 @@ import forms
 
 @login_required
 def new_pm(request):
-    temp_pm = PM(sender=request.user)
     if request.method == 'POST':
-        form =forms.NewPMForm(request.POST,
-                instance=temp_pm)
+        form =forms.NewPMForm(request.POST)
         if form.is_valid():
             form.save(request.user)
             return HttpResponseRedirect('/')
     else:
-        form =forms.NewPMForm(
-            instance = temp_pm)
+        form =forms.NewPMForm()
     return render_to_response('pms/new_pm.html',
             { 'form' : form },
             context_instance = RequestContext(request))
