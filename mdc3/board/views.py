@@ -10,7 +10,7 @@ from django.db.models.signals import post_save
 from django.core.cache import cache
 from django.core.paginator import Paginator, InvalidPage
 
-from models import Thread, LastRead
+from models import Thread, Post, LastRead
 import forms
 
 @login_required
@@ -18,9 +18,13 @@ def view_thread(request,id=None,expand=False):
     thread = get_object_or_404(Thread,pk=id)
 
     if request.method == 'POST':
-        form = forms.PostForm(request.POST)
+        post = Post(
+            thread = thread,
+            creator = request.user
+        )
+        form = forms.PostForm(request.POST, instance = post)
         if form.is_valid():
-            form.save(thread, request.user)
+            form.save()
             return HttpResponseRedirect("/")
     else:
         form = forms.PostForm()
@@ -62,15 +66,30 @@ def view_thread(request,id=None,expand=False):
 @login_required
 def new_thread(request):
     if request.method == 'POST':
-        form = forms.ThreadForm(request.POST)
-        if form.is_valid():
-            form.save(request.user)
+        thread = Thread(
+            creator = request.user,
+            last_post_by = request.user,
+            site = Site.objects.get_current(),
+        )
+        post = Post(
+            thread = thread,
+            creator = request.user
+        )
+        thread_form = forms.ThreadForm(request.POST, instance = thread)
+        post_form = forms.PostForm(request.POST, instance = post)
+        if thread_form.is_valid() and post_form.is_valid():
+            thread = thread_form.save()
+            post.thread = thread
+            post_form = forms.PostForm(request.POST, instance = post)
+            post_form.save()
             return HttpResponseRedirect("/")
     else:
-        form = forms.ThreadForm()
-    return render_to_response("board/new_thread.html",
-        { 'form' : form },
-        context_instance = RequestContext(request))
+        thread_form = forms.ThreadForm()
+        post_form = forms.PostForm()
+    return render_to_response("board/new_thread.html",{
+            'thread_form' : thread_form,
+            'post_form' : post_form,
+        }, context_instance = RequestContext(request))
 
 @login_required
 def list_threads(request):
