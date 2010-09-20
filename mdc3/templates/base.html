@@ -20,19 +20,21 @@
 <div id="header">
 {% block header %}
     <h1>{{ site_name }}</h1>
-    <div id="user">Logged in as {{ user.username }} | 
-        <a href="{% url django.contrib.auth.views.logout %}">Log out</a>
+    <div id="user">
+        <ul>
+            <li>Logged in as <strong>{{ user.username }}</strong></li>
+            <li><a href="{% url django.contrib.auth.views.logout %}">Log out</a></li>
     </div>
     <div id="menu">
-        <a href="/">Index</a> |
-        <a href="{% url new-thread %}">New Thread</a> |
-        <a href="{% url list-profiles %}">User List</a> |
-        <a href="{% url edit-info %}">Edit Profile</a> |
-        <a href="{% url edit-theme %}">Edit Theme</a> |
-        <a href="{% url new-invite %}">Invite</a> 
-        {% if user.is_staff %}
-            | <a href="/admin/">Admin</a>
-        {% endif %}
+        <ul>
+            <li><a href="/">Index</a></li>
+            <li><a href="{% url new-thread %}">New Thread</a></li>
+            <li><a href="{% url list-profiles %}">User List</a></li>
+            <li><a href="{% url edit-theme %}">Edit Theme</a></li>
+            {% if user.is_staff %}
+            <li><a href="/admin/">Admin</a></li>
+            {% endif %}
+        </ul>
     </div>
 {% endblock %}
 </div>
@@ -45,7 +47,9 @@ Put content here, motherfucker.
 
 <div id="footer">
 {% block footer %}
+<div id="ra">
     <img src="{{ MEDIA_URL }}images/eor.png">
+</div>
 {% endblock %}
 </div>
 </body>
