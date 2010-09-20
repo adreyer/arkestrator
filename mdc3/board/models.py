@@ -34,6 +34,12 @@ class Thread(models.Model):
         post_list = post_list[max(0,post_list.count()-25):]
         return post_list
 
+    @instance_memcache('total-views')
+    def total_views(self):
+        queryset = LastRead.objects.filter(thread=self)
+        agg = queryset.aggregate(models.Sum('read_count'))
+        return agg['read_count__sum']
+
 class Post(models.Model):
     thread = models.ForeignKey(Thread, null=False)
     creator = models.ForeignKey(User,null=False)
