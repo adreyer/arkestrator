@@ -43,6 +43,8 @@ def inbox(request):
 def view_pm(request, pm_id):
     #WARNING: must change so pk and recipients are checked
     pm = get_object_or_404(PM,pk=pm_id)
+    if pm.sender != request.user:
+        get_object_or_404(Recipient,message=pm,recipient=request.user)    
     form =forms.NewPMForm()
     return render_to_response("pms/view_pm.html",
             { 'pm' : pm ,
