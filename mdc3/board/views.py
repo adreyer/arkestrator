@@ -111,12 +111,13 @@ def list_threads(request):
 
     last_read = LastRead.objects.filter(
         thread__in=[t.id for t in thread_list],
-        timestamp__lt=F('thread__last_post'),
         user = request.user,
-    ).values('thread__id')
-    last_set = set(lr['thread__id'] for lr in last_read)
+    ).values('thread__id', 'timestamp')
+    last_viewed = dict((lr['thread__id'], lr['timestamp']) for lr in last_read)
     for t in thread_list:
-        if t.id in last_set:
+        if t.id in last_viewed:
+            t.unread = last_viewed[t.id] < t.last_post
+        else:
             t.unread = True
 
     return render_to_response("board/thread_list.html", {
