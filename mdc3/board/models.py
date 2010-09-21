@@ -77,6 +77,17 @@ def update_thread(sender, instance, signal, *args, **kwargs):
         instance.thread.last_post_by = instance.creator
         instance.thread.save()
 
+        try:
+            lastread = LastRead.objects.get(
+                user = instance.creator,
+                thread = instance.thread
+            )
+        except LastRead.DoesNotExist:
+            pass
+        lastread.post__id = instance.id
+        lastread.timestamp = instance.updated_at
+        lastread.save()
+
 def invalidate_front_page(sender, instance, signal, *args, **kwargs):
     cache_key = "thread-list-page:%d:1"%Site.objects.get_current().id
     cache.delete(cache_key)

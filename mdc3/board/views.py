@@ -112,7 +112,7 @@ def list_threads(request):
 
     last_read = LastRead.objects.filter(
         thread__in=[t.id for t in thread_list],
-        timestamp__lte=F('thread__last_post'),
+        timestamp__lt=F('thread__last_post'),
         user = request.user,
     ).values('thread__id')
     last_set = set(lr['thread__id'] for lr in last_read)
