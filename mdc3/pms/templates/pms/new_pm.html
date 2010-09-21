@@ -1,0 +1,11 @@
+{% extends "pm_base.html" %}
+
+{% block pm_content %}
+    <form method="post" action="{% url new-pm %}">
+        {% csrf_token %}
+        <table>
+        {{form.as_table }}
+        </table>
+        <input type="submit" value="Send" />
+    </form>
+{% endblock %}

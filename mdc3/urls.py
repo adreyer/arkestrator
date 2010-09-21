@@ -17,4 +17,5 @@ urlpatterns = patterns('',
     (r'', include('mdc3.board.urls')),
     (r'^profiles/', include('mdc3.profiles.urls')),
     (r'^invites/', include('mdc3.invites.urls')),
+    (r'^pms/', include('mdc3.pms.urls')),
 )
