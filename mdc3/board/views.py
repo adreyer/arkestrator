@@ -109,12 +109,16 @@ def list_threads(request):
         cache.set(cache_key, page_obj)
 
     thread_list = page_obj.object_list
-    last_read = LastRead.objects.filter(thread__in=[t.id for t in thread_list]
-        ).filter(timestamp__lte=F('thread__last_post')).values('thread__id')
+
+    last_read = LastRead.objects.filter(
+        thread__in=[t.id for t in thread_list],
+        timestamp__lte=F('thread__last_post'),
+        user = request.user,
+    ).values('thread__id')
     last_set = set(lr['thread__id'] for lr in last_read)
-    #for t in thread_list:
-    #    if t.id in last_set:
-    #        t.unread = True
+    for t in thread_list:
+        if t.id in last_set:
+            t.unread = True
 
     return render_to_response("board/thread_list.html", {
         'thread_list' : thread_list,
