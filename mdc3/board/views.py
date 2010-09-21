@@ -31,7 +31,7 @@ def view_thread(request,id=None,expand=False):
         form = forms.PostForm()
 
     queryset=thread.post_set.order_by("updated_at").select_related(
-        'creator').annotate(Max('id'))
+        'creator')
 
     try:
         lastread = LastRead.objects.get(
@@ -47,8 +47,6 @@ def view_thread(request,id=None,expand=False):
         )
 
     lastread.timestamp = datetime.datetime.now()
-    if queryset[0].id__max:
-        lastread.post__id = queryset[0].id__max
     lastread.read_count += 1
     lastread.save()
     del thread.total_views
