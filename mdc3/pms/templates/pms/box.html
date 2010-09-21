@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <a href="{% url new-pm %}">new message</a> |
+    <a href="{% url inbox %}">inbox</a> |
+    <a href="{% url outbox %}">outbox</a> 
+    <h2>{{ box_type }}</h2>
+    <table> 
+    {% for pm in pm_list %}
+        <tr>
+            <td> {{ pm.sender.username }}</td>
+            <td> <a href="/pms/{{ pm.pk }}">{{ pm.subject }}</a></td>
+            <td> {{ pm.created_on }}</td>
+        </tr>
+    {% endfor %}
+{% endblock %}

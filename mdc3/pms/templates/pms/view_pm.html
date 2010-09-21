@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <a href="{% url new-pm %}">new message</a> |
+    <a href="{% url inbox %}">inbox</a> |
+    <a href="{% url outbox %}">outbox</a> 
+    <h2>{{ box_type }}</h2>
+    Sender: {{ pm.sender.username }} <br>
+    To:     <br>
+    Subject:  {{ pm.subject }}  <br>
+    Body: <br>
+    {{ pm.body }} <br>
+    <form method="post" action="{% url new-pm %}">
+        {% csrf_token %}
+        <table>
+        {{form.as_table }}
+        </table>
+        <input type="submit" value="Send" />
+    </form>
+{% endblock %}
