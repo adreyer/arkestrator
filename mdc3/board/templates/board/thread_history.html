@@ -6,7 +6,7 @@
     <tr><th>User</th><th>Last Read</th></tr>
     {% for last_read in read_list %}
     <tr><td>{{ last_read.user.username }}</td>
-        <td>{{ last_read.timestamp|date:"D, d-M-Y \a\t h:m a" }}</td>
+        <td>{{ last_read.timestamp|date:"P d-M-Y" }}</td>
     </tr>
     {% endfor %}
     </table>
