@@ -18,8 +18,14 @@
             <tr class="{% cycle "row1" "row2" %}">
         {% endif %}
             <td>{{ thread.creator.username }}</td>
-            <td><a href="{% url view-thread thread.id %}">
-                {{ thread.subject }}</a></td>
+            <td>{% if thread.unread %}
+                    <b><a href="{% url view-thread thread.id %}">
+                        {{ thread.subject }}</a></b>
+                {% else %}
+                    <a href="{% url view-thread thread.id %}">
+                        {{ thread.subject }}</a>
+                {% endif %}
+            </td>
             <td>{{ thread.last_post|date:"P d-M-Y"}} by {{ thread.last_post_by.username }}</td>
             <td>{{ thread.total_posts }}</td>
             <td><a href="{% url thread-history thread.id %}">
