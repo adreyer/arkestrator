@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <a href="{% url new-pm %}">new message</a> |
+    <a href="{% url inbox %}">inbox</a> |
+    <a href="{% url outbox %}">outbox</a> 
+    <h2>{{ box_type }}</h2>
+    <table> 
+    {% for pm in pm_list %}
+            <tr>
+            <td> {{ pm.sender.username }}</td>
+            <td> <a href="/pms/{{ pm.pk }}">
+            {% if not forloop.counter0 %}<strong>read
+            {% else %} not read {% endif %}
+            {{ pm.subject }}
+            {% if not forloop.counter0 %}</strong>{% endif %}</a></td>
+            <td> {{ pm.created_on }}</td>
+        </tr>
+        {% endfor %}
+{%endblock %}

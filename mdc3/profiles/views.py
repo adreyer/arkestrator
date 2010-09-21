@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect,  HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
-from mdc3.profiles.models import Profile
+from models import Profile
 
 import forms
 
@@ -12,7 +12,6 @@ import forms
 @login_required
 def view_profile(request, user_id):
     profile = get_object_or_404(User,pk=user_id)
-    
     return render_to_response("profiles/view_profile.html",
         { 'profile' : profile },
         context_instance = RequestContext(request))
@@ -28,34 +27,23 @@ def list_profiles(request):
 @login_required
 def edit_info(request):
     if request.method == 'POST':
-        form = forms.InfoUserForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect("/")  #maybe this should be back to the profile
-##        else:
-##            return HttpResponse("bad form asshole")
+        user_form = forms.InfoUserForm(request.POST, instance=request.user)
+        profile_form = form.InfoProfileForm(request.POST,
+                instance=Profiles.objects.get(user=request.user))
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            
+            return HttpResponseRedirect("/")  
         
     else:
-        form = forms.InfoUserForm()
-        return render_to_response("profiles/edit_info.html",
-            { 'form' : form },
-            context_instance = RequestContext(request))
+        user_form = forms.InfoUserForm(instance=request.user)
+        profile_form = form.InfoProfileForm(
+                instance=Profiles.objects.get(user=request.user))
+        
+    return render_to_response("profiles/edit_info.html",
+                { 'user_form' : user_form,
+                  'profile_form' : profile_form},
+                context_instance = RequestContext(request))
     
-
-##@login_required
-##def edit_prefs(request):
-##    if request.method == 'POST':
-##        form = forms.PrefForm(request.POST)
-##        if form.is_valid():
-##            form.save(request.user)
-##            return HttpResponseRedirect("/")
-##        else:
-##            form = forms.ThreadForm()
-##        #does this get the users profile and user models?
-##        #is there a better way to pre-populate the form
-##        profile = get_object_or_404(models.Profile,pk=request.user)
-##        user = get_object_or_404(models.User,pk=request.user)
-##        return render_to_response("profiles/edit_prefs.html",
-##            { 'profile' : profile, 'user' : User },
-##            context_instance = RequestContext(request))
     

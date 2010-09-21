@@ -2,10 +2,10 @@ from django.contrib import admin
 from models import PM, Recipient
 
 class PMAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('sender', 'subject', 'created_on')
 
 class RecipientAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('message','recipient','read')
 
 admin.site.register(PM, PMAdmin)
 admin.site.register(Recipient, RecipientAdmin)

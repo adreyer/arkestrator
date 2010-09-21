@@ -4,7 +4,8 @@
     <form method="post" action="{% url edit-info %}">
         {% csrf_token %}
         <table>
-        {{ form.as_table }}
+        {{ user_form.as_table }}
+        {{ profile_form.as_table }}
         </table>
         <input type="submit" value="Save" />
     </form>

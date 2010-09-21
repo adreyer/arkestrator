@@ -34,17 +34,35 @@ def outbox(request):
 @login_required
 def inbox(request):
     pm_list = PM.objects.filter(recipients=request.user).order_by('-created_on')
-    return render_to_response('pms/box.html',
+    read_list = []
+    for pm in pm_list:
+        read_list.append(Recipient.objects.get(
+                recipient=request.user,
+                message=pm).read) 
+    return render_to_response('pms/inbox.html',
             { 'pm_list' : pm_list,
+              'read_list' : read_list,
               'box_type' : 'inbox' },
             context_instance = RequestContext(request))
 
 @login_required
+def mark_all_read(request):
+    unread_list = Recipients.objects.filter(user=request.user,read=false)
+    for rec in unread_list:
+        rec.read = True
+        rec.save()
+    return HttpResponseRedirect("/pms/inbox")
+
+@login_required
 def view_pm(request, pm_id):
-    #WARNING: must change so pk and recipients are checked
     pm = get_object_or_404(PM,pk=pm_id)
     if pm.sender != request.user:
-        get_object_or_404(Recipient,message=pm,recipient=request.user)    
+        read = get_object_or_404(Recipient,message=pm,recipient=request.user)
+        print 'verified shit'
+        if not read.read:
+            print unread
+            read.read = True
+            read.save()
     form =forms.NewPMForm()
     return render_to_response("pms/view_pm.html",
             { 'pm' : pm ,

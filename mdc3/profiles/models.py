@@ -15,20 +15,23 @@ class Profile(models.Model):
     last_profile_update = models.DateTimeField(default=datetime.datetime.now)
     profile_views = models.IntegerField(default=0)
     last_events_view = models.DateTimeField(default=datetime.datetime.now)
-    banned = models.BooleanField(default=False)
     invite_used = models.ForeignKey(Invite, null=True)
+    
     #info
     name = models.CharField(max_length=50, blank=True)
     location = models.CharField(max_length=50, blank=True)
     aim_name = models.CharField(max_length=50, blank=True)
     gtalk_name = models.CharField(max_length=50, blank=True)
-    website = models.URLField(max_length=150, blank=True)
-    info = models.CharField(max_length=2500, blank=True)
     email_public = models.EmailField(blank=True)
+    website = models.URLField(max_length=150, blank=True)
+    info = models.TextField(blank=True)
+    photo_url = models.URLField(blank=True)
+    
     #preferences
     show_images = models.BooleanField(default=True)
+    collapse_size = models.IntegerField(default=10)
     #fuck hidden
-    photo_url = models.URLField(blank=True)
+    
     
 
     def __str__(self):

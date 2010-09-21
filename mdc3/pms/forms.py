@@ -15,10 +15,7 @@ class NewPMForm(forms.Form):
         recipient_list = self.cleaned_data['recipients'].split()
         user_list = []
         for rec in recipient_list:
-
             try:
-##                tuser = User.objects.get(username=rec)
-##                user_list.append(tuser)
                 user_list.append(User.objects.get(username=rec))
             except User.DoesNotExist:
                 raise forms.ValidationError(("User "+ rec +" not found"))

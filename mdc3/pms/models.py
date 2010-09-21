@@ -7,7 +7,8 @@ import datetime
 class PM(models.Model):
     subject = models.CharField(max_length=100, blank=False)
     body = models.TextField(default='')
-    sender = models.ForeignKey(User, related_name='sent_pms',null=False)
+    sender = models.ForeignKey(User, related_name='sent_pms',
+                               default="(no subject)")
     recipients = models.ManyToManyField(User,
             related_name='recieved_pms',
             through='Recipient')
