@@ -68,7 +68,6 @@ class LastRead(models.Model):
     thread = models.ForeignKey(Thread)
     timestamp = models.DateTimeField(default = datetime.datetime.now,
         db_index = True)
-    post = models.ForeignKey(Post)
     read_count = models.IntegerField(default=0)
 
 def update_thread(sender, instance, signal, *args, **kwargs):

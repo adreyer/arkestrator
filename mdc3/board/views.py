@@ -39,7 +39,7 @@ def view_thread(request,id=None,expand=False):
             thread = thread
         )
         if not expand:
-            queryset = queryset.filter(id__gte=lastread.post.id)
+            queryset = queryset.filter(updated_at__gte=lastread.timestamp)
     except LastRead.DoesNotExist:
         lastread = LastRead(user = request.user,
             thread = thread,
