@@ -1,6 +1,6 @@
-{% extends "base.html" %}
+{% extends "pm_base.html" %}
 
-{% block content %}
+{% block pm_content %}
     <form method="post" action="{% url new-pm %}">
         {% csrf_token %}
         <table>

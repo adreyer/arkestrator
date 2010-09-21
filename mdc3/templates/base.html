@@ -31,6 +31,7 @@
             <li><a href="{% url new-thread %}">New Thread</a></li>
             <li><a href="{% url list-profiles %}">User List</a></li>
             <li><a href="{% url edit-theme %}">Edit Theme</a></li>
+            <li><a href="{% url inbox %}">Messages</a></li>
             {% if user.is_staff %}
             <li><a href="/admin/">Admin</a></li>
             {% endif %}

@@ -15,7 +15,7 @@ def new_pm(request):
         form =forms.NewPMForm(request.POST)
         if form.is_valid():
             form.save(request.user)
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect("/pms/inbox")
     else:
         form =forms.NewPMForm()
     return render_to_response('pms/new_pm.html',
@@ -23,17 +23,31 @@ def new_pm(request):
             context_instance = RequestContext(request))
 
 
-
+@login_required
 def outbox(request):
-    mess_list = PM.objects.filter(sender=request.user).order_by('-created_on
+    pm_list = PM.objects.filter(sender=request.user).order_by('-created_on')
+    return render_to_response('pms/box.html',
+            { 'pm_list' : pm_list,
+              'box_type' : 'outbox' },
+            context_instance = RequestContext(request))
 
 @login_required
 def inbox(request):
-    recieved _
-    return list_detail.object_list(
-        request,
-        queryset=PM.objects.filter(recipients=request.user).order_by("-created_on"),
-        )
+    pm_list = PM.objects.filter(recipients=request.user).order_by('-created_on')
+    return render_to_response('pms/box.html',
+            { 'pm_list' : pm_list,
+              'box_type' : 'inbox' },
+            context_instance = RequestContext(request))
+
+@login_required
+def view_pm(request, pm_id):
+    #WARNING: must change so pk and recipients are checked
+    pm = get_object_or_404(PM,pk=pm_id)
+    form =forms.NewPMForm()
+    return render_to_response("pms/view_pm.html",
+            { 'pm' : pm ,
+              'form' : form },
+            context_instance = RequestContext(request))
         
             
         
