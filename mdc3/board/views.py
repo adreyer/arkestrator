@@ -47,7 +47,8 @@ def view_thread(request,id=None,expand=False):
         )
 
     lastread.timestamp = datetime.datetime.now()
-    lastread.post__id = queryset[0].id__max
+    if queryset[0].id__max:
+        lastread.post__id = queryset[0].id__max
     lastread.read_count += 1
     lastread.save()
     del thread.total_views
