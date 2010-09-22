@@ -1,10 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>{{ profile.username }} aka {{ profile.first_name }} 
-{{ profile.last_name }}</h1>
+<h3>{{ user.username }}</h3>
+<b>Name: </b> {{ profile.name }} <br>
+<b>Email: </b>  {{ profile.public_email }} <br>
+<b>AIM: </b> {{ profile.aim_name }} <br>
+<b>Gtalk: </b> {{ profile.gtalk_name }} <br>
+<b>Location: </b> {{ location.aim_name }} <br>
+<b>Website: </b> <a href="{{ profile.website }}">{{ profile.website }} </a> <br>
+<img src="{{ photo_url }}"> <br>
+<b>Info: </b> {{ profile.info }} <br>
 
-<b>Email:</b>  {{ profile.email }}
+<h4>statistics</h4>
+<b>Last seen: </b> {{ profile.last_view }}
+<b>Profile Views</b> {{ profile.profile_views }}
+
 {% endblock %}
 
 

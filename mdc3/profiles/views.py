@@ -11,9 +11,14 @@ import forms
 
 @login_required
 def view_profile(request, user_id):
-    profile = get_object_or_404(User,pk=user_id)
+    user = get_object_or_404(User,pk=user_id)
+    profile = get_object_or_404(Profile,user=user)
+    if request.user != user:
+        profile.profile_views += 1
+        profile.save()
     return render_to_response("profiles/view_profile.html",
-        { 'profile' : profile },
+        {   'user' : user,
+            'profile' : profile },
         context_instance = RequestContext(request))
 
 
