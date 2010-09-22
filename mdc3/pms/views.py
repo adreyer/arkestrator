@@ -58,10 +58,7 @@ def view_pm(request, pm_id):
     pm = get_object_or_404(PM,pk=pm_id)
     if pm.sender != request.user:
         read = get_object_or_404(Recipient,message=pm,recipient=request.user)
-        print 'verified shit'
-        print read.read
         if not read.read:
-            print 'unread'
             read.read = True
             read.save()
     else:
@@ -79,5 +76,4 @@ def view_pm(request, pm_id):
               'form' : form },
             context_instance = RequestContext(request))
         
-            
-        
+

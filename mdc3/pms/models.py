@@ -18,6 +18,7 @@ class PM(models.Model):
     def __str__(self):
         return self.subject
 
+
 class Recipient(models.Model):
     recipient = models.ForeignKey(User)
     message = models.ForeignKey(PM)

@@ -9,13 +9,15 @@ class InfoUserForm(forms.ModelForm):
         fields = ('email')
 
 class InfoProfileForm(forms.ModelForm):
-    model = Profile
-    fields = ('name', 'location','email_publix',
-              'aim_name','gtalk_name','website',
-              'info','photo_url')
+    class Meta:
+        model = Profile
+        fields = ('name', 'location','email_publix',
+                  'aim_name','gtalk_name','website',
+                  'info','photo_url')
 
 class PreferencesForm(forms.ModelForm):
-    model = Profile
-    field = ('show_images','collapse_size')
+    class Meta:
+        model = Profile
+        field = ('show_images','collapse_size')
         
     

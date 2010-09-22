@@ -28,19 +28,18 @@ def list_profiles(request):
 def edit_info(request):
     if request.method == 'POST':
         user_form = forms.InfoUserForm(request.POST, instance=request.user)
-        profile_form = form.InfoProfileForm(request.POST,
-                instance=Profiles.objects.get(user=request.user))
+        profile_form = forms.InfoProfileForm(request.POST,
+                instance=Profile.objects.get(user=request.user))
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            
             return HttpResponseRedirect("/")  
         
     else:
         user_form = forms.InfoUserForm(instance=request.user)
-        profile_form = form.InfoProfileForm(
-                instance=Profiles.objects.get(user=request.user))
-        
+        profile_form = forms.InfoProfileForm(
+                    instance=Profile.objects.get(user=request.user))
+ 
     return render_to_response("profiles/edit_info.html",
                 { 'user_form' : user_form,
                   'profile_form' : profile_form},
