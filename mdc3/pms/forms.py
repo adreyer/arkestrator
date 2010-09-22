@@ -20,7 +20,7 @@ class NewPMForm(forms.Form):
             except User.DoesNotExist:
                 raise forms.ValidationError(("User "+ rec +" not found"))
                                             
-        self.cleaned_data['recipients_user'] = user_list
+        self.cleaned_data['recipients_user'] = set(user_list)
         return self.cleaned_data
 
     def save(self, user):
