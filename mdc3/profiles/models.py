@@ -26,6 +26,7 @@ class Profile(models.Model):
     website = models.URLField(max_length=150, blank=True)
     info = models.TextField(blank=True)
     photo_url = models.URLField(blank=True)
+    phone = models.CharField(max_length=50,blank=True)
     
     #preferences
     show_images = models.BooleanField(default=True)

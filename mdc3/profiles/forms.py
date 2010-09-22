@@ -11,9 +11,9 @@ class InfoUserForm(forms.ModelForm):
 class InfoProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ('name', 'location','email_publix',
-                  'aim_name','gtalk_name','website',
-                  'info','photo_url')
+        fields = ('name', 'location', 'phone', 'email_public',
+                  'aim_name', 'gtalk_name', 'website',
+                  'info', 'photo_url')
 
 class PreferencesForm(forms.ModelForm):
     class Meta:

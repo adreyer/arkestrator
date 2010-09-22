@@ -5,6 +5,7 @@
     <table>
     {% for profile in profile_list %}
             <tr class="{% cycle "row1" "row2" %}">
+            <td> {{ forloop.counter }} </td>
             <td><a href="{% url view-profile profile.id %}">{{ profile.username }}</a></td>
             <td>joined on {{ profile.date_joined }}</td>
         </tr>

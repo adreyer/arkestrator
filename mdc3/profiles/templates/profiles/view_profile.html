@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
+<a href="{{ edit-info }}">Edit Profile</a>
 <h3>{{ user.username }}</h3>
 <b>Name: </b> {{ profile.name }} <br>
+<b>Location: </b> {{ profile.location }} <br>
+<b>Phone Number:</b> {{ profile.phone }} <br>
 <b>Email: </b>  {{ profile.public_email }} <br>
 <b>AIM: </b> {{ profile.aim_name }} <br>
-<b>Gtalk: </b> {{ profile.gtalk_name }} <br>
-<b>Location: </b> {{ location.aim_name }} <br>
-<b>Website: </b> <a href="{{ profile.website }}">{{ profile.website }} </a> <br>
+<b>Gtalk: </b> {{ profile.gtalk_name }} <br><b>Website: </b> <a href="{{ profile.website }}">{{ profile.website }} </a> <br>
 <img src="{{ photo_url }}"> <br>
 <b>Info: </b> {{ profile.info }} <br>
 

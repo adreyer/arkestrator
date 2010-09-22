@@ -24,7 +24,7 @@ def view_profile(request, user_id):
 
 @login_required
 def list_profiles(request):
-    profile_list = User.objects.all()
+    profile_list = User.objects.all().sort_by('date_joined')
     return render_to_response("profiles/list_profiles.html",
         { 'profile_list' : profile_list }, 
         context_instance = RequestContext(request))
@@ -32,22 +32,17 @@ def list_profiles(request):
 @login_required
 def edit_info(request):
     if request.method == 'POST':
-        user_form = forms.InfoUserForm(request.POST, instance=request.user)
         profile_form = forms.InfoProfileForm(request.POST,
                 instance=Profile.objects.get(user=request.user))
-        if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
+        if profile_form.is_valid(): 
             profile_form.save()
-            return HttpResponseRedirect("/")  
-        
+            return HttpResponseRedirect("/")
     else:
-        user_form = forms.InfoUserForm(instance=request.user)
         profile_form = forms.InfoProfileForm(
                     instance=Profile.objects.get(user=request.user))
- 
+        
     return render_to_response("profiles/edit_info.html",
-                { 'user_form' : user_form,
-                  'profile_form' : profile_form},
+                { 'profile_form' : profile_form },
                 context_instance = RequestContext(request))
     
     
