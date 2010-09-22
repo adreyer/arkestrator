@@ -70,9 +70,18 @@ def view_pm(request, pm_id):
             recip.save()
         except Recipient.DoesNotExist:
             pass
-
-    rec_str = pm.get_rec_str()
-    form =forms.NewPMForm()
+    ## Moving this higher will probably improve performance
+    ## think about security before doing so though
+    if request.method == 'POST':
+        form =forms.NewPMForm(request.POST)
+        if form.is_valid():
+            new_pm = form.save(request.user)
+            new_pm.parent = pm
+            new_pm.save()
+            return HttpResponseRedirect("/pms/inbox")
+    else:
+        rec_str = pm.get_rec_str()
+        form =forms.NewPMForm()
     return render_to_response("pms/view_pm.html",
             { 'pm' : pm ,
               'rec_str' : rec_str,

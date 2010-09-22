@@ -34,6 +34,7 @@ class NewPMForm(forms.Form):
         for user in self.cleaned_data['recipients_user']:
             recip = Recipient(recipient=user, message=pm)
             recip.save()
+        return pm
         
         
         

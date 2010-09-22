@@ -10,7 +10,7 @@
     Subject:  {{ pm.subject }}  <br>
     Body: <br>
     {{ pm.body }} <br>
-    <form method="post" action="{% url new-pm %}">
+    <form method="post" action="{% url view-pm pm.pk %}">
         {% csrf_token %}
         <table>
         {{form.as_table }}
