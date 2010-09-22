@@ -4,13 +4,15 @@
     <a href="{% url new-pm %}">new message</a> |
     <a href="{% url inbox %}">inbox</a> |
     <a href="{% url outbox %}">outbox</a> 
-    <h2>{{ box_type }}</h2>
+    <h3>Outbox</h3>
     <table> 
-    {% for pm in pm_list %}
+    {% for pm_rec in pm_rec_list %}
         <tr>
-            <td> {{ pm.sender.username }}</td>
-            <td> <a href="/pms/{{ pm.pk }}">{{ pm.subject }}</a></td>
-            <td> {{ pm.created_on }}</td>
+            <td> {% for rec in pm_rec.1 %}
+                    {% if rec.1 %}{{ rec.0 }}{% else %}<strong>{{ rec.0 }}</strong>{%endif %}
+                {% endfor %}</td>
+            <td> <a href="/pms/{{ pm_rec.0.pk }}">{{ pm_rec.0.subject }}</a></td>
+            <td> {{ pm_rec.0.created_on }}</td>
         </tr>
     {% endfor %}
 {% endblock %}

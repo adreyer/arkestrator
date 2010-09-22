@@ -33,3 +33,6 @@ class Recipient(models.Model):
     recipient = models.ForeignKey(User)
     message = models.ForeignKey(PM)
     read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.recipient.username

@@ -26,9 +26,17 @@ def new_pm(request):
 @login_required
 def outbox(request):
     pm_list = PM.objects.filter(sender=request.user).order_by('-created_on')
+    pm_rec_list = []
+    for pm in pm_list:
+        rec_list = Recipient.objects.filter(message=pm)
+        read_list = []
+        for rec in rec_list:
+            read_list.append([rec,rec.read])
+        pm_rec_list.append([pm , read_list])
+        
+    print pm_rec_list
     return render_to_response('pms/box.html',
-            { 'pm_list' : pm_list,
-              'box_type' : 'outbox' },
+            { 'pm_rec_list' : pm_rec_list },
             context_instance = RequestContext(request))
 
 @login_required
