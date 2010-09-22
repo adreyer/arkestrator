@@ -24,7 +24,7 @@ def view_profile(request, user_id):
 
 @login_required
 def list_profiles(request):
-    profile_list = User.objects.all().sort_by('date_joined')
+    profile_list = User.objects.all().order_by('date_joined')
     return render_to_response("profiles/list_profiles.html",
         { 'profile_list' : profile_list }, 
         context_instance = RequestContext(request))
@@ -45,4 +45,20 @@ def edit_info(request):
                 { 'profile_form' : profile_form },
                 context_instance = RequestContext(request))
     
+    
+@login_required
+def edit_prefs(request):
+    if request.method == 'POST':
+        prefs_form = forms.PrefsForm(request.POST,
+                instance=Profile.objects.get(user=request.user))
+        if prefs_form.is_valid(): 
+            prefs_form.save()
+            return HttpResponseRedirect("/")
+    else:
+        prefs_form = forms.PrefsForm(
+                    instance=Profile.objects.get(user=request.user))
+        
+    return render_to_response("profiles/edit_prefs.html",
+                { 'prefs_form' : prefs_form },
+                context_instance = RequestContext(request))
     

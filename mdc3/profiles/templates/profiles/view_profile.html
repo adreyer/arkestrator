@@ -1,7 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-<a href="{{ edit-info }}">Edit Profile</a>
+<a href="{% url edit-info %}">edit profile</a> |
+<a href="{% url edit-prefs %}">edit prefs</a>
 <h3>{{ user.username }}</h3>
 <b>Name: </b> {{ profile.name }} <br>
 <b>Location: </b> {{ profile.location }} <br>

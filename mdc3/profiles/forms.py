@@ -15,9 +15,9 @@ class InfoProfileForm(forms.ModelForm):
                   'aim_name', 'gtalk_name', 'website',
                   'info', 'photo_url')
 
-class PreferencesForm(forms.ModelForm):
+class PrefsForm(forms.ModelForm):
     class Meta:
         model = Profile
-        field = ('show_images','collapse_size')
+        fields = ('show_images','collapse_size')
         
     
