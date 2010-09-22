@@ -6,7 +6,7 @@
     <a href="{% url outbox %}">outbox</a> 
     <h2>{{ box_type }}</h2>
     Sender: {{ pm.sender.username }} <br>
-    To:     <br>
+    To: {{ rec_str }}     <br>
     Subject:  {{ pm.subject }}  <br>
     Body: <br>
     {{ pm.body }} <br>

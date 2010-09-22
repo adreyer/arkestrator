@@ -61,6 +61,7 @@ def view_pm(request, pm_id):
         if not read.read:
             read.read = True
             read.save()
+    #this else is to make sure pms sent to oneself get marked read
     else:
         try:
             recip = Recipient.objects.get(message=pm,
@@ -69,11 +70,12 @@ def view_pm(request, pm_id):
             recip.save()
         except Recipient.DoesNotExist:
             pass
-            
+
+    rec_str = pm.get_rec_str()
     form =forms.NewPMForm()
     return render_to_response("pms/view_pm.html",
             { 'pm' : pm ,
+              'rec_str' : rec_str,
               'form' : form },
             context_instance = RequestContext(request))
         
-

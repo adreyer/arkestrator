@@ -18,6 +18,16 @@ class PM(models.Model):
     def __str__(self):
         return self.subject
 
+    #there is clearly a one line query for this but this will
+    #work for now
+    def get_rec_str(self):
+        rec_list = Recipient.objects.filter(message=self)
+        rec_str =''
+        for rec in rec_list:
+            rec_str += rec.recipient.username + ' '
+        return rec_str
+        
+
 
 class Recipient(models.Model):
     recipient = models.ForeignKey(User)
