@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
+    {% load bbcode %}
     <a href="{% url new-pm %}">new message</a> |
     <a href="{% url inbox %}">inbox</a> |
     <a href="{% url outbox %}">outbox</a> 
@@ -9,7 +10,7 @@
     To: {{ rec_str }}     <br>
     Subject:  {{ pm.subject }}  <br>
     Body: <br>
-    {{ pm.body }} <br>
+    {% bbcode pm.body %} <br>
     <form method="post" action="{% url view-pm pm.pk %}">
         {% csrf_token %}
         <table>
