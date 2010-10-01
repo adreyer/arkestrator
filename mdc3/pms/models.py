@@ -2,11 +2,13 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.contrib.sites.managers import CurrentSiteManager
+from bbcode.fields import BBCodeTextField
 import datetime
+
 
 class PM(models.Model):
     subject = models.CharField(max_length=100, blank=False)
-    body = models.TextField(default='')
+    body = BBCodeTextField(default='')
     sender = models.ForeignKey(User, related_name='sent_pms',
                                default="(no subject)")
     recipients = models.ManyToManyField(User,

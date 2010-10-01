@@ -81,6 +81,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.media",
     "django.contrib.messages.context_processors.messages",
     "mdc3.context_processors.site_name",
+    "mdc3.context_processors.new_pm",
 )
 
 ROOT_URLCONF = 'mdc3.urls'

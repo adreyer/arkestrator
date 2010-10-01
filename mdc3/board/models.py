@@ -5,6 +5,7 @@ from django.contrib.sites.models import Site
 from django.contrib.sites.managers import CurrentSiteManager
 from django.core.cache import cache
 
+from bbcode.fields import BBCodeTextField
 from mdc3.decorators import instance_memcache
 
 import datetime
@@ -55,7 +56,7 @@ class Thread(models.Model):
 class Post(models.Model):
     thread = models.ForeignKey(Thread, null=False)
     creator = models.ForeignKey(User,null=False)
-    body = models.TextField(blank=False)
+    body = BBCodeTextField(blank=False)
     updated_at = models.DateTimeField('Created at',
         default = datetime.datetime.now, 
         db_index = True)

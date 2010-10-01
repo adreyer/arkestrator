@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 
+{% load bbcode %}
 {% block content %}
     <h2>{{ thread.subject }}</h2>
     <a href="{% url view-thread-full thread.id %}">Show all 
@@ -15,7 +16,7 @@
                 {{ post.updated_at|date:"D, d-M-Y \a\t h:m a"}}
             </div>
             <div class="body">
-                {{ post.body|linebreaksbr }}
+                {% bbcode post.body %}
             </div>
         </div>
     {% endfor %}
