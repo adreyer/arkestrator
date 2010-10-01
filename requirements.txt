@@ -1,5 +1,4 @@
 Django>=1.2
 South>=0.7.2
 python-memcached
-pygments
 hg+http://bitbucket.org/zeeg/django-bbcode#egg=bbcode
