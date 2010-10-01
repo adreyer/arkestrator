@@ -9,8 +9,10 @@ def site_name(request):
 
 def new_pm(request):
     from django.contrib.auth.models import User
-    from mdc3.pms.models import Recipient 
+    from mdc3.pms.models import Recipient
 
-    pm_count = Recipient.objects.filter(recipient=request.user,read=False).count()
-    return { 'new_pms' : pm_count }
-
+    try:
+        pm_count = Recipient.objects.filter(recipient=request.user,read=False).count()
+        return { 'new_pms' : pm_count }
+    except TypeError:
+        return { 'new_pms' : 0 }
