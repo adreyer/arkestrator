@@ -1,13 +1,7 @@
-{% extends "base.html" %}
+{% extends "pm_base.html" %}
 
 {% block content %}
-    <a href="{% url new-pm %}">new message</a> |
-    <a href="{% url inbox %}">inbox</a> |
-    <a href="{% url outbox %}">outbox</a> |
-    <a href="{% url mark-read %}">mark all read</a>
     <h3>Inbox</h3>
-    <h3> {{ read_list.1 }}</h3>
-
     <table> 
     {% for pm in pm_read %}
             <tr>

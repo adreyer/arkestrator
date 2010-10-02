@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block extramenu %}
+    <ul>
+        <li><a href="{% url new-pm %}">new message</a> </li>
+        <li><a href="{% url inbox %}">inbox</a> </li>
+        <li><a href="{% url outbox %}">outbox</a> </li>
+        <li><a href="{% url mark-read %}">mark all read</a></li>
+    </ul>
+{% endblock %}
