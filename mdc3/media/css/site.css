@@ -1,3 +1,52 @@
+div {
+    border: 1px dotted black;
+}
+
+h1 {   
+    margin-top: 4px;
+    margin-bottom: 4px;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+div#user {
+    float: right;
+}
+
+div#user ul {
+    padding-left: 3px;
+    padding-right: 3px;
+    margin-top: 3px;
+    margin-bottom: 0px;
+}
+
+div#user ul li {
+    display: inline;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+
+div#menu {
+    float: left;
+}
+
+div#menu ul {
+    padding-left: 3px;
+    padding-right: 3px;
+    margin-top: 3px;
+    margin-bottom: 0px;
+}
+
+div#menu ul li {
+    display: inline;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+
+
+
 .thread_list {
     width: 100%;
 }
