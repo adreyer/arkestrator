@@ -5,6 +5,7 @@ from django.template import Context
 from django.core.urlresolvers import reverse
 
 import colorsys
+import time
 
 def invert_color(color):
     r = int(color[:2], 16)
@@ -41,5 +42,6 @@ class Theme(models.Model):
         return template.render(Context({'object': self}))
 
     def get_absolute_url(self):
-        return reverse('theme-css', args=(self.id,))
+        return "%s?ts=%d" % (reverse('theme-css', args=(self.id,)),
+            int(time.mktime(self.updated.timetuple())))
 

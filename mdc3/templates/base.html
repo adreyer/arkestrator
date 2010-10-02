@@ -7,7 +7,7 @@
         type="text/css" media="screen" />
     {% block user_theme %}
         {% if user.theme %}
-            <link rel="stylesheet" href="{% url theme-css user.theme.id %}"
+            <link rel="stylesheet" href="{{ user.theme.get_absolute_url }}"
                 type="text/css" media="screen" />
         {% else %}
             <link rel="stylesheet" href="{% url default-theme-css %}"
