@@ -103,9 +103,13 @@ def list_threads(request):
     if page_obj is None:
         queryset = Thread.on_site.order_by("-last_post").select_related(
             "creator","last_post_by")
-        paginator = Paginator(queryset, 50, allow_empty_first_page=True)
+        paginator = Paginator(queryset, 3, allow_empty_first_page=True)
         page_obj = paginator.page(page)
         cache.set(cache_key, page_obj)
+
+    page_list = range(1,paginator.num_pages+1)
+    print paginator.num_pages
+    print page_list
 
     thread_list = page_obj.object_list
 
@@ -123,6 +127,7 @@ def list_threads(request):
     return render_to_response("board/thread_list.html", {
         'thread_list' : thread_list,
         'page_obj' : page_obj,
+        'page_list' : page_list,
     }, context_instance = RequestContext(request))
 
 @login_required

@@ -33,4 +33,14 @@
         </tr>
     {% endfor %}
     </table>
+    <div class="pagination">
+        <strong> Go to page: </strong>
+        {% for p in page_list %}
+            {% if p == page_obj.number %}
+                <strong>{{ p }},</strong>
+            {% else %}
+                <a href="?page={{ p }}">{{ p }},</a>
+            {% endif %}
+        {% endfor %}
+    </div>
 {% endblock %}
