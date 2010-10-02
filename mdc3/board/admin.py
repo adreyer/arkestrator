@@ -8,11 +8,10 @@ class PostInline(admin.StackedInline):
 
 class ThreadAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None, {'fields': ['subject','creator','site']}),
+        (None, {'fields': ['subject','creator','site','stuck']}),
         ('Last Post Information', {'fields':['last_post_by','last_post']}),
     ]
 
-    inlines = [PostInline]
 
 admin.site.register(Thread,ThreadAdmin)
 admin.site.register(Post)

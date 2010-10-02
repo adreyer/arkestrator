@@ -20,13 +20,13 @@ class Theme(models.Model):
     user = models.OneToOneField(User, blank=True, null=True)
     name = models.CharField(max_length=32, blank=True)
 
-    background = models.CharField(max_length=6, default="202030")
-    row1 = models.CharField(max_length=6, default="303040")
-    row2 = models.CharField(max_length=6, default="404050")
-    form_background = models.CharField(max_length=6, default="606070")
-    my_posts = models.CharField(max_length=6, default="505060")
+    background = models.CharField(max_length=6, default="eeeeee")
+    row1 = models.CharField(max_length=6, default="e0e4e8")
+    row2 = models.CharField(max_length=6, default="d0d4d8")
+    form_background = models.CharField(max_length=6, default="ffffff")
+    my_posts = models.CharField(max_length=6, default="e8e4e0")
     font_face = models.CharField(max_length=64, default="sans-serif")
-    font_size = models.IntegerField(default=100)
+    font_size = models.IntegerField(default=95)
 
     def text_color(self):
         return invert_color(self.background)

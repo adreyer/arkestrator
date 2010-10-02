@@ -98,10 +98,11 @@ def list_threads(request):
     except ValueError:
         raise Http404
 
+    
     cache_key = "thread-list-page:%d:%d"%(Site.objects.get_current().id, page)
     page_obj = cache.get(cache_key, None)
     if page_obj is None:
-        queryset = Thread.on_site.order_by("-last_post").select_related(
+        queryset = Thread.on_site.order_by("-stuck","-last_post").select_related(
             "creator","last_post_by")
         paginator = Paginator(queryset, 50, allow_empty_first_page=True)
         page_obj = paginator.page(page)
@@ -140,3 +141,5 @@ def thread_history(request,id=None,expand=False):
         'read_list' : queryset.all(),
     }, context_instance = RequestContext(request))
 
+
+    

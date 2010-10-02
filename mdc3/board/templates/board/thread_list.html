@@ -20,9 +20,11 @@
             <td>{{ thread.creator.username }}</td>
             <td>{% if thread.unread %}
                     <b><a href="{% url view-thread thread.id %}">
+                        {% if thread.stuck %}<strong>Sticky: </strong>{% endif %}
                         {{ thread.subject }}</a></b>
                 {% else %}
                     <a href="{% url view-thread thread.id %}">
+                        {% if thread.stuck %}<strong>Sticky: </strong>{% endif %}
                         {{ thread.subject }}</a>
                 {% endif %}
             </td>

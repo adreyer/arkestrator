@@ -105,3 +105,6 @@ INSTALLED_APPS = (
     'mdc3.pms',
     'bbcode',
 )
+
+BBCODE_DEFAULT_NAMESPACES = ('no-smilies',)
+
