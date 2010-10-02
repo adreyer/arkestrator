@@ -28,6 +28,8 @@ class Theme(models.Model):
     font_face = models.CharField(max_length=64, default="sans-serif")
     font_size = models.IntegerField(default=95)
 
+    updated = models.DateTimeField(auto_now=True)
+
     def text_color(self):
         return invert_color(self.background)
 
