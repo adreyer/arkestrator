@@ -1,7 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
+{% block tabtitle %}
 <title>{{ site_name }}</title>
+{% endblock %}
 {% block style %}
     <link rel="stylesheet" href="{{ MEDIA_URL }}css/site.css" 
         type="text/css" media="screen" />
@@ -19,7 +21,9 @@
 <body>
 <div id="header">
 {% block header %}
+    {% block pagetitle %}
     <h1>{{ site_name }}</h1>
+    {% endblock %}
     <div id="status">XXXXX threads, XX active users</div>
     <div id="user">
         <ul>

@@ -1,9 +1,18 @@
 {% extends "base.html" %}
+{% block tabtitle %}
+<title>{{ thread.subject}} | {{ site_name }}</title>
+{% endblock %}
+{% block pagetitle %}
+    <h1>{{ thread.subject }}</h1>
+{% endblock %}
 
 {% load bbcode %}
 {% block content %}
-    <h2>{{ thread.subject }}</h2>
-    <a href="{% url view-thread-full thread.id %}">Show all 
+    <ul>
+        <li><a href="{% url view-thread-full thread.id %}">Show all </li>
+        <li><a href="{% url list-threads %}">Go Back</a></li>
+        <li><a href="{% url sticky thread.id %}">toggle sticky</a></li>
+    </ul>
         {{ thread.total_posts }} replies</a>
     {% for post in object_list %}
         <div class="post">
@@ -20,8 +29,6 @@
             </div>
         </div>
     {% endfor %}
-    <a href="{% url list-threads %}">Go Back</a>
-    <a href="{% url sticky thread.id %}">toggle sticky</a>
     <a name="post" />
     <form method="post" action="{% url view-thread thread.id %}#post">
         {% csrf_token %}
