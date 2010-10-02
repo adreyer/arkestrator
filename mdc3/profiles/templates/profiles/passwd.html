@@ -1,0 +1,12 @@
+{% extends "prof_base.html" %}
+
+{% block content %}
+   
+    <form method="post" action="{% url passwd %}">
+        {% csrf_token %}
+        <table
+        {{ form.as_table }}
+        </table>
+        <input type="submit" value="Save" />
+    </form>
+{% endblock %}

@@ -22,17 +22,17 @@ class NewInviteForm(forms.Form):
 class UserRegistrationForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('username', 'email', 'password')
-        widgets = {
-            'password' : forms.PasswordInput(),
-            }
+        fields = ('username', 'email')
     
-    password_verify = forms.CharField(required=True,
+    pass1 = forms.CharField(required=True,
+            label="password",
+            widget=forms.PasswordInput)
+    pass2 = forms.CharField(required=True,
             label="retype password",
             widget=forms.PasswordInput)
 
     def clean(self):
-        if self.cleaned_data["password"] != self.cleaned_data["password_verify"]:
+        if self.cleaned_data["pass1"] != self.cleaned_data["pass2"]:
             raise forms.ValidationError("passwords don't match")
         return self.cleaned_data
         

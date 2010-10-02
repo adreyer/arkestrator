@@ -19,5 +19,3 @@ class PrefsForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('show_images','collapse_size')
-        
-    
