@@ -20,3 +20,10 @@ textarea, input {
     background-color: #{{ object.form_background }}; 
 }
 
+.menuitem {
+    background-color: #{{ object.row2 }}; 
+}
+
+.menuitem:hover {
+    background-color: #{{ object.my_posts }};
+}

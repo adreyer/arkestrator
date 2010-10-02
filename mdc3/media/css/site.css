@@ -1,7 +1,3 @@
-div {
-    border: 1px dotted black;
-}
-
 h1 {   
     margin-top: 4px;
     margin-bottom: 4px;
@@ -9,46 +5,52 @@ h1 {
     margin-right: 0px;
 }
 
+div#status {
+    margin-bottom: 1em;
+}
+
+div#header {
+    width: 100%;
+    margin: 0 auto;
+}
+
 div#user {
     float: right;
+    width: auto;
 }
-
-div#user ul {
-    padding-left: 3px;
-    padding-right: 3px;
-    margin-top: 3px;
-    margin-bottom: 0px;
-}
-
-div#user ul li {
-    display: inline;
-    margin-left: 3px;
-    margin-right: 3px;
-}
-
 
 div#menu {
     float: left;
+    width: auto;
 }
 
-div#menu ul {
+div#user ul, div#menu ul {
     padding-left: 3px;
     padding-right: 3px;
     margin-top: 3px;
     margin-bottom: 0px;
 }
 
-div#menu ul li {
-    display: inline;
-    margin-left: 3px;
-    margin-right: 3px;
+.menuitem {
+    display: inline-block;
+    margin-left: 2px;
+    margin-right: 2px;
+    padding: 5px;
+    padding-right: 10px;
+    padding-left: 10px;
 }
-
-
-
 
 .thread_list {
     width: 100%;
+    border-collapse: collapse;
+}
+
+div#content {
+    clear: both;
+}
+
+table.thread_list td {
+    padding: 3px;
 }
 
 div#ra {

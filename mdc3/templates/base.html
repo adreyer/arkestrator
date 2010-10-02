@@ -23,22 +23,22 @@
     <div id="status">XXXXX threads, XX active users</div>
     <div id="user">
         <ul>
-            <li><a href="/profiles/{{ user.id }}"><strong>{{ user.username }}</strong></a></li>
-            <li><a href="{% url django.contrib.auth.views.logout %}">Log out</a></li>
+            <li class="menuitem"><a href="/profiles/{{ user.id }}"><strong>{{ user.username }}</strong></a></li>
+            <li class="menuitem"><a href="{% url django.contrib.auth.views.logout %}">Log out</a></li>
         </ul>
     </div>
     <div id="menu">
         <ul>
-            <li><a href="/">Index</a></li>
-            <li><a href="{% url new-thread %}">New Thread</a></li>
-            <li><a href="{% url list-profiles %}">User List</a></li>
-            <li><a href="{% url edit-theme %}">Edit Theme</a></li>
-            <li><a href="{% url inbox %}">
+            <li class="menuitem"><a href="/">Index</a></li>
+            <li class="menuitem"><a href="{% url new-thread %}">New Thread</a></li>
+            <li class="menuitem"><a href="{% url list-profiles %}">User List</a></li>
+            <li class="menuitem"><a href="{% url edit-theme %}">Edit Theme</a></li>
+            <li class="menuitem"><a href="{% url inbox %}">
                 {% if new_pms %}
                     <b>Messages({{ new_pms }})</b>
                 {% else %}Messages{% endif %}</a></li>
             {% if user.is_staff %}
-            <li><a href="/admin/">Admin</a></li>
+            <li class="menuitem"><a href="/admin/">Admin</a></li>
             {% endif %}
         </ul>
         {% block extramenu %}
