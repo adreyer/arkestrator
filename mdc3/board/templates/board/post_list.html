@@ -3,17 +3,18 @@
 <title>{{ thread.subject}} | {{ site_name }}</title>
 {% endblock %}
 {% block pagetitle %}
-    <h1>{{ thread.subject }}</h1>
+    <h1>{{ thread.subject }} ({{ thread.total_posts }} replies)</h1>
 {% endblock %}
 
 {% load bbcode %}
 {% block content %}
-    <ul>
-        <li><a href="{% url view-thread-full thread.id %}">Show all </li>
-        <li><a href="{% url list-threads %}">Go Back</a></li>
-        <li><a href="{% url sticky thread.id %}">toggle sticky</a></li>
-    </ul>
-        {{ thread.total_posts }} replies</a>
+    <div id="submenu">
+        <ul>
+            <li class="submenuitem"><a href="{% url view-thread-full thread.id %}">Show all </li>
+            <li class="submenuitem"><a href="{% url sticky thread.id %}">Toggle sticky</a></li>
+            <li class="submenuitem"><a href="{% url thread-history thread.id %}">Thread history</a></li>
+        </ul>
+    </div>
     {% for post in object_list %}
         <div class="post">
             {% if post.creator == user %}

@@ -6,18 +6,34 @@ body {
     color: #{{ object.text_color }};
 }
 
-a { color: #{{ object.text_color }}; text-decoration: none; }
-a:hover { text-decoration: underline; }
+a { 
+    color: #{{ object.text_color }}; 
+    text-decoration: none; 
+}
 
-.row1 { background-color: #{{ object.row1 }}; }
+a:hover { 
+    text-decoration: underline; 
+}
 
-.row2 { background-color: #{{ object.row2 }}; }
+.row1 { 
+    background-color: #{{ object.row1 }}; 
+}
 
-.my_post { background-color: #{{ object.my_posts }}; }
+.row2 { 
+    background-color: #{{ object.row2 }}; 
+}
+
+.my_post { 
+    background-color: #{{ object.my_posts }}; 
+}
 
 textarea, input { 
     color: #{{ object.form_text_color }}; 
     background-color: #{{ object.form_background }}; 
+}
+
+div#submenu {
+    background-color: #{{ object.row2 }};
 }
 
 .menuitem {
@@ -25,5 +41,13 @@ textarea, input {
 }
 
 .menuitem:hover {
+    background-color: #{{ object.my_posts }};
+}
+
+.submenuitem {
+    background-color: #{{ object.row1 }};
+}
+
+.submenuitem:hover {
     background-color: #{{ object.my_posts }};
 }
