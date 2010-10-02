@@ -1,7 +1,7 @@
-{% extends "base.html" %}
+{% extends "prof_base.html" %}
 
 {% block content %}
-    <a href="{% url edit-info %}">edit info</a>
+   
     <form method="post" action="{% url edit-prefs %}">
         {% csrf_token %}
         <table>
