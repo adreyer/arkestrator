@@ -141,5 +141,13 @@ def thread_history(request,id=None,expand=False):
         'read_list' : queryset.all(),
     }, context_instance = RequestContext(request))
 
-
+@login_required
+def toggle_sticky(request,id):
+    thread = get_object_or_404(Thread,pk=id)
+    if thread.stuck:
+        thread.stuck = False
+    else:
+        thread.stuck = True
+    thread.save()
+    return HttpResponseRedirect("/")
     

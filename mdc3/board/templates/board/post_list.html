@@ -21,6 +21,7 @@
         </div>
     {% endfor %}
     <a href="{% url list-threads %}">Go Back</a>
+    <a href="{% url sticky thread.id %}">toggle sticky</a>
     <a name="post" />
     <form method="post" action="{% url view-thread thread.id %}#post">
         {% csrf_token %}
@@ -29,4 +30,5 @@
         </table>
         <input type="submit" value="Say It" />
     </form>
+   
 {% endblock %}
