@@ -4,13 +4,6 @@
 
 {% block content %}
     <table class="thread_list">
-    <tr>
-        <th class="left">Username</th>
-        <th class="left">Subject</th>
-        <th class="left">Last Post</th>
-        <th class="center">Replies</th>
-        <th class="center">Views</th>
-    </tr>
     {% for thread in thread_list %}
         {% if thread.creator == user %}
             <tr class="my_post">

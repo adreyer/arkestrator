@@ -22,8 +22,9 @@
     <h1>{{ site_name }}</h1>
     <div id="user">
         <ul>
-            <li>Logged in as <strong>{{ user.username }}</strong></li>
+            <li><a href="/profiles/{{ user.id }}"><strong>{{ user.username }}</strong></a></li>
             <li><a href="{% url django.contrib.auth.views.logout %}">Log out</a></li>
+        </ul>
     </div>
     <div id="menu">
         <ul>
