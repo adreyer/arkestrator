@@ -34,12 +34,12 @@
     <div id="menu">
         <ul>
             <li class="menuitem"><a href="/">Index</a></li>
-            <li class="menuitem"><a href="{% url new-thread %}">New Thread</a></li>
-            <li class="menuitem"><a href="{% url list-profiles %}">User List</a></li>
-            <li class="menuitem"><a href="{% url edit-theme %}">Edit Theme</a></li>
+            <li class="menuitem"><a href="{% url new-thread %}">New thread</a></li>
+            <li class="menuitem"><a href="{% url list-profiles %}">User list</a></li>
+            <li class="menuitem"><a href="{% url edit-theme %}">Edit theme</a></li>
             <li class="menuitem"><a href="{% url inbox %}">
                 {% if new_pms %}
-                    <b>Messages({{ new_pms }})</b>
+                    <span class="urgent">Messages ({{ new_pms }} new)</span>
                 {% else %}Messages{% endif %}</a></li>
             {% if user.is_staff %}
             <li class="menuitem"><a href="/admin/">Admin</a></li>
