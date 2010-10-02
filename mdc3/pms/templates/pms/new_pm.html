@@ -1,10 +1,6 @@
-{% extends "base.html" %}
+{% extends "pm_base.html" %}
 
 {% block content %}
-
-    <a href="{% url new-pm %}">new message</a> |
-    <a href="{% url inbox %}">inbox</a> |
-    <a href="{% url outbox %}">outbox</a> 
     <form method="post" action="{% url new-pm %}">
         {% csrf_token %}
         <table>

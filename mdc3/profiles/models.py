@@ -8,7 +8,6 @@ class Profile(models.Model):
     #data
     user = models.OneToOneField(User,null=False)
     ip_signup = models.IPAddressField()
-    new_message = models.BooleanField(default=False)
     last_login = models.DateTimeField(default=datetime.datetime.now)
     last_view = models.DateTimeField(default=datetime.datetime.now)
     last_post = models.DateTimeField(default=datetime.datetime.now)

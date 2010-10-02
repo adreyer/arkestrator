@@ -1,9 +1,6 @@
-{% extends "base.html" %}
+{% extends "pm_base.html" %}
 
 {% block content %}
-    <a href="{% url new-pm %}">new message</a> |
-    <a href="{% url inbox %}">inbox</a> |
-    <a href="{% url outbox %}">outbox</a> 
     <h3>Outbox</h3>
     <table> 
     {% for pm_rec in pm_rec_list %}
