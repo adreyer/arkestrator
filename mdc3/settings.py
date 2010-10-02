@@ -106,5 +106,5 @@ INSTALLED_APPS = (
     'bbcode',
 )
 
-BBCODE_DEFAULT_NAMESPACES = ('no-smilies',)
+BBCODE_DEFAULT_NAMESPACES = ('no-smilies','no-colors')
 
