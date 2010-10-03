@@ -112,6 +112,10 @@ div.body {
     padding-bottom: 8px;
 }
 
+div.body a {
+    text-decoration: underline;
+}
+
 div.post {
     margin-bottom: -1px; /* LOL */
 }
