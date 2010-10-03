@@ -35,8 +35,9 @@ def outbox(request):
 
     queryset = PM.objects.filter(sender=request.user).order_by(
         '-created_on').select_related('created_on', 'subject',
-            'recipient__read')
-    paginator = Paginator(queryset, 3, allow_empty_first_page=True)
+            'recipient','recipient__read',
+            'recipient__recipient__username')
+    paginator = Paginator(queryset, 50, allow_empty_first_page=True)
     page_obj = paginator.page(page)
 
     page_list = range(1,paginator.num_pages+1)
@@ -66,7 +67,7 @@ def inbox(request):
     queryset = PM.objects.filter(recipients=request.user).order_by(
         '-created_on').select_related('subject','created_on',
             'sender__username','recipient__read')
-    paginator = Paginator(queryset, 3, allow_empty_first_page=True)
+    paginator = Paginator(queryset, 50, allow_empty_first_page=True)
     page_obj = paginator.page(page)
 
     page_list = range(1,paginator.num_pages+1)
@@ -86,15 +87,15 @@ def inbox(request):
 
 @login_required
 def mark_read(request):
-    unread_list = Recipient.objects.filter(recipient=request.user,read=False)
-    for rec in unread_list:
-        rec.read = True
-        rec.save()
+    unread_list = Recipient.objects.filter(
+        recipient=request.user,read=False).update(
+            read=True)
     return HttpResponseRedirect("/pms/inbox")
 
 @login_required
 def view_pm(request, pm_id):
     pm = get_object_or_404(PM,pk=pm_id)
+    #make sure only the sender and recipients can read it
     if pm.sender != request.user:
         read = get_object_or_404(Recipient,message=pm,recipient=request.user)
         if not read.read:
