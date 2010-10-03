@@ -61,23 +61,17 @@ def inbox(request):
         page = int(request.GET.get('page', 1))
     except ValueError:
         raise Http404
-    
-    queryset = PM.objects.filter(recipients=request.user).order_by(
-        '-created_on').select_related('subject','created_on',
-            'sender__username','recipient__read')
+
+    queryset = Recipient.objects.filter(recipient = request.user).order_by(
+        "-message__created_on").select_related('message', 'message__sender')
+
     paginator = Paginator(queryset, 25, allow_empty_first_page=True)
     page_obj = paginator.page(page)
 
     pm_list = page_obj.object_list
     
-    read_list = []
-    for pm in pm_list:
-        read_list.append(Recipient.objects.get(
-                recipient=request.user,
-                message=pm).read)
-    pm_read = zip(pm_list, read_list)
     return render_to_response('pms/inbox.html',
-            { 'pm_read' : pm_read,
+            { 'pm_list' : pm_list,
               'page_obj' : page_obj },
             context_instance = RequestContext(request))
 
