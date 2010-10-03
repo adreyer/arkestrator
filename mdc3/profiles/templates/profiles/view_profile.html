@@ -19,8 +19,9 @@
             <strong>AIM:</strong> {{ view_profile.aim_name }} <br />
             <strong>Gtalk: </strong> {{ view_profile.gtalk_name }} <br />
             <strong>Website: </strong> <a href="{{ view_profile.website }}">{{ view_profile.website }} </a> <br />
+            
             <strong>Info:</strong> <br /> 
-            <p>{{view_profile.info}}</p> <br/>
+            <p>{{ view_profile.info|linebreaks }}</p> <br/>
             <strong>Profile views:</strong> {{ view_profile.profile_views }}<br />
             <strong>Last seen:</strong> <br /> 
         </td>
