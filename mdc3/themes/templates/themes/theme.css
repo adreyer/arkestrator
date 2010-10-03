@@ -10,6 +10,10 @@ div#content {
     background-color: #{{ object.row2 }};
 }
 
+blockquote.quote {
+    background-color: #{{ object.row2 }};
+}
+
 a { 
     color: #{{ object.text_color }}; 
 }

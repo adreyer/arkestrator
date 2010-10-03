@@ -12,16 +12,31 @@
 <table class="thread_list">
     <tr>
         <td>
-            <strong>Name:</strong> {{ view_profile.name }} <br />
-            <strong>Location:</strong> {{ view_profile.location }} <br />
-            <strong>Phone Number:</strong> {{ view_profile.phone }} <br />
-            <strong>Email:</strong>  {{ view_profile.public_email }} <br />
-            <strong>AIM:</strong> {{ view_profile.aim_name }} <br />
-            <strong>Gtalk: </strong> {{ view_profile.gtalk_name }} <br />
-            <strong>Website: </strong> <a href="{{ view_profile.website }}">{{ view_profile.website }} </a> <br />
-            
-            <strong>Info:</strong> <br /> 
-            <p>{{ view_profile.info|linebreaks }}</p> <br/>
+            {% if view_profile.name %} 
+                <strong>Name:</strong> {{ view_profile.name }} <br />
+            {% endif %}
+            {% if view_profile.location %} 
+                <strong>Location:</strong> {{ view_profile.location }} <br />
+            {% endif %}
+            {% if view_profile.phone %} 
+                <strong>Phone Number:</strong> {{ view_profile.phone }} <br />
+            {% endif %}
+            {% if view_profile.public_email %} 
+                <strong>Email:</strong>  {{ view_profile.public_email }} <br />
+            {% endif %}
+            {% if view_profile.aim_name %} 
+                <strong>AIM:</strong> {{ view_profile.aim_name }} <br />
+            {% endif %}
+            {% if view_profile.gtalk_name %} 
+                <strong>Gtalk: </strong> {{ view_profile.gtalk_name }} <br />
+            {% endif %}
+            {% if view_profile.website %} 
+                <strong>Website: </strong> <a href="{{ view_profile.website }}">{{ view_profile.website }} </a> <br />
+            {% endif %}
+            {% if view_profile.info %} 
+                <strong>Info:</strong> <br /> 
+                <p>{{ view_profile.info|linebreaks }}</p> <br/>
+            {% endif %}
             <strong>Profile views:</strong> {{ view_profile.profile_views }}<br />
             <strong>Last seen:</strong> <br /> 
         </td>
