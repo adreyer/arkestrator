@@ -116,6 +116,10 @@ div.body a {
     text-decoration: underline;
 }
 
+div.body a:hover {
+    text-decoration: none;
+}
+
 div.post {
     margin-bottom: -1px; /* LOL */
 }
