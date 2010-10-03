@@ -10,14 +10,17 @@
 
 {% block content %}
     <table class="thread_list"> 
-    {% for pm in pm_read %}
+    {% for pm in pm_list %}
             <tr class="{% cycle "row1" "row2" %}">
-            <td> {{ pm.0.sender.username }}</td>
-            <td> <a href="/pms/{{ pm.0.pk }}">
-                {% if not pm.1 %}<strong>{% endif %}
-                {{ pm.0.subject }}
-                {% if not pm.1 %}</strong>{% endif %}</a></td>
-            <td> {{ pm.0.created_on|date:"h:i a d-M-y" }}</td>
+            <td> {{ pm.message.sender.username }}</td>
+            <td> <a href="{% url view-pm pm.message.pk %}">{% spaceless %}
+                {% if pm.read %}
+                    {{ pm.message.subject }}
+                {% else %}
+                    <strong>{{ pm.message.subject }}</strong>
+                {% endif %}
+                {% endspaceless %}</a></td>
+            <td> {{ pm.message.created_on|date:"h:i a d-M-y" }}</td>
         </tr>
         {% endfor %}
     </table>
