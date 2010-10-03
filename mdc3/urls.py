@@ -21,4 +21,6 @@ urlpatterns = patterns('',
     (r'^profiles/', include('mdc3.profiles.urls')),
     (r'^invites/', include('mdc3.invites.urls')),
     (r'^pms/', include('mdc3.pms.urls')),
+    url(r'^active/$', 'mdc3.util.views.active_users',
+        name='active-users'),
 )
