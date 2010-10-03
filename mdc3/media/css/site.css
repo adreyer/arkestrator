@@ -47,18 +47,12 @@ div#submenu {
     -moz-border-radius-topright: 5px;
 }
 
-div#user ul, div#menu ul {
+div#user ul, div#menu ul, div#submenu ul {
     padding-left: 3px;
     padding-right: 3px;
     margin-top: 3px;
-    margin-bottom: 0px;
-}
-
-div#submenu ul {
-    padding-left: 3px;
-    padding-right: 3px;
-    margin-top: 3px;
-    margin-bottom: 0px;
+    margin-bottom: 1px;
+    list-style-type: none;
 }
 
 .menuitem {
@@ -67,7 +61,7 @@ div#submenu ul {
     margin-right: 2px;
     padding: 5px;
     padding-right: 10px;
-    padding-left: 10px;
+    padding-left: 10px; 
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     -moz-border-radius-topleft: 5px;
@@ -82,10 +76,14 @@ div#submenu ul {
     margin-right: 1px;
     padding: 2px;
     padding-right: 5px;
-    padding-left: 5px;
+    padding-left: 5px; 
     font-size: 90%;
     border-radius: 5px;
     -moz-border-radius: 5px;
+}
+
+.menuitem a, .submenuitem a {
+    display: block;
 }
 
 .menuitem a:hover, .submenuitem a:hover {
@@ -99,6 +97,7 @@ div#submenu ul {
 
 div#content {
     clear: both;
+    margin-top: -1px;
 }
 
 table.thread_list td {
@@ -123,6 +122,25 @@ div.body a:hover {
 
 div.post {
     margin-bottom: -1px; /* LOL */
+}
+
+p.replyform {
+    padding: 10px;
+}
+
+textarea, input {
+    padding: 4px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+
+div#bottom-bezel {
+    clear: both;
+    padding-bottom: 4px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    -moz-border-radius-bottomright: 5px;
 }
 
 div#ra {
