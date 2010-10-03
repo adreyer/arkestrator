@@ -1,27 +1,40 @@
 {% extends "pms/pm_base.html" %}
 
+{% block tabtitle %}
+<title>Outbox for {{ user.username }} - {{ site_name }}</title>
+{% endblock %}
+
+{% block pagetitle %}
+<h1>Outbox for {{ user.username }}</h1>
+{% endblock %}
+
+
 {% block content %}
-    <h3>Outbox</h3>
-    <table class="pm_list"> 
+    <table class="thread_list"> 
     {% for pm_rec in pm_rec_list %}
         <tr class="{% cycle "row1" "row2" %}">
             <td> {% for rec in pm_rec.1 %}
                     {% if rec.1 %}{{ rec.0 }}{% else %}<strong>{{ rec.0 }}</strong>{%endif %}
                 {% endfor %}</td>
             <td> <a href="/pms/{{ pm_rec.0.pk }}">{{ pm_rec.0.subject }}</a></td>
-            <td> {{ pm_rec.0.created_on }}</td>
+            <td nowrap="nowrap"> {{ pm_rec.0.created_on|date:"h:i a d-M-y" }}</td>
         </tr>
     {% endfor %}
     </table>
-        <div class="pagination">
-        <strong> Go to page: </strong>
-        {% for p in page_obj.paginator.page_range %}
-            {% if p == page_obj.number %}
-                <strong>{{ p }},</strong>
-            {% else %}
-                <a href="?page={{ p }}">{{ p }},</a>
-            {% endif %}
-        {% endfor %}
-    </div>
-
 {% endblock %}
+
+{% block bottombezel %}
+<div id="bottombezel">
+    <ul>
+            <li class="submenulegend">Page:</li>
+    {% for p in page_obj.paginator.page_range %}
+        {% if p == page_obj.number %}
+            <li class="submenuitem"><strong>{{ p }}</strong></li>
+        {% else %}
+            <li class="submenuitem"><a href="?page={{ p }}">{{ p }}</a></li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+

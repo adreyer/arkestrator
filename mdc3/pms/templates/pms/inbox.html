@@ -17,7 +17,7 @@
                 {% if not pm.1 %}<strong>{% endif %}
                 {{ pm.0.subject }}
                 {% if not pm.1 %}</strong>{% endif %}</a></td>
-            <td> {{ pm.0.created_on }}</td>
+            <td> {{ pm.0.created_on|date:"h:i a d-M-y" }}</td>
         </tr>
         {% endfor %}
     </table>

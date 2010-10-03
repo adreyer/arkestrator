@@ -11,6 +11,10 @@ p {
     margin-bottom: 0.5em;
 }
 
+.smallfont {
+    font-size: 93%;
+}
+
 a {
     text-decoration: none;
 }
@@ -109,6 +113,10 @@ div#content {
 
 table.thread_list td {
     padding: 3px;
+}
+
+table.thread_list td.count {
+    text-align: center;
 }
 
 div.body, div.row2, div.my_post {

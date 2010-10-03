@@ -10,7 +10,7 @@
         {% else %}
             <tr class="{% cycle "row1" "row2" %}">
         {% endif %}
-            <td>{{ thread.creator.username }}</td>
+            <td nowrap="nowrap">{{ thread.creator.username }}</td>
             <td>{% if thread.unread %}
                     <b><a href="{% url view-thread thread.id %}">
                         {% if thread.stuck %}<strong>Sticky: </strong>{% endif %}
@@ -21,9 +21,9 @@
                         {{ thread.subject }}</a>
                 {% endif %}
             </td>
-            <td>{{ thread.last_post|date:"P d-M-Y"}} by {{ thread.last_post_by.username }}</td>
-            <td>{{ thread.total_posts }}</td>
-            <td><a href="{% url thread-history thread.id %}">
+            <td nowrap="nowrap">{{ thread.last_post|date:"h:i a d-M-y"}} by <span class="smallfont">{{ thread.last_post_by.username }}</span></td>
+            <td nowrap="nowrap" class="count">{{ thread.total_posts }}</td>
+            <td nowrap="nowrap" class="count"><a href="{% url thread-history thread.id %}">
                 {{ thread.total_views }}</a></td>
         </tr>
     {% endfor %}
