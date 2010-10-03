@@ -87,6 +87,10 @@ div#submenu ul {
     -moz-border-radius: 5px;
 }
 
+.menuitem a:hover, .submenuitem a:hover {
+    text-decoration: none;
+}
+
 .thread_list {
     width: 100%;
     border-collapse: collapse;

@@ -41,16 +41,23 @@ div#submenu {
 
 .menuitem {
     background-color: #{{ object.row2 }}; 
+    border: 1px solid #{{ object.background }};
+    border-bottom: none;
+    margin-bottom: -1px;
 }
 
 .menuitem:hover {
     background-color: #{{ object.my_posts }};
+    border: 1px solid #{{ object.text_color }};
+    border-bottom: none;
 }
 
 .submenuitem {
     background-color: #{{ object.row1 }};
+    border: 1px solid #{{ object.row2 }};
 }
 
 .submenuitem:hover {
     background-color: #{{ object.my_posts }};
+    border: 1px solid #{{ object.text_color }};
 }
