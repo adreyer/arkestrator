@@ -33,16 +33,14 @@
             </div>
         </div>
     {% endfor %}
-    {% block bottombezel %}
-    <div id="bottombezel"></div>
-    {% endblock %}
-    <a name="post" />
+{% endblock %}
+{% block replyform %}
+<a name="post" />
     <form method="post" action="{% url view-thread thread.id %}#post">
-        {% csrf_token %}
-        <p class="replyform">
-            <textarea id="id_body" rows="12" cols="60" name="body"></textarea><br >
+    {% csrf_token %}
+    <p class="replyform">
+        <textarea id="id_body" rows="12" cols="60" name="body"></textarea><br >
             <input class="button" type="submit" value="Say it" />
         </p>
     </form>
-   
 {% endblock %}
