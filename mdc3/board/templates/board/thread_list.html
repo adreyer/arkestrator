@@ -1,15 +1,16 @@
 {% extends "base.html" %}
 
-{% load cache %}
+{% load cache util %}
 
 {% block content %}
     <table class="thread_list">
-    {% for thread in thread_list %}
-        {% if thread.creator == user %}
-            <tr class="my_post">
-        {% else %}
-            <tr class="{% cycle "row1" "row2" %}">
-        {% endif %}
+    {% withcycle "row1" "row2" as row_color %}
+        {% for thread in thread_list %}
+            {% if thread.creator == user %}
+                <tr class="my_post">
+            {% else %}
+                <tr class="{{ row_color }}">
+            {% endif %}
             <td nowrap="nowrap">{{ thread.creator.username }}</td>
             <td>{% if thread.unread %}
                     <b><a href="{% url view-thread thread.id %}">
@@ -25,8 +26,10 @@
             <td nowrap="nowrap" class="count">{{ thread.total_posts }}</td>
             <td nowrap="nowrap" class="count"><a href="{% url thread-history thread.id %}">
                 {{ thread.total_views }}</a></td>
-        </tr>
-    {% endfor %}
+            </tr>
+            {% nextcycle row_color %}
+        {% endfor %}
+    {% endwithcycle %}
     </table>
 {% endblock %}
 {% block bottombezel %}
