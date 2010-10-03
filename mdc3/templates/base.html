@@ -25,7 +25,8 @@
     <h1>{{ site_name }}</h1>
     {% endblock %}
     <div id="status">{{ thread_count }} thread{{ thread_count|pluralize }}, 
-        {{ online_users }} active users</div>
+        {{ online_users }} active users
+    </div>
     <div id="user">
         <ul>
             <li class="menuitem"><a href="/profiles/{{ user.id }}"><strong>{{ user.username }}</strong></a></li>
@@ -46,9 +47,9 @@
             <li class="menuitem"><a href="/admin/">Admin</a></li>
             {% endif %}
         </ul>
+    </div>
         {% block extramenu %}
         {% endblock %}
-    </div>
 {% endblock %}
 </div>
 

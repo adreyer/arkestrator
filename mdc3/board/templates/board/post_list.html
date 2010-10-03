@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% load bbcode %}
-{% block content %}
+{% block extramenu %}
     <div id="submenu">
         <ul>
             <li class="submenuitem"><a href="{% url view-thread-full thread.id %}">Show all ({{ thread.total_posts }})</li>
@@ -16,6 +16,8 @@
             <li class="submenuitem"><a href="{% url thread-history thread.id %}">Thread history</a></li>
         </ul>
     </div>
+{% endblock %}
+{% block content %}
     {% for post in object_list %}
         <div class="post">
             {% if post.creator == user %}
