@@ -78,7 +78,7 @@ div#submenu ul {
     padding-right: 5px;
     padding-left: 5px;
     font-size: 90%;
-    border-bottom-left-radius: 5px;
+    border-radius: 5px;
     -moz-border-radius: 5px;
 }
 
@@ -97,6 +97,9 @@ table.thread_list td {
 
 div.body, div.row2, div.my_post {
     padding: 4px;
+}
+
+div.body {
     padding-bottom: 8px;
 }
 
