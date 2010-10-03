@@ -59,7 +59,7 @@ div#submenu {
 
 .menuitem:hover {
     background-color: #{{ object.my_posts }};
-    border: 1px solid #{{ object.text_color }};
+    border: 1px solid #{{ object.row2 }};
     border-bottom: none;
 }
 
