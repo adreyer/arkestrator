@@ -1,6 +1,12 @@
+import datetime
+
+from django.contrib.sites.models import Site
+from django.contrib.auth.models import User
+from django.core.cache import cache
+
+from mdc3.pms.models import Recipient
 
 def site_name(request):
-    from django.contrib.sites.models import Site
 
     Site.objects.clear_cache()
     current_site = Site.objects.get_current()
@@ -8,8 +14,6 @@ def site_name(request):
 
 
 def new_pm(request):
-    from django.contrib.auth.models import User
-    from mdc3.pms.models import Recipient
 
     if request.user.is_authenticated():
         pm_count = Recipient.objects.filter(recipient=request.user,read=False).count()
@@ -17,3 +21,6 @@ def new_pm(request):
     else:
         return { 'new_pms' : 0 }
 
+def online_users(request):
+    
+    return { 'online_users' : len(request.online_users) }

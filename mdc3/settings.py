@@ -72,6 +72,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'mdc3.middleware.OnlineUsersMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -83,6 +84,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "mdc3.context_processors.site_name",
     "mdc3.context_processors.new_pm",
     "mdc3.board.context_processors.thread_count",
+    "mdc3.context_processors.online_users",
 )
 
 ROOT_URLCONF = 'mdc3.urls'
