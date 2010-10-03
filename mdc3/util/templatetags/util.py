@@ -40,6 +40,8 @@ class NextCycleNode(Node):
         except KeyError:
             raise TemplateSyntaxError("cannot find cycle named '%s'" % self.var_name)
 
+        return ""
+
 @register.tag
 def withcycle(parser, token):
     args = token.split_contents()[1:]
