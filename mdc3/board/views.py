@@ -1,6 +1,7 @@
 import datetime
 
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import never_cache
 from django.contrib.sites.models import Site
 from django.shortcuts import render_to_response,get_object_or_404
 from django.http import HttpResponseRedirect, Http404
@@ -93,12 +94,12 @@ def new_thread(request):
         }, context_instance = RequestContext(request))
 
 @login_required
+@never_cache
 def list_threads(request):
     try:
         page = int(request.GET.get('page', 1))
     except ValueError:
         raise Http404
-
     
     cache_key = "thread-list-page:%d:%d"%(Site.objects.get_current().id, page)
     page_obj = cache.get(cache_key, None)
