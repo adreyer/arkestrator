@@ -34,14 +34,24 @@ def outbox(request):
         raise Http404
 
     queryset = PM.objects.filter(sender=request.user).order_by(
-        '-created_on').select_related('recipient_set', 
-        'recipient_set__recipient')
+        '-created_on')
 
     paginator = Paginator(queryset, 25, allow_empty_first_page=True)
     page_obj = paginator.page(page)
 
     pm_list = page_obj.object_list
-    
+
+    rec_list = list(Recipient.objects.filter(message__in=pm_list).order_by(
+        '-message__created_on').select_related('recipient'))
+
+    for pm in pm_list:
+        pm_rec_list = []
+        while rec_list and pm.id == rec_list[0].message_id:
+            pm_rec_list.append(rec_list[0])
+            rec_list = rec_list[1:]
+        pm.rec_list = pm_rec_list
+        print pm_rec_list
+
     return render_to_response('pms/outbox.html',
             { 'pm_rec_list' : pm_list,
               'page_obj' : page_obj },
