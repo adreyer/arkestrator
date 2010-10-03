@@ -4,13 +4,13 @@ from models import PM, Recipient
 import bbcode
 
 
-class NewPMForm(forms.Form):
+class NewPMForm(forms.ModelForm):
+    class Meta:
+        model = PM
+        fields = ('subject', 'body')
+        
     recipients = forms.CharField(required=True,
             label="To:(Enter usernames seperated by spaces)")
-    subject = forms.CharField(max_length=100, required=True)
-    body = forms.CharField(required=False,
-            widget=forms.Textarea)
-    
 
     def clean_recipients(self):
         recipient_list = self.cleaned_data['recipients'].split()
