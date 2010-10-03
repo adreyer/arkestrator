@@ -1,8 +1,15 @@
 {% extends "pms/pm_base.html" %}
 
+{% block tabtitle %}
+<title>Inbox for {{ user.username }} - {{ site_name }}</title>
+{% endblock %}
+
+{% block pagetitle %}
+<h1>Inbox for {{ user.username }}</h1>
+{% endblock %}
+
 {% block content %}
-    <h3>Inbox</h3>
-    <table class="pm_list"> 
+    <table class="thread_list"> 
     {% for pm in pm_read %}
             <tr class="{% cycle "row1" "row2" %}">
             <td> {{ pm.0.sender.username }}</td>
@@ -13,15 +20,19 @@
             <td> {{ pm.0.created_on }}</td>
         </tr>
         {% endfor %}
-        <table>
-        <div class="pagination">
-            <strong> Go to page: </strong>
-            {% for p in page_obj.paginator.page_range %}
-                {% if p == page_obj.number %}
-                        <strong>{{ p }},</strong>
-                    {% else %}
-                        <a href="?page={{ p }}">{{ p }},</a>
-                {% endif %}
-            {% endfor %}
-    </div>
-{%endblock %}
+    </table>
+{% endblock %}
+{% block bottombezel %}
+<div id="bottombezel">
+    <ul>
+            <li class="submenulegend">Page:</li>
+    {% for p in page_obj.paginator.page_range %}
+        {% if p == page_obj.number %}
+            <li class="submenuitem"><strong>{{ p }}</strong></li>
+        {% else %}
+            <li class="submenuitem"><a href="?page={{ p }}">{{ p }}</a></li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}

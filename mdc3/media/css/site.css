@@ -83,6 +83,7 @@ div#user ul, div#menu ul, div#submenu ul, div#bottombezel ul {
 }
 
 .submenulegend {
+    margin-left: 2px;
     display: inline-block;
     font-weight: bold;
 }
