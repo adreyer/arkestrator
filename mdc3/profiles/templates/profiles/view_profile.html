@@ -1,23 +1,36 @@
 {% extends "profiles/profile_base.html" %}
+{% block tabtitle %}
+<title>Profile: {{ view_user.username }}</title>
+{% endblock %}
+{% block pagetitle %}
+<h1>Profile: {{ view_user.username }}</h1>
+{% endblock %}
 
 
 {% block content %}
-<h3>{{ view_user.username }}</h3>
-<b>Name: </b> {{ view_profile.name }} <br>
-<b>Location: </b> {{ view_profile.location }} <br>
-<b>Phone Number:</b> {{ view_profile.phone }} <br>
-<b>Email: </b>  {{ view_profile.public_email }} <br>
-<b>AIM: </b> {{ view_profile.aim_name }} <br>
-<b>Gtalk: </b> {{ view_profile.gtalk_name }} <br><b>Website: </b> <a href="{{ view_profile.website }}">{{ view_profile.website }} </a> <br>
-{% if view_profile.photo_url %}
-    <img src="{{ view_profile.photo_url }}"> <br>
-{% endif %}
-<b>Info: </b> {{ view_profile.info }} <br>
-
-<h4>statistics</h4>
-<b>Last seen: </b> {{ view_profile.last_view }}
-<b>Profile Views</b> {{ view_profile.profile_views }}
-
+<div class="row2">
+<table class="thread_list">
+    <tr>
+        <td>
+            <strong>Name:</strong> {{ view_profile.name }} <br />
+            <strong>Location:</strong> {{ view_profile.location }} <br />
+            <strong>Phone Number:</strong> {{ view_profile.phone }} <br />
+            <strong>Email:</strong>  {{ view_profile.public_email }} <br />
+            <strong>AIM:</strong> {{ view_profile.aim_name }} <br />
+            <strong>Gtalk: </strong> {{ view_profile.gtalk_name }} <br />
+            <strong>Website: </strong> <a href="{{ view_profile.website }}">{{ view_profile.website }} </a> <br />
+            <strong>Info:</strong> <br /> 
+            <p>{{view_profile.info}}</p> <br/>
+            <strong>Profile views:</strong> {{ view_profile.profile_views }}<br />
+            <strong>Last seen:</strong> <br /> 
+        </td>
+        {% if view_profile.photo_url %}
+            <td align="right" valign="top">    
+                <img src="{{ view_profile.photo_url }}"> <br>
+        {% endif %}
+    </tr>
+</table>
+</div>
 {% endblock %}
 
 
