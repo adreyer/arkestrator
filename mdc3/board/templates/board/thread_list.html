@@ -32,14 +32,18 @@
         </tr>
     {% endfor %}
     </table>
-    <div class="pagination">
-        <strong> Go to page: </strong>
-        {% for p in page_obj.paginator.page_range %}
-            {% if p == page_obj.number %}
-                <strong>{{ p }},</strong>
-            {% else %}
-                <a href="?page={{ p }}">{{ p }},</a>
-            {% endif %}
-        {% endfor %}
-    </div>
+{% endblock %}
+{% block bottombezel %}
+<div id="bottombezel">
+    <ul>
+            <li class="submenulegend">Page:</li>
+    {% for p in page_obj.paginator.page_range %}
+        {% if p == page_obj.number %}
+            <li class="submenuitem"><strong>{{ p }}</strong></li>
+        {% else %}
+            <li class="submenuitem"><a href="?page={{ p }}">{{ p }}</a></li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+</div>
 {% endblock %}

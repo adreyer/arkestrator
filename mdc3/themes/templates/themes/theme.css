@@ -38,7 +38,7 @@ textarea, input {
     border: 1px solid #{{ object.text_color }};
 }
 
-div#bottom-bezel {
+div#bottombezel {
     background-color: #{{ object.row2 }};
 }
 
