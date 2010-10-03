@@ -29,7 +29,7 @@ class Thread(models.Model):
 
     stuck = models.BooleanField(default=False)
 
-    def __str__(self):
+    def __unicode__(self):
         return self.subject
 
     @instance_memcache('default-posts-list', 1800)

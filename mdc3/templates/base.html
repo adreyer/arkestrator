@@ -24,7 +24,7 @@
     {% block pagetitle %}
     <h1>{{ site_name }}</h1>
     {% endblock %}
-    <div id="status">XXXXX threads, XX active users</div>
+    <div id="status">{{ thread_count }} thread{{ thread_count|pluralize }}, XX active users</div>
     <div id="user">
         <ul>
             <li class="menuitem"><a href="/profiles/{{ user.id }}"><strong>{{ user.username }}</strong></a></li>
