@@ -3,14 +3,15 @@
 <title>{{ thread.subject}} | {{ site_name }}</title>
 {% endblock %}
 {% block pagetitle %}
-    <h1>{{ thread.subject }} ({{ thread.total_posts }} replies)</h1>
+    <h1>{{ thread.subject }}</h1>
 {% endblock %}
 
 {% load bbcode %}
 {% block content %}
     <div id="submenu">
         <ul>
-            <li class="submenuitem"><a href="{% url view-thread-full thread.id %}">Show all </li>
+            <li class="submenuitem"><a href="{% url view-thread-full thread.id %}">Show all ({{ thread.total_posts }})</li>
+            <li class="submenuitem"><a href="/this/does/nothing/lol">Hide images</a></li>
             <li class="submenuitem"><a href="{% url sticky thread.id %}">Toggle sticky</a></li>
             <li class="submenuitem"><a href="{% url thread-history thread.id %}">Thread history</a></li>
         </ul>
@@ -22,11 +23,11 @@
             {% else %}
                 <div class="row2">
             {% endif %}
-                {{ post.creator.username }} posted this on
+                <strong><a href="{% url view-profile post.creator.id %}">{{ post.creator.username }}</a></strong> posted this on
                 {{ post.updated_at|date:"D, d-M-Y \a\t h:m a"}}
             </div>
             <div class="body">
-                {% bbcode post.body %}
+                <p>{% bbcode post.body %}</p>
             </div>
         </div>
     {% endfor %}
