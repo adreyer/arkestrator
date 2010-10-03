@@ -41,7 +41,9 @@ def edit_info(request):
                 instance=Profile.objects.get(user=request.user))
         if profile_form.is_valid(): 
             profile_form.save()
-            return HttpResponseRedirect("/")
+            #there must be a better way to do this
+            purl = '/profiles/' + str(request.user.id)
+            return HttpResponseRedirect(purl)
     else:
         profile_form = forms.InfoProfileForm(
                     instance=Profile.objects.get(user=request.user))
@@ -58,7 +60,8 @@ def edit_prefs(request):
                 instance=Profile.objects.get(user=request.user))
         if prefs_form.is_valid(): 
             prefs_form.save()
-            return HttpResponseRedirect("/")
+            purl = '/profiles/' + str(request.user.id)
+            return HttpResponseRedirect(purl)
     else:
         prefs_form = forms.PrefsForm(
                     instance=Profile.objects.get(user=request.user))
