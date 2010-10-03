@@ -27,7 +27,6 @@ class WithCycleNode(Node):
             self.current = self.iter.next()
 
         def __unicode__(self):
-            print "current", self.current
             return self.current
 
 class NextCycleNode(Node):
