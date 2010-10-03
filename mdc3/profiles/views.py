@@ -17,8 +17,8 @@ def view_profile(request, user_id):
         profile.profile_views += 1
         profile.save()
     return render_to_response("profiles/view_profile.html",
-        {   'user' : user,
-            'profile' : profile },
+        {   'view_user' : user,
+            'view_profile' : profile },
         context_instance = RequestContext(request))
 
 
