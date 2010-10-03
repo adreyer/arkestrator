@@ -47,7 +47,7 @@ div#submenu {
     -moz-border-radius-topright: 5px;
 }
 
-div#user ul, div#menu ul, div#submenu ul {
+div#user ul, div#menu ul, div#submenu ul, div#bottombezel ul {
     padding-left: 3px;
     padding-right: 3px;
     margin-top: 3px;
@@ -82,6 +82,11 @@ div#user ul, div#menu ul, div#submenu ul {
     -moz-border-radius: 5px;
 }
 
+.submenulegend {
+    display: inline-block;
+    font-weight: bold;
+}
+
 .menuitem a, .submenuitem a {
     display: block;
 }
@@ -98,6 +103,7 @@ div#user ul, div#menu ul, div#submenu ul {
 div#content {
     clear: both;
     margin-top: -1px;
+    margin-bottom: -3px;
 }
 
 table.thread_list td {
@@ -134,9 +140,9 @@ textarea, input {
     -moz-border-radius: 5px;
 }
 
-div#bottom-bezel {
+div#bottombezel {
     clear: both;
-    padding-bottom: 4px;
+    min-height: 4px;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
     -moz-border-radius-bottomleft: 5px;

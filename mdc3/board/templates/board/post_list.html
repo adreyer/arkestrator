@@ -33,7 +33,9 @@
             </div>
         </div>
     {% endfor %}
-    <div id="bottom-bezel"></div>
+    {% block bottombezel %}
+    <div id="bottombezel"></div>
+    {% endblock %}
     <a name="post" />
     <form method="post" action="{% url view-thread thread.id %}#post">
         {% csrf_token %}

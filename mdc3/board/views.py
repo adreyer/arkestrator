@@ -27,6 +27,7 @@ def view_thread(request,id=None,expand=False):
         form = forms.PostForm(request.POST, instance = post)
         if form.is_valid():
             form.save()
+            request.posting_users.add_to_set(request.user.id)
             return HttpResponseRedirect("/")
     else:
         form = forms.PostForm()
@@ -84,6 +85,7 @@ def new_thread(request):
             post.thread = thread
             post_form = forms.PostForm(request.POST, instance = post)
             post_form.save()
+            request.posting_users.add_to_set(request.user.id)
             return HttpResponseRedirect("/")
     else:
         thread_form = forms.ThreadForm()
