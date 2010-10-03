@@ -46,6 +46,8 @@ def outbox(request):
 
     for pm in pm_list:
         pm_rec_list = []
+        # this can potentially fail catastrophically if someone sends
+        # two different messages at the exact same time.
         while rec_list and pm.id == rec_list[0].message_id:
             pm_rec_list.append(rec_list[0])
             rec_list = rec_list[1:]
