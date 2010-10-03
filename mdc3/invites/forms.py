@@ -4,6 +4,7 @@ from mdc3.invites.models import Invite
 from mdc3.profiles.models import Profile
 
 import datetime
+import re
 
 class NewInviteForm(forms.Form):
     invitee = forms.EmailField(required=True, label="Invitees's email adress")
@@ -30,6 +31,13 @@ class UserRegistrationForm(forms.ModelForm):
     pass2 = forms.CharField(required=True,
             label="retype password",
             widget=forms.PasswordInput)
+
+    #don't allow whitespace in usernames
+    def clean_username(self):
+        if re.search(r'\s', self.cleaned_data['username']):
+            raise forms.ValidationError(
+                    "no whitespace if usernames, perhaps you'd like to use an _")
+        return self.cleaned_data['username']
 
     def clean(self):
         if self.cleaned_data["pass1"] != self.cleaned_data["pass2"]:
