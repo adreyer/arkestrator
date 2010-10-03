@@ -4,6 +4,9 @@ from django.db.models.signals import post_save
 
 from mdc3.board.models import Thread
 
+def posting_users(request):
+    return { 'posting_users': len(request.posting_users) }
+
 def _thread_count_key(site):
     return "thread-count:%d"%site.id
 
