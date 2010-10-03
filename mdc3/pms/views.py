@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.template import RequestContext
 from django.views.generic import list_detail
 from django.core.paginator import Paginator, InvalidPage
+from copy import copy
 
 
 from models import PM, Recipient
@@ -108,10 +109,20 @@ def view_pm(request, pm_id):
             recip.save()
         except Recipient.DoesNotExist:
             pass
-    reply = pm
+    
+    reply = copy(pm)
     reply.parent=pm
-    ## Moving this higher will probably improve performance
-    ## think about security before doing so though
+    reply.body = reply.body.replace('[hidden]','')
+    reply.body = reply.body.replace('[/hidden]','')
+    reply.body = '[hidden][quote]' + reply.body + '[/quote][/hidden]'
+
+    #this is messy and slow and should be fixed
+    rec_list = Recipient.objects.filter(message=pm)
+    reply_recs = pm.sender.username
+    for rec in rec_list:
+        if rec.recipient != request.user:
+            reply_recs = reply_recs + ' ' + rec.recipient.username
+
     if request.method == 'POST':
         form =forms.NewPMForm(request.POST,
                 instance=reply)
@@ -122,7 +133,8 @@ def view_pm(request, pm_id):
             return HttpResponseRedirect("/pms/inbox")
     else:
         rec_str = pm.get_rec_str()
-        form =forms.NewPMForm(instance=reply)
+        form =forms.NewPMForm(instance=reply,
+                initial={'recipients' : reply_recs})
     return render_to_response("pms/view_pm.html",
             { 'pm' : pm ,
               'rec_str' : rec_str,
