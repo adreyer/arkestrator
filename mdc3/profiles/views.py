@@ -5,6 +5,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from models import Profile
+from mdc3.board.models import LastRead
 
 import forms
 
@@ -16,9 +17,12 @@ def view_profile(request, user_id):
     if request.user != user:
         profile.profile_views += 1
         profile.save()
+    last_seen = LastRead.objects.filter(user=user).order_by(
+            '-timestamp')[0].timestamp
     return render_to_response("profiles/view_profile.html",
         {   'view_user' : user,
-            'view_profile' : profile },
+            'view_profile' : profile,
+            'last_seen' : last_seen},
         context_instance = RequestContext(request))
 
 

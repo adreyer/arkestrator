@@ -38,7 +38,7 @@
                 <p>{{ view_profile.info|linebreaks }}</p> <br/>
             {% endif %}
             <strong>Profile views:</strong> {{ view_profile.profile_views }}<br />
-            <strong>Last seen:</strong> <br /> 
+            <strong>Last seen:</strong>{{ last_seen|date:"D, d-M-Y \a\t h:m a" }}<br /> 
         </td>
         {% if view_profile.photo_url %}
             <td align="right" valign="top">    
