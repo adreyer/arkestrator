@@ -8,11 +8,6 @@ body {
 
 a { 
     color: #{{ object.text_color }}; 
-    text-decoration: none; 
-}
-
-a:hover { 
-    text-decoration: underline; 
 }
 
 .row1 { 
@@ -25,6 +20,14 @@ a:hover {
 
 .my_post { 
     background-color: #{{ object.my_posts }}; 
+}
+
+div.post {
+    border: 1px solid #{{ object.text_color }};
+}
+
+div.body {
+    border-top: 1px solid #{{ object.text_color }};
 }
 
 textarea, input { 
