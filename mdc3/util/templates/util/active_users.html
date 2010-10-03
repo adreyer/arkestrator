@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block tabtitle %}
+    <title>{{ online_users }} active user{{ online_users|pluralize }}</title>
+{% endblock %}
+
+{% block pagetitle %}
+    <h1>{{ online_users }} active user{{ online_users|pluralize }}</h1>
+{% endblock %}
+
+{% block content %}
+<div class="row1">
+<div>{{ online_users }} user{{ online_users|pluralize }} viewing, 
+{{ posting_users }} user{{ posting_users|pluralize }} posting
+</div>
+<div>{% for user in user_list %}
+<a href="{% url view-profile user.id %}">{% spaceless %}
+    {% if user.is_posting %}
+        <b>{{ user.username }}<b>
+    {% else %}
+        {{ user.username }}
+    {% endif %}
+{% endspaceless %}</a>
+{% endfor %}</div>
+</div>
+{% endblock %}
+
+
