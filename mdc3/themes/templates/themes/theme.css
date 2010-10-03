@@ -6,6 +6,10 @@ body {
     color: #{{ object.text_color }};
 }
 
+div#content {
+    background-color: #{{ object.row2 }};
+}
+
 a { 
     color: #{{ object.text_color }}; 
 }

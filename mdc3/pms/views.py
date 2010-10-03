@@ -37,7 +37,7 @@ def outbox(request):
         '-created_on').select_related('created_on', 'subject',
             'recipient','recipient__read',
             'recipient__recipient__username')
-    paginator = Paginator(queryset, 50, allow_empty_first_page=True)
+    paginator = Paginator(queryset, 25, allow_empty_first_page=True)
     page_obj = paginator.page(page)
 
     pm_list = page_obj.object_list
@@ -65,7 +65,7 @@ def inbox(request):
     queryset = PM.objects.filter(recipients=request.user).order_by(
         '-created_on').select_related('subject','created_on',
             'sender__username','recipient__read')
-    paginator = Paginator(queryset, 50, allow_empty_first_page=True)
+    paginator = Paginator(queryset, 25, allow_empty_first_page=True)
     page_obj = paginator.page(page)
 
     pm_list = page_obj.object_list
