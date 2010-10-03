@@ -25,7 +25,8 @@
     <h1>{{ site_name }}</h1>
     {% endblock %}
     <div id="status">{{ thread_count }} thread{{ thread_count|pluralize }}, 
-        {{ online_users }} active users
+        {{ online_users }} active user{{ online_users|pluralize }},
+        {{ posting_users }} posting user{{ posting_users|pluralize }},
     </div>
     <div id="user">
         <ul>

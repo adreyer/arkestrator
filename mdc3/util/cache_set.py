@@ -2,10 +2,15 @@ import datetime
 import time
 
 from django.core.cache import cache
+from django.contrib.sites.models import Site
 
 class TimedCacheSet(object):
-    def __init__(self, base_key, resolution = 60):
-        self.base_key = base_key
+    def __init__(self, base_key, resolution = 60, site_local = True):
+        if site_local:
+            self.base_key = "%s:%d" % (base_key, Site.objects.get_current().id)
+        else:
+            self.base_key = base_key
+
         self.resolution = resolution
 
         #this may not work for times close to the epoch
