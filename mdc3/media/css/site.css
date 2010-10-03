@@ -11,6 +11,14 @@ p {
     margin-bottom: 0.5em;
 }
 
+blockquote.quote {
+    margin: 1em 12em 0em 2em; 
+    padding: 0.75em; 
+    font-size: 93%;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+
 .smallfont {
     font-size: 83%;
 }
