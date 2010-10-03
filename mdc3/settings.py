@@ -82,6 +82,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.messages.context_processors.messages",
     "mdc3.context_processors.site_name",
     "mdc3.context_processors.new_pm",
+    "mdc3.board.context_processors.thread_count",
 )
 
 ROOT_URLCONF = 'mdc3.urls'
