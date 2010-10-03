@@ -40,7 +40,6 @@ def outbox(request):
     paginator = Paginator(queryset, 50, allow_empty_first_page=True)
     page_obj = paginator.page(page)
 
-    page_list = range(1,paginator.num_pages+1)
     pm_list = page_obj.object_list
     
     pm_rec_list = []
@@ -53,8 +52,7 @@ def outbox(request):
         
     return render_to_response('pms/outbox.html',
             { 'pm_rec_list' : pm_rec_list,
-              'page_obj' : page_obj,
-              'page_list' : page_list},
+              'page_obj' : page_obj },
             context_instance = RequestContext(request))
 
 @login_required
@@ -70,7 +68,6 @@ def inbox(request):
     paginator = Paginator(queryset, 50, allow_empty_first_page=True)
     page_obj = paginator.page(page)
 
-    page_list = range(1,paginator.num_pages+1)
     pm_list = page_obj.object_list
     
     read_list = []
@@ -81,8 +78,7 @@ def inbox(request):
     pm_read = zip(pm_list, read_list)
     return render_to_response('pms/inbox.html',
             { 'pm_read' : pm_read,
-              'page_obj' : page_obj,
-              'page_list' : page_list},
+              'page_obj' : page_obj },
             context_instance = RequestContext(request))
 
 @login_required

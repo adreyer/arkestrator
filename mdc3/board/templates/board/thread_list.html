@@ -30,7 +30,7 @@
     </table>
     <div class="pagination">
         <strong> Go to page: </strong>
-        {% for p in page_list %}
+        {% for p in page_obj.paginator.page_range %}
             {% if p == page_obj.number %}
                 <strong>{{ p }},</strong>
             {% else %}

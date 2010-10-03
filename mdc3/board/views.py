@@ -108,8 +108,6 @@ def list_threads(request):
         page_obj = paginator.page(page)
         cache.set(cache_key, page_obj)
 
-    page_list = range(1,page_obj.paginator.num_pages+1)
-
     thread_list = page_obj.object_list
 
     last_read = LastRead.objects.filter(
@@ -126,7 +124,6 @@ def list_threads(request):
     return render_to_response("board/thread_list.html", {
         'thread_list' : thread_list,
         'page_obj' : page_obj,
-        'page_list' : page_list,
     }, context_instance = RequestContext(request))
 
 @login_required
