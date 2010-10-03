@@ -37,3 +37,10 @@ class TimedCacheSet(object):
         if value not in s:
             s |= set([value])
             cache.set(self.curr_key, s, 2 * self.resolution)
+
+    def __iter__(self):
+        return iter(self.full_set)
+
+    def __len__(self):
+        return len(self.full_set)
+

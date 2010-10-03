@@ -9,5 +9,5 @@ class OnlineUsersMiddleware(object):
         if not request.user.is_anonymous():
             tcs.add_to_set(request.user.id)
 
-        request.online_users = tcs.full_set
+        request.online_users = tcs
 

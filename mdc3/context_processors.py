@@ -22,5 +22,6 @@ def new_pm(request):
         return { 'new_pms' : 0 }
 
 def online_users(request):
-    
     return { 'online_users' : len(request.online_users) }
+
+
