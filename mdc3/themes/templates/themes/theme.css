@@ -39,7 +39,7 @@ textarea, input {
     font-family: {{ object.font_face }};
     color: #{{ object.form_text_color }}; 
     background-color: #{{ object.form_background }}; 
-    border: 1px solid #{{ object.text_color }};
+    border: 1px solid #{{ object.row2 }};
 }
 
 div#bottombezel {
