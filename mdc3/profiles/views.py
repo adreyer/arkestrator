@@ -13,6 +13,7 @@ import forms
 @login_required
 def view_profile(request, user_id):
     user = get_object_or_404(User,pk=user_id)
+    #change after everyone has a profile
     profile = get_object_or_404(Profile,user=user)
     if request.user != user:
         profile.profile_views += 1
