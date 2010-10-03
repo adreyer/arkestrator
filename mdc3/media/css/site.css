@@ -121,6 +121,7 @@ table.thread_list td.count {
 
 div.recipientlist {
     max-width: 12em;
+    max-height: 4em;
     overflow: hidden;
 }
 
