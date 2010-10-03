@@ -39,7 +39,7 @@
             <li class="menuitem"><a href="{% url edit-theme %}">Edit theme</a></li>
             <li class="menuitem"><a href="{% url inbox %}">
                 {% if new_pms %}
-                    <span class="urgent">Messages ({{ new_pms }} new)</span>
+                    <span class="urgent">Messages ({{ new_pms }})</span>
                 {% else %}Messages{% endif %}</a></li>
             {% if user.is_staff %}
             <li class="menuitem"><a href="/admin/">Admin</a></li>
