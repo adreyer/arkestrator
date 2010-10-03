@@ -8,7 +8,6 @@
     Subject:  {{ pm.subject }}  <br>
     Body: <br>
     {% bbcode pm.body %} <br>
-    [p] {{ pm.body }}[/p]
     <form method="post" action="{% url view-pm pm.pk %}">
         {% csrf_token %}
         <table>
