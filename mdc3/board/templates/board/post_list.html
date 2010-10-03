@@ -23,11 +23,11 @@
             {% else %}
                 <div class="row2">
             {% endif %}
-                {{ post.creator.username }} posted this on
+                <strong><a href="{% url view-profile post.creator.id %}">{{ post.creator.username }}</a></strong> posted this on
                 {{ post.updated_at|date:"D, d-M-Y \a\t h:m a"}}
             </div>
             <div class="body">
-                {% bbcode post.body %}
+                <p>{% bbcode post.body %}</p>
             </div>
         </div>
     {% endfor %}
