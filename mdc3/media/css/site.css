@@ -62,8 +62,8 @@ div#user ul, div#menu ul, div#submenu ul, div#bottombezel ul {
 
 .menuitem {
     display: inline-block;
-    margin-left: 2px;
-    margin-right: 2px;
+    margin-left: 1px;
+    margin-right: 1px;
     padding: 5px;
     padding-right: 10px;
     padding-left: 10px; 
@@ -113,11 +113,12 @@ div#content {
 }
 
 table.thread_list td {
-    padding: 3px;
+    padding: 4px;
 }
 
 table.thread_list td.count {
     text-align: center;
+    min-width: 1.5em;
 }
 
 div.recipientlist {
@@ -151,7 +152,7 @@ p.replyform {
 }
 
 textarea, input {
-    padding: 4px;
+    padding: 5px;
     border-radius: 5px;
     -moz-border-radius: 5px;
 }
