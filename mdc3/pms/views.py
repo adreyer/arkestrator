@@ -97,7 +97,11 @@ def view_pm(request, pm_id):
     reply.parent=pm
     reply.body = reply.body.replace('[hidden]','')
     reply.body = reply.body.replace('[/hidden]','')
-    reply.body = '[hidden][quote]' + reply.body + '[/quote][/hidden]'
+    reply.body = """
+
+
+
+[hidden][quote]""" + reply.body + '[/quote][/hidden]'
 
     #this is messy and slow and should be fixed
     rec_list = Recipient.objects.filter(message=pm)

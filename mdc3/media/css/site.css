@@ -19,6 +19,21 @@ blockquote.quote {
     -moz-border-radius: 5px;
 }
 
+th {
+    text-align: right;
+    font-weight: bold;
+}
+
+th.legend {
+    min-width: 0;
+    padding: 5px;
+}
+
+div.pmbody {
+    margin-right: 1em;
+    border-radius: 5px;
+}
+
 .smallfont {
     font-size: 83%;
 }

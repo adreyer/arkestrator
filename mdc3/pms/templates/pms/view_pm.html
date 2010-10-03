@@ -1,18 +1,50 @@
 {% extends "pms/pm_base.html" %}
 
+{% block tabtitle %}
+<title>{{ pm.subject}} - {{ site_name }}</title>
+{% endblock %}
+
+{% block pagetitle %}
+<h1>{{ pm.subject }}</h1>
+{% endblock %}
+
 {% block content %}
     {% load bbcode %}
-    <h2>{{ box_type }}</h2>
-    Sender: {{ pm.sender.username }} <br>
-    To: {{ rec_str }}     <br>
-    Subject:  {{ pm.subject }}  <br>
-    Body: <br>
-    {% bbcode pm.body %} <br>
     <form method="post" action="{% url view-pm pm.pk %}">
-        {% csrf_token %}
-        <table>
-        {{form.as_table }}
-        </table>
-        <input type="submit" value="Send" />
+    {% csrf_token %}
+    <table width="100%">
+        <tr>
+            <th nowrap="nowrap" class="legend">From:</th>
+            <td>{{ pm.sender.username }}</td>
+        </td>
+        <tr>
+            <th nowrap="nowrap" class="legend">To:</th>
+            <td>{{ rec_str }}</td>
+        </tr>
+        <tr>
+            <th />
+            <td width="100%">
+                <div class="body pmbody">        
+                {% bbcode pm.body %}
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <th nowrap="nowrap" class="legend"><label for="id_recs">To:</label></th>
+            <td>{{ form.recs }}</td>
+        </tr>
+        <tr>
+            <th nowrap="nowrap" class="legend"><label for="id_subject">Subject:</label></th>
+            <td>{{ form.subject }}</td>
+        </tr>
+        <tr>   
+            <th />
+            <td>{{ form.body }}</td>
+        </tr>
+        <tr>
+            <th />
+            <td><input type="submit" value="Send" /></td>
+        </tr>
+    </table>
     </form>
 {% endblock %}

@@ -6,11 +6,15 @@ import bbcode
 
 class NewPMForm(forms.ModelForm):
     recs = forms.CharField(required=True,
-            label="To:(Enter usernames seperated by spaces)")
+            label="To:", widget=forms.TextInput(attrs={'size': 60}))
     
     class Meta:
         model = PM
         fields = ('recs','subject', 'body')
+        widgets = {
+            'body': forms.Textarea(attrs={'cols': 60, 'rows': 12}),
+            'subject': forms.TextInput(attrs={'size': 60, 'maxlength': 160})
+        }
         
     def clean_recs(self):
         recipient_list = self.cleaned_data['recs'].split()
