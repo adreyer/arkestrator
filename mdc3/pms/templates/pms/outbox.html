@@ -2,9 +2,9 @@
 
 {% block content %}
     <h3>Outbox</h3>
-    <table> 
+    <table class="pm_list"> 
     {% for pm_rec in pm_rec_list %}
-        <tr>
+        <tr class="{% cycle "row1" "row2" %}">
             <td> {% for rec in pm_rec.1 %}
                     {% if rec.1 %}{{ rec.0 }}{% else %}<strong>{{ rec.0 }}</strong>{%endif %}
                 {% endfor %}</td>

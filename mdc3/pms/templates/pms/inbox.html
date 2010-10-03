@@ -2,14 +2,14 @@
 
 {% block content %}
     <h3>Inbox</h3>
-    <table> 
+    <table class="pm_list"> 
     {% for pm in pm_read %}
-            <tr>
+            <tr class="{% cycle "row1" "row2" %}">
             <td> {{ pm.0.sender.username }}</td>
             <td> <a href="/pms/{{ pm.0.pk }}">
-            {% if not pm.1 %}<strong>{% endif %}
-            {{ pm.0.subject }}
-            {% if not pm.1 %}</strong>{% endif %}</a></td>
+                {% if not pm.1 %}<strong>{% endif %}
+                {{ pm.0.subject }}
+                {% if not pm.1 %}</strong>{% endif %}</a></td>
             <td> {{ pm.0.created_on }}</td>
         </tr>
         {% endfor %}
