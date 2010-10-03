@@ -119,6 +119,11 @@ table.thread_list td.count {
     text-align: center;
 }
 
+div.recipientlist {
+    max-width: 12em;
+    overflow: hidden;
+}
+
 div.body, div.row2, div.my_post {
     padding: 4px;
 }
