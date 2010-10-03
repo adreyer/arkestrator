@@ -14,7 +14,7 @@
     {% for pm_rec in pm_rec_list %}
         <tr class="{% cycle "row1" "row2" %}">
             <td class="pmrecipients"><div class="recipientlist">
-                {% for rec in pm_rec.recipient_set.all %}
+                {% for rec in pm_rec.rec_list %}
                     {% if rec.read %}
                         {{ rec.recipient.username }}
                     {% else %}
