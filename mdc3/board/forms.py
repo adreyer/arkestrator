@@ -8,10 +8,11 @@ class ThreadForm(forms.ModelForm):
         fields = ('subject',)
 
     def clean_subject(self):
-        self.cleaned_data["subject"] = self.cleaned_data["subject"].strip()
-        if self.cleaned_data["subject"] == '':
+        subj = self.cleaned_data["subject"]
+        subj = subj.strip()
+        if subj  == '':
             raise forms.ValidationError("whitespace is not a subject")
-        return self.cleaned_data
+        return subj
                     
 
 class PostForm(forms.ModelForm):
