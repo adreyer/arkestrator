@@ -24,7 +24,18 @@ div#menu {
     width: auto;
 }
 
+div#submenu {
+    width: 100%;
+}
+
 div#user ul, div#menu ul {
+    padding-left: 3px;
+    padding-right: 3px;
+    margin-top: 3px;
+    margin-bottom: 0px;
+}
+
+div#submenu ul {
     padding-left: 3px;
     padding-right: 3px;
     margin-top: 3px;
@@ -42,6 +53,24 @@ div#user ul, div#menu ul {
     border-top-right-radius: 5px;
     -moz-border-radius-topleft: 5px;
     -moz-border-radius-topright: 5px;
+}
+
+.submenuitem {
+    display: inline-block;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding: 5px;
+    padding-right: 5px;
+    padding-left: 5px;
+    font-size: 90%;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    -moz-border-radius-bottomright: 5px;
+}
+
+.menuitem a:hover, .submenuitem a:hover {
+    text-decoration: none;
 }
 
 .thread_list {
@@ -76,3 +105,7 @@ div#gtfo p {
     text-transform: uppercase;
 }
 
+.urgent {
+    text-decoration: blink;
+    font-weight: bold;
+}
