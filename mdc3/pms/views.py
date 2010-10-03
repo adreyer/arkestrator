@@ -4,6 +4,8 @@ from django.shortcuts import render_to_response,get_object_or_404
 from django.http import HttpResponseRedirect, Http404
 from django.template import RequestContext
 from django.views.generic import list_detail
+from django.core.paginator import Paginator, InvalidPage
+
 
 from models import PM, Recipient
 from django.contrib.auth.models import User
@@ -25,7 +27,20 @@ def new_pm(request):
 
 @login_required
 def outbox(request):
-    pm_list = PM.objects.filter(sender=request.user).order_by('-created_on')
+    try:
+        page = int(request.GET.get('page', 1))
+    except ValueError:
+        raise Http404
+
+    queryset = PM.objects.filter(sender=request.user).order_by(
+        '-created_on').select_related('created_on', 'subject',
+            'recipient__read')
+    paginator = Paginator(queryset, 3, allow_empty_first_page=True)
+    page_obj = paginator.page(page)
+
+    page_list = range(1,paginator.num_pages+1)
+    pm_list = page_obj.object_list
+    
     pm_rec_list = []
     for pm in pm_list:
         rec_list = Recipient.objects.filter(message=pm)
@@ -34,23 +49,38 @@ def outbox(request):
             read_list.append([rec,rec.read])
         pm_rec_list.append([pm , read_list])
         
-    print pm_rec_list
-    return render_to_response('pms/box.html',
-            { 'pm_rec_list' : pm_rec_list },
+    return render_to_response('pms/outbox.html',
+            { 'pm_rec_list' : pm_rec_list,
+              'page_obj' : page_obj,
+              'page_list' : page_list},
             context_instance = RequestContext(request))
 
 @login_required
 def inbox(request):
-    pm_list = PM.objects.filter(recipients=request.user).order_by('-created_on')
+    try:
+        page = int(request.GET.get('page', 1))
+    except ValueError:
+        raise Http404
+    
+    queryset = PM.objects.filter(recipients=request.user).order_by(
+        '-created_on').select_related('subject','created_on',
+            'sender__username','recipient__read')
+    paginator = Paginator(queryset, 3, allow_empty_first_page=True)
+    page_obj = paginator.page(page)
+
+    page_list = range(1,paginator.num_pages+1)
+    pm_list = page_obj.object_list
+    
     read_list = []
-    #can be made more efficient
     for pm in pm_list:
         read_list.append(Recipient.objects.get(
                 recipient=request.user,
                 message=pm).read)
     pm_read = zip(pm_list, read_list)
     return render_to_response('pms/inbox.html',
-            { 'pm_read' : pm_read},
+            { 'pm_read' : pm_read,
+              'page_obj' : page_obj,
+              'page_list' : page_list},
             context_instance = RequestContext(request))
 
 @login_required
