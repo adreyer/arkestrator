@@ -51,7 +51,8 @@ def view_thread(request,id=None,expand=False):
     lastread.save()
     del thread.total_views
 
-    if not expand and queryset.count() < 25:
+    
+    if not expand and queryset.count() < 10:
         queryset = thread.default_post_list
 
     return list_detail.object_list(

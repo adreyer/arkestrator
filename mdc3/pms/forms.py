@@ -5,15 +5,15 @@ import bbcode
 
 
 class NewPMForm(forms.ModelForm):
-    recipients = forms.CharField(required=True,
+    recs = forms.CharField(required=True,
             label="To:(Enter usernames seperated by spaces)")
     
     class Meta:
         model = PM
-        fields = ('subject', 'body')
+        fields = ('recs','subject', 'body')
         
-    def clean_recipients(self):
-        recipient_list = self.cleaned_data['recipients'].split()
+    def clean_recs(self):
+        recipient_list = self.cleaned_data['recs'].split()
         user_list = []
         for rec in recipient_list:
             try:
