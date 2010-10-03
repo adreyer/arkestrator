@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block extramenu %}
+    <div id="submenu">
+        <ul>
+            <li class="submenuitem"><a href="{% url view-profile user.id %}">view profile</a></li>
+            <li class="submenuitem"><a href="{% url edit-prefs %}">edit preferences</a></li>
+            <li class="submenuitem"><a href="{% url edit-info %}">edit info</a></li>
+            <li class="submenuitem"><a href="{% url passwd %}">change_password</a></li>
+        </ul>
+    </div>
+{% endblock %}
+        
+

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block extramenu %}
+    <div id="submenu">
+        <ul>
+            <li class="submenuitem"><a href="{% url new-pm %}">new message</a> </li>
+            <li class="submenuitem"><a href="{% url inbox %}">inbox</a> </li>
+            <li class="submenuitem"><a href="{% url outbox %}">outbox</a> </li>
+            <li class="submenuitem"><a href="{% url mark-read %}">mark all read</a></li>
+        </ul>
+    </div>
+{% endblock %}
