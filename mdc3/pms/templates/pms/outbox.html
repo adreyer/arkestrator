@@ -13,11 +13,16 @@
     <table class="thread_list"> 
     {% for pm_rec in pm_rec_list %}
         <tr class="{% cycle "row1" "row2" %}">
-            <td class="pmrecipients"><div class="recipientlist">{% for rec in pm_rec.1 %}
-                    {% if rec.1 %}{{ rec.0 }}{% else %}<strong>{{ rec.0 }}</strong>{%endif %}
+            <td class="pmrecipients"><div class="recipientlist">
+                {% for rec in pm_rec.recipient_set.all %}
+                    {% if rec.read %}
+                        {{ rec.recipient.username }}
+                    {% else %}
+                        <strong>{{ rec.recipient.username }}</strong>
+                    {% endif %}
                 {% endfor %}</div></td>
-            <td> <a href="/pms/{{ pm_rec.0.pk }}">{{ pm_rec.0.subject }}</a></td>
-            <td nowrap="nowrap"> {{ pm_rec.0.created_on|date:"h:i a d-M-y" }}</td>
+            <td><a href="{% url view-pm pm_rec.pk %}">{{ pm_rec.subject }}</a></td>
+            <td nowrap="nowrap"> {{ pm_rec.created_on|date:"h:i a d-M-y" }}</td>
         </tr>
     {% endfor %}
     </table>
