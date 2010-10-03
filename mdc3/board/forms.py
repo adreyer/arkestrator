@@ -17,6 +17,7 @@ class ThreadForm(forms.ModelForm):
 
 class PostForm(forms.ModelForm):
     class Meta:
+        auto_id = False
         model = Post
         fields = ('body',)
 
