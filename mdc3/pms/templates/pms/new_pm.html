@@ -4,8 +4,22 @@
     <form method="post" action="{% url new-pm %}">
         {% csrf_token %}
         <table>
-        {{form.as_table }}
+            <tr>
+                <th nowrap="nowrap" class="legend"><label for="id_recs">To:</label></th>
+                <td>{{ form.recs }}</td>
+            </tr>
+            <tr>
+                <th nowrap="nowrap" class="legend"><label for="id_subject">Subject:</label></th>
+                <td>{{ form.subject }}</td>
+            </tr>
+            <tr>   
+                <th />
+                <td>{{ form.body }}</td>
+            </tr>
+            <tr>
+                <th />
+                <td><input type="submit" value="Send" /></td>
+            </tr>
         </table>
-        <input type="submit" value="Send" />
     </form>
 {% endblock %}
