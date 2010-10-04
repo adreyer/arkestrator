@@ -36,17 +36,18 @@ def list_profiles(request):
 
 @login_required
 def edit_info(request):
+    prof = Profile.objects.get(user=request.user)
     if request.method == 'POST':
         profile_form = forms.InfoProfileForm(request.POST,
-                instance=Profile.objects.get(user=request.user))
+                instance=prof)
         if profile_form.is_valid(): 
             profile_form.save()
             #there must be a better way to do this
             purl = '/profiles/' + str(request.user.id)
-            return HttpResponseRedirect(purl)
+            return HttpResponseRedirect(prof.get_absolute_url())
     else:
         profile_form = forms.InfoProfileForm(
-                    instance=Profile.objects.get(user=request.user))
+                    instance=prof)
         
     return render_to_response("profiles/edit_info.html",
                 { 'profile_form' : profile_form },
@@ -55,16 +56,16 @@ def edit_info(request):
     
 @login_required
 def edit_prefs(request):
+    prof = Profile.objects.get(user=request.user)
     if request.method == 'POST':
         prefs_form = forms.PrefsForm(request.POST,
-                instance=Profile.objects.get(user=request.user))
+                instance=prof)
         if prefs_form.is_valid(): 
             prefs_form.save()
-            purl = '/profiles/' + str(request.user.id)
-            return HttpResponseRedirect(purl)
+            return HttpResponseRedirect(prof.get_absolute_url())
     else:
         prefs_form = forms.PrefsForm(
-                    instance=Profile.objects.get(user=request.user))
+                    instance=prof)
         
     return render_to_response("profiles/edit_prefs.html",
                 { 'prefs_form' : prefs_form },

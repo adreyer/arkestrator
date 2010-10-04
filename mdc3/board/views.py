@@ -151,4 +151,28 @@ def toggle_sticky(request,id):
         thread.stuck = True
     thread.save()
     return HttpResponseRedirect("/")
-    
+
+@login_required
+def mark_read(request):
+    thread_list = Thread.on_site.order_by("-stuck","-last_post")[0:50]
+    lr_list = LastRead.objects.filter(
+        thread__in=[t.id for t in thread_list],
+        user = request.user,
+    ).select_related('thread__id', 'timestamp')
+    last_read = lr_list.values('thread__id', 'timestamp')
+    last_viewed = dict((lr['thread__id'], lr['timestamp']) for lr in last_read)
+    for t in thread_list:
+        if t.id in last_viewed and last_viewed[t.id] < t.last_post:
+            lr = lr_list.get(thread__id=t.id)
+            lr.timestamp = datetime.datetime.now()
+            lr.save()
+        else:
+            try:
+                lr = LastRead.objects.get(
+                    user = request.user,thread = t)
+            except LastRead.DoesNotExist:
+                lr = LastRead(user = request.user,
+                    thread = t, read_count = 0)
+            lr.timestamp = datetime.datetime.now()
+            lr.save()
+    return HttpResponseRedirect("/")

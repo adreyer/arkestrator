@@ -2,6 +2,14 @@
 
 {% load cache util %}
 
+{% block extramenu %}
+    <div id="submenu">
+        <ul>
+            <li class="submenuitem"><a href="{% url  mark-threads-read %}">Mark All Read</a></li>
+        </ul>
+    </div>
+{% endblock extramenu %}
+
 {% block content %}
     <table class="thread_list">
     {% withcycle "row1" "row2" as row_color %}

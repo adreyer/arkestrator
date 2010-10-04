@@ -33,7 +33,9 @@ class Profile(models.Model):
     #fuck hidden
     
     
-
+    def get_absolute_url(self):
+        return "/profiles/%i/" % self.id
+    
     def __str__(self):
         return self.user.username
     
