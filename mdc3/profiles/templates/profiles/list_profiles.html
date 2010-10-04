@@ -1,8 +1,14 @@
 {% extends "base.html" %}
+{% block tabtitle %}
+<title>User List - {{ site_name }}</title>
+{% endblock %}
+
+{% block pagetitle %}
+<h1>User List</h1>
+{% endblock %}
 
 {% block content %}
-    <h2>Profiles</h2>
-    <table>
+    <table class="thread_list">
     {% for profile in profile_list %}
             <tr class="{% cycle "row1" "row2" %}">
             <td> {{ forloop.counter }} </td>
