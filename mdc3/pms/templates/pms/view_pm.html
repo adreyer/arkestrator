@@ -8,8 +8,13 @@
 <h1>{{ pm.subject }}</h1>
 {% endblock %}
 
+{% block extrahead %}
+{% endblock %}
+
+{% load bbcode %}
+
 {% block content %}
-    {% load bbcode %}
+    
     <form method="post" action="{% url view-pm pm.pk %}">
     {% csrf_token %}
     <table width="100%">
