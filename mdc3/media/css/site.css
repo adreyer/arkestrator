@@ -19,10 +19,6 @@ blockquote.quote {
     -moz-border-radius: 5px;
 }
 
-td {
-    vertical-align: top;
-}
-
 th {
     text-align: right;
     font-weight: bold;
