@@ -116,12 +116,12 @@ def view_pm(request, pm_id):
 [hidden][quote]""" + reply.body + '[/quote][/hidden]'
 
     #this is messy and slow and should be fixed
-    rec_list = Recipient.objects.filter(message=pm)
+    rec_list = Recipient.objects.filter(message=pm).select_related(
+            'recipient__username')
     reply_recs = pm.sender.username
     for rec in rec_list:
-        if rec.recipient != request.user:
+        if rec.recipient != request.user and rec.recipient != pm.sender:
             reply_recs = reply_recs + ' ' + rec.recipient.username
-
     if request.method == 'POST':
         form =forms.NewPMForm(request.POST,
                 instance=reply)
@@ -133,7 +133,7 @@ def view_pm(request, pm_id):
     else:
         rec_str = pm.get_rec_str()
         form =forms.NewPMForm(instance=reply,
-                initial={'recipients' : reply_recs})
+                initial={'recs' : reply_recs})
     return render_to_response("pms/view_pm.html",
             { 'pm' : pm ,
               'rec_str' : rec_str,
