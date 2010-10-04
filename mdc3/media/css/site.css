@@ -94,6 +94,7 @@ div#user ul, div#menu ul, div#submenu ul, div#bottombezel ul {
     border-top-right-radius: 5px;
     -moz-border-radius-topleft: 5px;
     -moz-border-radius-topright: 5px;
+    font-size: 100%;
 }
 
 .submenuitem {
@@ -105,7 +106,7 @@ div#user ul, div#menu ul, div#submenu ul, div#bottombezel ul {
     padding: 2px;
     padding-right: 5px;
     padding-left: 5px; 
-    font-size: 90%;
+    font-size: 93%;
     border-radius: 5px;
     -moz-border-radius: 5px;
 }
@@ -178,6 +179,7 @@ textarea, input {
     padding: 5px;
     border-radius: 5px;
     -moz-border-radius: 5px;
+    font-size: 100%;
 }
 
 div#bottombezel {

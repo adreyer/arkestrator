@@ -32,11 +32,16 @@
                 <div class="body pmbody">        
                 {% bbcode pm.body %}
                 </div>
+                <br />
             </td>
         </tr>
         <tr>
-            <th nowrap="nowrap" class="legend"><label for="id_recs">To:</label></th>
+            <th nowrap="nowrap" class="legend"><label for="id_recs">Reply to:</label></th>
             <td>{{ form.recs }}</td>
+        </tr>
+        <tr>
+            <th />
+            <td class="smallfont">Separate multiple user names with spaces.</td>
         </tr>
         <tr>
             <th nowrap="nowrap" class="legend"><label for="id_subject">Subject:</label></th>
