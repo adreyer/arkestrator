@@ -1,7 +1,6 @@
 import datetime
 
 from django.contrib.auth.decorators import login_required
-from django.views.decorators.cache import never_cache
 from django.contrib.sites.models import Site
 from django.shortcuts import render_to_response,get_object_or_404
 from django.http import HttpResponseRedirect, Http404
@@ -14,6 +13,8 @@ from django.core.paginator import Paginator, InvalidPage
 
 from models import Thread, Post, LastRead
 import forms
+
+from mdc3.decorators import super_no_cache
 
 @login_required
 def view_thread(request,id=None,expand=False):
@@ -95,8 +96,8 @@ def new_thread(request):
             'post_form' : post_form,
         }, context_instance = RequestContext(request))
 
+@super_no_cache
 @login_required
-@never_cache
 def list_threads(request):
     try:
         page = int(request.GET.get('page', 1))

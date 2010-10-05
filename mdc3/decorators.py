@@ -69,3 +69,10 @@ def instance_memcache(key, timeout=None):
     def _instance_memcache(fn):
         return InstanceMethodCache(key, fn, timeout)
     return _instance_memcache
+
+def super_no_cache(fn):
+    def _super_no_cache(*args, **kwargs):
+        response = fn(*args, **kwargs)
+        response['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0'
+        return response
+    return _super_no_cache
