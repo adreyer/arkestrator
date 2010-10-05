@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block tabtitle %}
+<title>Posts by {{poster}} - {{ site_name }}</title>
+{% endblock %}
+{% block pagetitle %}
+    <h1>Posts by {{poster}}</h1>
+{% endblock %}
+
+{% load bbcode %}
+{% block extramenu %}
+    <div id="submenu">
+        <ul>
+            <li class="submenuitem"><a href="{% url new-thread %}">New Thread</a></li>
+        </ul>
+    </div>
+{% endblock %}
+{% block content %}
+    {% for post in object_list %}
+        <div class="post">
+        <div class="row2">
+            <strong>Subject: </strong>{{ post.thread.subject }} <br/>
+            <strong>Posted:</strong>
+                {{ post.updated_at|date:"D, d-M-Y \a\t h:m a"}}
+            </div>
+            <div class="body">
+                <p>{% bbcode post.body %}</p>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+{% block bottombezel %}
+    <div id="bottombezel">
+         <ul>
+            <li class="submenulegend">Page:</li>
+            {% for p in page_obj.paginator.page_range %}
+                {% if p == page_obj.number %}
+                    <li class="submenuitem"><strong>{{ p }}</strong></li>
+                {% else %}
+                    <li class="submenuitem"><a href="?page={{ p }}">{{ p }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
+
