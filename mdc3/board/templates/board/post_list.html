@@ -34,6 +34,13 @@
         </div>
     {% endfor %}
 {% endblock %}
+{% block bottombezel %}
+    <div id="bottombezel">
+        <ul>
+            <li class="submenuitem"><a href="{% url list-threads %}">Go back</a></li>
+        </ul>
+    </div>
+{% endblock %}
 {% block replyform %}
 <a name="post" />
     <form method="post" action="{% url view-thread thread.id %}#post">
