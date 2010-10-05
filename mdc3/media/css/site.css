@@ -1,9 +1,9 @@
 h1 {
     font-size: large;
-    margin-top: 4px;
-    margin-bottom: 4px;
-    margin-left: 0px;
-    margin-right: 0px;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
+    margin-left: 0em;
+    margin-right: 0em;
 }
 
 p {
@@ -15,8 +15,8 @@ blockquote.quote {
     margin: 1em 12em 0em 2em; 
     padding: 0.75em; 
     font-size: 93%;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
+    border-radius: 0.5em;
+    -moz-border-radius: 0.5em;
 }
 
 th {
@@ -32,7 +32,7 @@ th.legend {
 
 div.pmbody {
     margin-right: 1em;
-    border-radius: 5px;
+    border-radius: 0.5em;
 }
 
 .smallfont {
@@ -64,16 +64,17 @@ div#user {
 div#menu {
     float: left;
     width: auto;
+    margin-bottom: 1px;
 }
 
 div#submenu {
     width: 100%;
     clear: both;
     min-height: 4px;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    -moz-border-radius-topleft: 5px;
-    -moz-border-radius-topright: 5px;
+    border-top-left-radius: 0.5em;
+    border-top-right-radius: 0.5em;
+    -moz-border-radius-topleft: 0.5em;
+    -moz-border-radius-topright: 0.5em;
 }
 
 div#user ul, div#menu ul, div#submenu ul, div#bottombezel ul {
@@ -90,10 +91,10 @@ div#user ul, div#menu ul, div#submenu ul, div#bottombezel ul {
     padding: 5px;
     padding-right: 10px;
     padding-left: 10px; 
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    -moz-border-radius-topleft: 5px;
-    -moz-border-radius-topright: 5px;
+    border-top-left-radius: 0.5em;
+    border-top-right-radius: 0.5em;
+    -moz-border-radius-topleft: 0.5em;
+    -moz-border-radius-topright: 0.5em;
     font-size: 100%;
     list-style-type: none;
 }
@@ -108,8 +109,8 @@ div#user ul, div#menu ul, div#submenu ul, div#bottombezel ul {
     padding-right: 5px;
     padding-left: 5px; 
     font-size: 93%;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
+    border-radius: 0.5em;
+    -moz-border-radius: 0.5em;
     list-style-type: none;
 }
 
@@ -144,8 +145,6 @@ li {
 
 div#content {
     clear: both;
-    margin-top: -1px;
-    margin-bottom: -3px;
 }
 
 table.thread_list td {
@@ -189,18 +188,18 @@ p.replyform {
 
 textarea, input {
     padding: 5px;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
+    border-radius: 0.5em;
+    -moz-border-radius: 0.5em;
     font-size: 100%;
 }
 
 div#bottombezel {
     clear: both;
     min-height: 4px;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    -moz-border-radius-bottomleft: 5px;
-    -moz-border-radius-bottomright: 5px;
+    border-bottom-left-radius: 0.5em;
+    border-bottom-right-radius: 0.5em;
+    -moz-border-radius-bottomleft: 0.5em;
+    -moz-border-radius-bottomright: 0.5em;
 }
 
 div#ra {
@@ -220,8 +219,8 @@ div#gtfo p {
     font-size: large; 
     font-weight: bold; 
     text-transform: uppercase;
-    border-radius: 5px;
-    -moz-border-radius: 5px;
+    border-radius: 0.5em
+    -moz-border-radius: 0.5em;
 }
 
 .urgent {
