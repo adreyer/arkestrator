@@ -63,7 +63,7 @@ def view_thread(request,id=None,expand=False):
     #this is a hack to hide images
     if not Profile.objects.get(user=request.user).show_images:
         for post in post_list:
-            post.body = post.body.replace('[img','(*)[url')
+            post.body = post.body.replace('[img','(img)[url')
             post.body = post.body.replace('[/img]','[/url]')
             
 ##    return list_detail.object_list(

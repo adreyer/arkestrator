@@ -126,8 +126,8 @@ def view_pm(request, pm_id):
 
     #this is a hack to hide images
     if not Profile.objects.get(user=request.user).show_images:
-        pm.body = pm.body.replace('[img','[url]')
-        pm.body = pm.body.replace('[/img]','[/url](*)')
+        pm.body = pm.body.replace('[img','(img)[url')
+        pm.body = pm.body.replace('[/img]','[/url]')
         
     if request.method == 'POST':
         form =forms.NewPMForm(request.POST,
