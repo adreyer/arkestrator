@@ -26,7 +26,8 @@ th {
 
 th.legend {
     min-width: 0;
-    padding: 5px;
+    padding: 0.25em;
+    vertical-align: top;
 }
 
 div.pmbody {
@@ -76,10 +77,9 @@ div#submenu {
 }
 
 div#user ul, div#menu ul, div#submenu ul, div#bottombezel ul {
-    padding-left: 3px;
-    padding-right: 3px;
-    margin-top: 3px;
-    margin-bottom: 1px;
+    padding-left: 0.2em;
+    padding-right: 0.2em;
+    margin: 0px;
     list-style-type: none;
 }
 
@@ -95,6 +95,7 @@ div#user ul, div#menu ul, div#submenu ul, div#bottombezel ul {
     -moz-border-radius-topleft: 5px;
     -moz-border-radius-topright: 5px;
     font-size: 100%;
+    list-style-type: none;
 }
 
 .submenuitem {
@@ -109,12 +110,14 @@ div#user ul, div#menu ul, div#submenu ul, div#bottombezel ul {
     font-size: 93%;
     border-radius: 5px;
     -moz-border-radius: 5px;
+    list-style-type: none;
 }
 
 .submenulegend {
     margin-left: 2px;
     display: inline-block;
     font-weight: bold;
+    list-style-type: none;
 }
 
 .menuitem a, .submenuitem a {
@@ -129,6 +132,15 @@ div#user ul, div#menu ul, div#submenu ul, div#bottombezel ul {
     width: 100%;
     border-collapse: collapse;
 }
+
+/* WARNING! AHEAD THERE BE HACKS! */
+
+li {
+    zoom: 1;
+    *display: inline !important;
+}
+
+/* END OF HACKS FOR FUCKING INTERNET EXPLORER BULLSHIT */
 
 div#content {
     clear: both;
@@ -216,3 +228,4 @@ div#gtfo p {
     text-decoration: blink;
     font-weight: bold;
 }
+
