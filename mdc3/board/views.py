@@ -11,6 +11,7 @@ from django.db.models import Sum, Count, Max, F
 from django.core.cache import cache
 from django.core.paginator import Paginator, InvalidPage
 
+from mdc3.profiles.models import Profile
 from models import Thread, Post, LastRead
 import forms
 
@@ -58,14 +59,27 @@ def view_thread(request,id=None,expand=False):
     if not expand and queryset.count() < 10:
         queryset = thread.default_post_list
 
-    return list_detail.object_list(
-        request,
-        queryset = queryset,
-        extra_context = {
-            "thread" : thread,
-            "form" : form,
-        }
-    )
+    post_list = list(queryset)
+    #this is a hack to hide images
+    if not Profile.objects.get(user=request.user).show_images:
+        for post in post_list:
+            post.body = post.body.replace('[img','(*)[url')
+            post.body = post.body.replace('[/img]','[/url]')
+            
+##    return list_detail.object_list(
+##        request,
+##        queryset = post_list,
+##        extra_context = {
+##            "thread" : thread,
+##            "form" : form,
+##        }
+##    )
+
+    return render_to_response("board/post_list.html", {
+        'object_list' : post_list,
+        'thread' : thread,
+        'form' : form,},
+        context_instance = RequestContext(request))
 
 @login_required
 def new_thread(request):

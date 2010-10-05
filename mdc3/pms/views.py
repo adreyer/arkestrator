@@ -9,6 +9,7 @@ from copy import copy
 
 
 from models import PM, Recipient
+from mdc3.profiles.models import Profile
 from django.contrib.auth.models import User
 import forms
 
@@ -122,6 +123,12 @@ def view_pm(request, pm_id):
     for rec in rec_list:
         if rec.recipient != request.user and rec.recipient != pm.sender:
             reply_recs = reply_recs + ' ' + rec.recipient.username
+
+    #this is a hack to hide images
+    if not Profile.objects.get(user=request.user).show_images:
+        pm.body = pm.body.replace('[img','[url]')
+        pm.body = pm.body.replace('[/img]','[/url](*)')
+        
     if request.method == 'POST':
         form =forms.NewPMForm(request.POST,
                 instance=reply)
