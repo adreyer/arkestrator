@@ -16,5 +16,9 @@ urlpatterns = patterns('',
         name='thread-history'),
     url(r"^threads/new/$",views.new_thread,name='new-thread'),
     url(r"^threads/mark_read/$",views.mark_read,name='mark-threads-read'),
+    url(r"^threads/threads_by/(?P<id>\d+)/$", views.threads_by,
+            name='threads-by'),
+    url(r"^threads/posts_by/(?P<id>\d+)/$", views.posts_by,
+            name='posts-by'),
 )
 

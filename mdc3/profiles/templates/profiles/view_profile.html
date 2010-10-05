@@ -1,4 +1,4 @@
-{% extends "profiles/profile_base.html" %}
+{% extends "base.html" %}
 
 {% block tabtitle %}
 <title>Profile: {{ view_user.username }}</title>
@@ -8,11 +8,36 @@
 {% endblock %}
 
 
+{% block extramenu %}
+    <div id="submenu">
+        <ul>
+            {% if not view_user.id == user.id %}
+                <li class="submenuitem"><a href="{% url new-pm view_user.id %}">
+                Send {{ view_user.username }} a pm</a></li>
+            {% else %}
+                <li class="submenuitem"><a href="{% url view-profile user.id %}">View profile</a></li>
+                <li class="submenuitem"><a href="{% url edit-prefs %}">Preferences</a></li>
+                <li class="submenuitem"><a href="{% url edit-info %}">Edit profile</a></li>
+                <li class="submenuitem"><a href="{% url edit-theme %}">Edit theme</a></li>
+                <li class="submenuitem"><a href="{% url passwd %}">Change password</a></li>
+            {% endif %}
+            <li class="submenuitem"><a href="{% url threads-by view_user.id %}">
+                Threads by {{view_user.username}}</a></li>
+            <li class="submenuitem"><a href="{% url posts-by view_user.id %}">
+                Posts by {{view_user.username}}</a></li>
+        </ul>
+    </div>
+{% endblock extramenu %}
+
+
+
 {% block content %}
 <div class="row2">
 <table class="thread_list">
     <tr>
         <td>
+            <a href="{% url new-pm view_user.id %}">
+               <strong> Send {{ view_user.username }} a pm</strong></a><br />
             {% if view_profile.name %} 
                 <strong>Name:</strong> {{ view_profile.name }} <br />
             {% endif %}

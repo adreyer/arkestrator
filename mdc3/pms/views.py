@@ -14,14 +14,20 @@ from django.contrib.auth.models import User
 import forms
 
 @login_required
-def new_pm(request):
+def new_pm(request, rec_id=0):    
     if request.method == 'POST':
         form =forms.NewPMForm(request.POST)
         if form.is_valid():
             form.save(request.user)
             return HttpResponseRedirect("/pms/inbox")
     else:
-        form =forms.NewPMForm()
+        rec=''
+        if rec_id:
+            try:
+                rec= User.objects.get(pk=rec_id)
+            except User.DoesNotExist:
+                pass
+        form =forms.NewPMForm(initial={ 'recs':rec })
     return render_to_response('pms/new_pm.html',
             { 'form' : form },
             context_instance = RequestContext(request))
@@ -47,13 +53,10 @@ def outbox(request):
 
     for pm in pm_list:
         pm_rec_list = []
-        # this can potentially fail catastrophically if someone sends
-        # two different messages at the exact same time.
         while rec_list and pm.id == rec_list[0].message_id:
             pm_rec_list.append(rec_list[0])
             rec_list = rec_list[1:]
         pm.rec_list = pm_rec_list
-        print pm_rec_list
 
     return render_to_response('pms/outbox.html',
             { 'pm_rec_list' : pm_list,

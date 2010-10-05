@@ -10,6 +10,7 @@ from django.db.models.signals import post_save
 from django.db.models import Sum, Count, Max, F
 from django.core.cache import cache
 from django.core.paginator import Paginator, InvalidPage
+from django.contrib.auth.models import User
 
 from mdc3.profiles.models import Profile
 from models import Thread, Post, LastRead
@@ -191,3 +192,31 @@ def mark_read(request):
             lr.timestamp = datetime.datetime.now()
             lr.save()
     return HttpResponseRedirect("/")
+
+@login_required
+def threads_by(request, id):
+    poster = get_object_or_404(User,pk=id)
+    queryset = Thread.on_site.filter(creator=id).order_by(
+        '-last_post').select_related('last_post_by')
+
+    return list_detail.object_list(
+            request,
+            queryset = queryset,
+            paginate_by = 50,
+            template_name = "board/threads_by.html",
+            extra_context = {"poster" : poster.username}
+            )
+
+@login_required
+def posts_by(request, id):
+    poster = get_object_or_404(User,pk=id)
+    queryset = Post.objects.filter(creator=poster).order_by(
+        '-updated_at').select_related('thread__subject')
+
+    return list_detail.object_list(
+            request,
+            queryset = queryset,
+            paginate_by = 50,
+            template_name = "board/posts_by.html",
+            extra_context = {"poster" : poster.username}
+            )
