@@ -7,10 +7,16 @@ import datetime
 import re
 
 class NewInviteForm(forms.Form):
-    invitee = forms.EmailField(required=True, label="Invitees's email adress")
+    invitee = forms.EmailField(required=True, label="Email of Invitee")
+    invitee2 = forms.EmailField(required=True, label="Email(verify)")
     explanation = forms.CharField(max_length=150,
         label="Who the fuck is this person",
         widget=forms.Textarea)
+
+    def clean(self):
+        if self.cleaned_data["invitee"] != self.cleaned_data["invitee2"]:
+            raise forms.ValidationError("emails don't match")
+        return self.cleaned_data
 
     def save(self, user):
         invite = Invite.objects.create(

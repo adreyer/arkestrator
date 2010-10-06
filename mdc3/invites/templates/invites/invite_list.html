@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block tabtitle %}
+<title>Invites - {{ site_name }}</title>
+{% endblock %}
+{% block pagetitle %}
+    <h1>Invites {{poster}}</h1>
+{% endblock %}
+
+{% load bbcode %}
+{% block extramenu %}
+    <div id="submenu">
+        <ul>
+            <li class="submenuitem"><a href="{% url new-invite %}">New Invite</a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block content %}
+    {% for invite in object_list %}
+        <div class="post">
+        <div class="row2">
+            <a href="{% url view-profile invite.inviter.id %}">
+                {{ invite.inviter.username }}</a> invited {{ invite.invitee }} 
+                on {{ invite.created_on|date:"D, d-M-Y \a\t h:m a"}}
+                {% if invite.approved %}
+                    <br />
+                    {{ invite.approved_by.username }}
+                    approved this on 
+                    {{ invite.approved_on|date:"D, d-M-Y \a\t h:m a"}}
+                {% else %}
+                    {% if not invite.rejected %}
+                        <span class="submenuitem">
+                            <a href="{% url reject-invite invite.id %}">
+                            reject</a></span>
+                    {% else %}
+                        <br />
+                        {{ invite.approved_by.username }}
+                        rejected this on 
+                        {{ invite.approved_on|date:"D, d-M-Y \a\t h:m a"}}
+                    {% endif %}
+                    <span class="submenuitem">
+                        <a href="{% url approve-invite invite.id %}">
+                        approve</a></span>
+                    
+                {% endif %} 
+            </div>
+            <div class="body">
+                <p>{{ invite.explanation }}</p>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+
+{% block bottombezel %}
+    <div id="bottombezel">
+         <ul>
+            <li class="submenulegend">Page:</li>
+            {% for p in page_obj.paginator.page_range %}
+                {% if p == page_obj.number %}
+                    <li class="submenuitem"><strong>{{ p }}</strong></li>
+                {% else %}
+                    <li class="submenuitem"><a href="?page={{ p }}">{{ p }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
+

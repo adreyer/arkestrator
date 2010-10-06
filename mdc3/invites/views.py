@@ -3,9 +3,14 @@ from django.http import HttpResponseRedirect,  HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.views.generic import list_detail
+
+import datetime
+import time
+
 from mdc3.invites.models import Invite
 from mdc3.profiles.models import Profile
-
 import forms
 
 @login_required
@@ -57,3 +62,41 @@ def register(request,code):
           'code' : code },
          context_instance = RequestContext(request))
     
+
+@login_required
+def invite_list(request):
+    queryset = Invite.objects.order_by('rejected','approved','used')
+    return list_detail.object_list(
+        request,
+        queryset = queryset,
+        paginate_by = 10)
+
+@login_required
+def approve_invite(request, id):
+    inv = get_object_or_404(Invite,id=id)
+    if not inv.approved:
+        inv.approved = True
+        if inv.rejected:
+            inv.rejected=False
+        inv.approved_on = datetime.datetime.now()
+        inv.approved_by = request.user
+        inv.invite_code = str(abs(hash(time.time())))
+        invite_url = 'http://board.mdc2.org/invites/' + inv.invite_code
+        send_mail(subject='Welcome to MDC',
+                message="""
+Welcome to MDC. Use the link below to create your account
+<a href=\"""" + invite_url + '\">' + invite_url + '</a>',
+                from_email = 'cmr@mdc2.org',
+                recipient_list = [inv.invitee],
+                fail_silently=False)
+        inv.save()
+    return HttpResponseRedirect("/invites/")
+
+def reject_invite(request, id):
+    inv = get_object_or_404(Invite,id=id)
+    if not inv.rejected:
+        inv.rejected = True
+        inv.approved_on = datetime.datetime.now()
+        inv.approved_by = request.user
+        inv.save()
+    return HttpResponseRedirect("/invites/")

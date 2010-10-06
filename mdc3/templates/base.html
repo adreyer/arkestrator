@@ -64,7 +64,7 @@ else { document.getElementById(d).style.display = "none"; }
                 {% else %}Messages{% endif %}</a></li>
             <li class="menuitem"><a href="{% url list-profiles %}">User list</a></li>
             <li class="menuitem"><a href="http://wiki.mdc2.org/index.php/Main_Page">Wiki</a></li>
-            <li class="menuitem"><a href="{% url new-invite %}">Invite</a></li>
+            <li class="menuitem"><a href="{% url invite-list %}">Invites</a></li>
             {% if user.is_staff %}
             <li class="menuitem"><a href="/admin/">Admin</a></li>
             {% endif %}

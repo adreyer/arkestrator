@@ -3,6 +3,6 @@ from models import Invite
 
 class InviteAdmin(admin.ModelAdmin):
     list_display = ('invitee', 'inviter', 'created_on',
-                    'approved', 'used')
+                    'approved', 'rejected','used')
 
 admin.site.register(Invite, InviteAdmin)
