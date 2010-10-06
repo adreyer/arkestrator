@@ -21,7 +21,7 @@
 {% block content %}
     {% for post in object_list %}
         <div class="post">
-            <a name="#{{ post.id }}" />
+            <a name="{{ post.id }}" />
             {% if post.creator == user %}
                 <div class="my_post">
             {% else %}
