@@ -65,7 +65,8 @@ def register(request,code):
 
 @login_required
 def invite_list(request):
-    queryset = Invite.objects.order_by('rejected','approved','used')
+    queryset = Invite.objects.filter(rejected=False,
+            approved=False).order_by('-created_on')
     return list_detail.object_list(
         request,
         queryset = queryset,
