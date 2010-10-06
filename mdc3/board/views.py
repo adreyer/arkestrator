@@ -67,15 +67,6 @@ def view_thread(request,id=None,expand=False):
             post.body = post.body.replace('[img','(img)[url')
             post.body = post.body.replace('[/img]','[/url]')
             
-##    return list_detail.object_list(
-##        request,
-##        queryset = post_list,
-##        extra_context = {
-##            "thread" : thread,
-##            "form" : form,
-##        }
-##    )
-
     return render_to_response("board/post_list.html", {
         'object_list' : post_list,
         'thread' : thread,
