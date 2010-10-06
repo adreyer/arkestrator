@@ -117,6 +117,24 @@ div#user ul, div#menu ul, div#submenu ul, div#bottombezel ul {
     list-style-type: none;
 }
 
+.floatright {
+    float: right;
+
+/* WARNING! AHEAD THERE BE HACKS! */
+    zoom: 1
+    *display: inline !important;
+    *float: none;
+}
+
+li {
+    zoom: 1;
+    *display: inline !important;
+}
+
+/* END OF HACKS FOR FUCKING INTERNET EXPLORER BULLSHIT */
+
+
+
 .submenulegend {
     margin-left: 0.5em;
     display: inline-block;
@@ -136,15 +154,6 @@ div#user ul, div#menu ul, div#submenu ul, div#bottombezel ul {
     width: 100%;
     border-collapse: collapse;
 }
-
-/* WARNING! AHEAD THERE BE HACKS! */
-
-li {
-    zoom: 1;
-    *display: inline !important;
-}
-
-/* END OF HACKS FOR FUCKING INTERNET EXPLORER BULLSHIT */
 
 div#content {
     clear: both;
@@ -173,11 +182,11 @@ div.body {
     padding-bottom: 0.67em;
 }
 
-div.body a {
+div.post div.body a {
     text-decoration: underline;
 }
 
-div.body a:hover {
+div.post div.body a:hover {
     text-decoration: none;
 }
 

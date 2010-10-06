@@ -14,6 +14,7 @@
             <li class="submenuitem"><a href="/this/does/nothing/lol">Hide images</a></li>
             <li class="submenuitem"><a href="{% url sticky thread.id %}">Toggle sticky</a></li>
             <li class="submenuitem"><a href="{% url thread-history thread.id %}">Thread history</a></li>
+            <li class="submenuitem floatright"><a href="#pagebottom">Jump to bottom</a></li>
         </ul>
     </div>
 {% endblock %}
@@ -38,6 +39,7 @@
     <div id="bottombezel">
         <ul>
             <li class="submenuitem"><a href="{% url list-threads %}">Go back</a></li>
+            <li class="submenuitem floatright"><a href="#pagetop">Jump to top</a></li>
         </ul>
     </div>
 {% endblock %}

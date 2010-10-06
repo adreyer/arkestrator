@@ -6,6 +6,7 @@ import datetime
 
 env.hosts = ['mdc2.org']
 env.user = 'deploy'
+env.key_filename = '/home/cmr/.ssh/id_rsa'
 
 def dev():
     "The Development Environment"
