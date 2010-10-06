@@ -69,6 +69,7 @@ class Post(models.Model):
 class LastRead(models.Model):
     user = models.ForeignKey(User)
     thread = models.ForeignKey(Thread)
+    post = models.ForeignKey(Post)
     timestamp = models.DateTimeField(default = datetime.datetime.now,
         db_index = True)
     read_count = models.IntegerField(default=0)
