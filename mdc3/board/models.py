@@ -86,12 +86,14 @@ def update_thread(sender, instance, signal, *args, **kwargs):
                 thread = instance.thread
             )
             lastread.timestamp = instance.updated_at
+            lastread.post = instance
             lastread.save()
         except LastRead.DoesNotExist:
             lastread = LastRead.objects.create(
                 user = instance.creator,
                 thread = instance.thread,
                 timestamp = instance.updated_at,
+                post = instance,
             )
 
 def invalidate_front_page(sender, instance, signal, *args, **kwargs):

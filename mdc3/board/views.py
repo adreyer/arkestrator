@@ -2,6 +2,7 @@ import datetime
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render_to_response,get_object_or_404
 from django.http import HttpResponseRedirect, Http404
 from django.template import RequestContext
@@ -51,22 +52,25 @@ def view_thread(request,id=None,expand=False):
             read_count = 0,
         )
 
-    lastread.timestamp = datetime.datetime.now()
-    lastread.read_count += 1
-    lastread.save()
-    del thread.total_views
-
-    
     if not expand and queryset.count() < 10:
         queryset = thread.default_post_list
 
     post_list = list(queryset)
     #this is a hack to hide images
-    if not Profile.objects.get(user=request.user).show_images:
-        for post in post_list:
-            post.body = post.body.replace('[img','(img)[url')
-            post.body = post.body.replace('[/img]','[/url]')
-            
+    try:
+        if not request.user.get_profile().show_images:
+            for post in post_list:
+                post.body = post.body.replace('[img','(img)[url')
+                post.body = post.body.replace('[/img]','[/url]')
+    except ObjectDoesNotExist:
+        pass
+
+    lastread.timestamp = datetime.datetime.now()
+    lastread.read_count += 1
+    lastread.post = post_list[-1]
+    lastread.save()
+    del thread.total_views
+    
     return render_to_response("board/post_list.html", {
         'object_list' : post_list,
         'thread' : thread,
@@ -124,11 +128,12 @@ def list_threads(request):
     last_read = LastRead.objects.filter(
         thread__in=[t.id for t in thread_list],
         user = request.user,
-    ).values('thread__id', 'timestamp')
-    last_viewed = dict((lr['thread__id'], lr['timestamp']) for lr in last_read)
+    ).values('thread__id', 'timestamp', 'post__id')
+    last_viewed = dict((lr['thread__id'], lr) for lr in last_read)
     for t in thread_list:
         if t.id in last_viewed:
-            t.unread = last_viewed[t.id] < t.last_post
+            t.unread = last_viewed[t.id]['timestamp'] < t.last_post
+            t.last_post_read = last_viewed[t.id]['post__id']
         else:
             t.unread = True
 

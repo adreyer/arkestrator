@@ -22,11 +22,17 @@
             {% endif %}
             <td nowrap="nowrap"><a href="{% url view-profile thread.creator.id %}">{{ thread.creator.username }}</a></td>
             <td>{% if thread.unread %}
-                    <b><a href="{% url view-thread thread.id %}">
+                    <b><a href="{% url view-thread thread.id %}{% spaceless %}
+                        {% if thread.last_post_read %}
+                                #{{ thread.last_post_read }}
+                            {% endif %}{% endspaceless %}">
                         {% if thread.stuck %}<strong>Sticky: </strong>{% endif %}
                         {{ thread.subject }}</a></b>
                 {% else %}
-                    <a href="{% url view-thread thread.id %}">
+                    <a href="{% url view-thread thread.id %}{% spaceless %}
+                        {% if thread.last_post_read %}
+                                #{{ thread.last_post_read }}
+                            {% endif %}{% endspaceless %}">
                         {% if thread.stuck %}<strong>Sticky: </strong>{% endif %}
                         {{ thread.subject }}</a>
                 {% endif %}
