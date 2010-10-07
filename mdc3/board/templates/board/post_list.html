@@ -16,6 +16,9 @@
             <li class="submenuitem"><a href="/this/does/nothing/lol">Hide images</a></li>
             <li class="submenuitem"><a href="{% url sticky thread.id %}">Toggle sticky</a></li>
             <li class="submenuitem"><a href="{% url thread-history thread.id %}">Thread history</a></li>
+            {% if perms.board.can_lock %}
+                <li class="submenuitem"><a href="{% url lock-thread thread.id %}">Lock Thread</a></li>
+             {% endif %}
             <li class="submenuitem floatright"><a href="#pagebottom">Jump to bottom</a></li>
         </ul>
     </div>
@@ -48,6 +51,7 @@
     </div>
 {% endblock %}
 {% block replyform %}
+{% if not thread.locked %}
 <a name="post"></a>
     <form method="post" action="{% url view-thread thread.id %}#post">
     {% csrf_token %}
@@ -56,4 +60,5 @@
         <input class="button" type="submit" value="Say it" />
         </p>
     </form>
+{% endif %}
 {% endblock %}

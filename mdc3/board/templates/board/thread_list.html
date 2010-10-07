@@ -26,6 +26,7 @@
                         {% if thread.last_post_read %}
                                 #{{ thread.last_post_read }}
                             {% endif %}{% endspaceless %}">
+                        {% if thread.locked %}<strong>Locked: </strong>{% endif %}
                         {% if thread.stuck %}<strong>Sticky: </strong>{% endif %}
                         {{ thread.subject }}</a></b>
                 {% else %}
@@ -33,6 +34,7 @@
                         {% if thread.last_post_read %}
                                 #{{ thread.last_post_read }}
                             {% endif %}{% endspaceless %}">
+                        {% if thread.locked %}<strong>Locked: </strong>{% endif %}
                         {% if thread.stuck %}<strong>Sticky: </strong>{% endif %}
                         {{ thread.subject }}</a>
                 {% endif %}

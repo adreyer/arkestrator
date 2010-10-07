@@ -11,6 +11,11 @@ from mdc3.decorators import instance_memcache
 import datetime
 
 class Thread(models.Model):
+    class Meta:
+        permissions = (
+            ("can_lock","Can lock threads"),
+        )
+    
     subject = models.CharField(max_length=160, blank=False)
     creator = models.ForeignKey(User,null=False,related_name='threads')
     
@@ -28,6 +33,7 @@ class Thread(models.Model):
     on_site = CurrentSiteManager()
 
     stuck = models.BooleanField(default=False)
+    locked = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.subject

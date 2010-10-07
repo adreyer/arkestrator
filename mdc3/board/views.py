@@ -1,6 +1,6 @@
 import datetime
 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render_to_response,get_object_or_404
@@ -24,6 +24,8 @@ def view_thread(request,id=None,expand=False):
     thread = get_object_or_404(Thread,pk=id)
 
     if request.method == 'POST':
+        if thread.locked:
+            return HttpResponseRedirect("/")
         post = Post(
             thread = thread,
             creator = request.user
@@ -71,7 +73,6 @@ def view_thread(request,id=None,expand=False):
     lastread.save()
     del thread.total_views
 
-    print len(post_list)
     if len(post_list)<= 10:
         expand = True
         
@@ -222,3 +223,11 @@ def posts_by(request, id):
             template_name = "board/posts_by.html",
             extra_context = {"poster" : poster.username}
             )
+@login_required
+@permission_required('board.can_lock','/')
+def lock_thread(request, id):
+    thread = get_object_or_404(Thread,pk=id)
+    thread.locked = not thread.locked
+    thread.save()
+    return HttpResponseRedirect("/")
+    
