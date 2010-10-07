@@ -6,14 +6,14 @@ import bbcode
 
 class NewPMForm(forms.ModelForm):
     recs = forms.CharField(required=True,
-            label="To:", widget=forms.TextInput(attrs={'size': 60}))
+            label="To:", widget=forms.TextInput(attrs={'size': 70}))
     
     class Meta:
         model = PM
         fields = ('recs','subject', 'body')
         widgets = {
-            'body': forms.Textarea(attrs={'cols': 60, 'rows': 12}),
-            'subject': forms.TextInput(attrs={'size': 60, 'maxlength': 160})
+            'body': forms.Textarea(attrs={'cols': 70, 'rows': 12}),
+            'subject': forms.TextInput(attrs={'size': 70, 'maxlength': 160})
         }
         
     def clean_recs(self):

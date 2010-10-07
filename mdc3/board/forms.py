@@ -7,7 +7,7 @@ class ThreadForm(forms.ModelForm):
         model = Thread
         fields = ('subject',)
         widgets = {
-            'subject': forms.TextInput(attrs={'size': 70})
+            'subject': forms.TextInput(attrs={'size': 70, 'maxlength': 160})
         }
 
     def clean_subject(self):
