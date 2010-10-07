@@ -8,4 +8,5 @@ urlpatterns = patterns('mdc3.pms',
     url(r"^outbox/$", 'views.outbox', name='outbox'),
     url(r"^mark_read/$", 'views.mark_read', name='mark-read'),
     url(r"^(?P<pm_id>\d+)/$", 'views.view_pm',name='view-pm'),
+    url(r"^del/(?P<pm_id>\d+)/$", 'views.del_pm',name='del-pm'),
 )

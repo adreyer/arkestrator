@@ -40,8 +40,8 @@ def outbox(request):
     except ValueError:
         raise Http404
 
-    queryset = PM.objects.filter(sender=request.user).order_by(
-        '-created_on')
+    queryset = PM.objects.filter(sender=request.user,
+                deleted=False).order_by('-created_on')
 
     paginator = Paginator(queryset, 25, allow_empty_first_page=True)
     page_obj = paginator.page(page)
@@ -70,8 +70,9 @@ def inbox(request):
     except ValueError:
         raise Http404
 
-    queryset = Recipient.objects.filter(recipient = request.user).order_by(
-        "-message__created_on").select_related('message', 'message__sender')
+    queryset = Recipient.objects.filter(recipient=request.user,
+        deleted=False).order_by("-message__created_on").select_related(
+        'message', 'message__sender')
 
     paginator = Paginator(queryset, 25, allow_empty_first_page=True)
     page_obj = paginator.page(page)
@@ -150,3 +151,14 @@ def view_pm(request, pm_id):
               'form' : form },
             context_instance = RequestContext(request))
         
+def del_pm(request, pm_id):
+    pm = get_object_or_404(PM,pk=pm_id)
+    if pm.sender == request.user:
+        pm.deleted = True
+        pm.save()
+    rec_list = Recipient.objects.filter(message=pm)
+    rec_list.filter(recipient=request.user).update(deleted=True)
+    if pm.deleted and not rec_list.filter(deleted=False):
+        pm.delete()
+        rec_list.delete()
+    return HttpResponseRedirect("/pms/inbox")

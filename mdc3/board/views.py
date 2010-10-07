@@ -43,8 +43,7 @@ def view_thread(request,id=None,expand=False):
             else:
                 cache.delete(cache_key)
         else:
-            form = forms.PostForm(initial={
-                'form_lock': request.POST['form_lock'] })
+            form = forms.PostForm(request.POST)
     else:
         random.randint(0,sys.maxint)
         form = forms.PostForm(initial={'form_lock': random.randint(0,sys.maxint) })

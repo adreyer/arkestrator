@@ -18,6 +18,7 @@ class PM(models.Model):
             through='Recipient')
     created_on = models.DateTimeField(default=datetime.datetime.now)
     parent = models.ForeignKey('self',null=True)
+    deleted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.subject
@@ -37,6 +38,7 @@ class Recipient(models.Model):
     recipient = models.ForeignKey(User)
     message = models.ForeignKey(PM)
     read = models.BooleanField(default=False)
+    deleted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.recipient.username

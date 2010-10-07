@@ -11,6 +11,12 @@
 {% block extrahead %}
 {% endblock %}
 
+
+
+{% block extrasubmenu %}
+<li class="submenuitem"><a href="{% url del-pm pm.id %}">Delete</a></li>
+{% endblock %}
+
 {% load bbcode %}
 
 {% block content %}

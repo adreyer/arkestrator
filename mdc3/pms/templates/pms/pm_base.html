@@ -7,6 +7,8 @@
             <li class="submenuitem"><a href="{% url inbox %}">Inbox</a> </li>
             <li class="submenuitem"><a href="{% url outbox %}">Outbox</a> </li>
             <li class="submenuitem"><a href="{% url mark-read %}">Mark all read</a></li>
+            {% block extrasubmenu %}
+            {% endblock %}
         </ul>
     </div>
 {% endblock %}
