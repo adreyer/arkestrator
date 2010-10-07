@@ -73,7 +73,7 @@ def view_thread(request,id=None,expand=False):
     lastread.save()
     del thread.total_views
 
-    if len(post_list)<= 10:
+    if len(post_list)< 10:
         expand = True
         
     return render_to_response("board/post_list.html", {
