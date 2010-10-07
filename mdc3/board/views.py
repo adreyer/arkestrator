@@ -26,9 +26,7 @@ def view_thread(request,id=None,expand=False):
 
     if request.method == 'POST':
         cache_key = 'form_lock:' + request.POST['form_lock']
-        if not cache.get(cache_key):
-            cache.set(cache_key, True)
-            
+        if  cache.add(cache_key, True): 
             if thread.locked:
                 return HttpResponseRedirect("/")
             
@@ -44,7 +42,8 @@ def view_thread(request,id=None,expand=False):
             else:
                 cache.delete(cache_key)
         else:
-            HttpResponseRedirect("/")
+            form = forms.PostForm(initial={
+                'form_lock': request.POST['form_lock'] })
     else:
         lock = random.randint(0,2000000000)
         form = forms.PostForm(initial={'form_lock': lock })
