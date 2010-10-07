@@ -24,6 +24,7 @@
     {% endblock %}
 {% endblock %}
 
+<script type="text/javascript" language="JavaScript" src="{{ MEDIA_URL }}js/plain-text.js"></script>
 <script type="text/javascript" language="JavaScript"><!--
 function toggle(d) {
 if(d.length < 1) { return; }
@@ -33,7 +34,8 @@ else { document.getElementById(d).style.display = "none"; }
 }
 
 function quote(p) {
-    var quotation = '[quote][b]'+document.getElementById('info_'+p).innerText+' [url=#post_'+p+']#'+p+'[/url][/b]'+"\n"+document.getElementById('post_'+p).innerText+'[/quote]'+"\n"
+    var quotation = '[quote][b]'+getPlainText(document.getElementById('info_'+p))+' [url=#post_'+p+']#'+p+'[/url][/b]'+"\n"+getPlainText(document.getElementById('post_'+p))+'[/quote]'+"\n"
+
     document.getElementById('id_body').innerHTML = document.getElementById('id_body').innerHTML + quotation 
 }
 //--></script>
