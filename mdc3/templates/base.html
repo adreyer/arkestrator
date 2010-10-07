@@ -24,7 +24,6 @@
     {% endblock %}
 {% endblock %}
 
-<script type="text/javascript" language="JavaScript" src="{{ MEDIA_URL }}js/plain-text.js"></script>
 <script type="text/javascript" language="JavaScript"><!--
 function toggle(d) {
 if(d.length < 1) { return; }
@@ -33,10 +32,27 @@ if(document.getElementById(d).style.display == "none")
 else { document.getElementById(d).style.display = "none"; }
 }
 
-function quote(p) {
-    var quotation = '[quote][b]'+getPlainText(document.getElementById('info_'+p))+' [url=#info_'+p+']#'+p+'[/url][/b]'+"\n"+getPlainText(document.getElementById('post_'+p))+'[/quote]'+"\n"
+function createInstance() {
+    req = new XMLHttpRequest();
+    return(req);
+}
 
-    document.getElementById('id_body').innerHTML = document.getElementById('id_body').innerHTML + quotation 
+
+function quote(url) { 
+    var req = createInstance();
+    var quotation = document.getElementById('id_body').innerHTML;
+    req.onreadystatechange = function() {
+        if (req.readyState == 4) {
+            if (req.status == 200) {
+                quotation = quotation + req.responseText
+                document.getElementById('id_body').innerHTML = quotation;
+            } else {
+                document.getElementById('id_body').innerHTML="Error: status " + req.status + " " + req.statusText;
+            }
+        }
+    }
+    req.open("GET", url, true);
+    req.send(null);
 }
 //--></script>
 
