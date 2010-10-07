@@ -3,8 +3,10 @@ from django.http import HttpResponseRedirect,  HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
+from django.contrib.sites.models import Site
 from django.core.mail import send_mail
 from django.views.generic import list_detail
+from django.core.cache import cache
 
 import datetime
 import time
@@ -22,7 +24,7 @@ def new_invite(request):
             return HttpResponseRedirect("/")
     else:
         form = forms.NewInviteForm()
-        return render_to_response("invites/new_invite.html",
+    return render_to_response("invites/new_invite.html",
             { 'form' : form },
             context_instance = RequestContext(request))
 

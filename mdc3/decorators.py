@@ -1,5 +1,7 @@
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import user_passes_test
+from mdc3.profiles.models import Profile
 
 class BetterCacher(object):
     def __init__(self, urlname, duration, fn):
@@ -76,3 +78,6 @@ def super_no_cache(fn):
         response['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0'
         return response
     return _super_no_cache
+
+def moderator_required(redirect_field='/'):
+    lamd

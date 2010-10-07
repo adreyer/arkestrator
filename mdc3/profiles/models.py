@@ -15,6 +15,8 @@ class Profile(models.Model):
     profile_views = models.IntegerField(default=0)
     last_events_view = models.DateTimeField(default=datetime.datetime.now)
     invite_used = models.ForeignKey(Invite, null=True)
+    moderator = models.BooleanField(default=False)
+    
     
     #info
     name = models.CharField(max_length=50, blank=True)
