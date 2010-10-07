@@ -27,21 +27,21 @@ def view_thread(request,id=None,expand=False):
 
     if request.method == 'POST':
         cache_key = 'form_lock:' + request.POST['form_lock']
-        if  cache.add(cache_key, True): 
-            if thread.locked:
-                return HttpResponseRedirect("/")
-            
-            post = Post(
-                thread = thread,
-                creator = request.user
-            )
-            form = forms.PostForm(request.POST, instance = post)
-            if form.is_valid():
-                form.save()
-                request.posting_users.add_to_set(request.user.id)
-                return HttpResponseRedirect("/")
-            else:
-                cache.delete(cache_key)
+##        if  cache.add(cache_key, True): 
+        if thread.locked:
+            return HttpResponseRedirect("/")
+        
+        post = Post(
+            thread = thread,
+            creator = request.user
+        )
+        form = forms.PostForm(request.POST, instance = post)
+        if form.is_valid():
+            form.save()
+            request.posting_users.add_to_set(request.user.id)
+            return HttpResponseRedirect("/")
+##            else:
+##                cache.delete(cache_key)
         else:
             form = forms.PostForm(request.POST)
     else:
