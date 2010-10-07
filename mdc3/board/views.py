@@ -43,9 +43,15 @@ def view_thread(request,id=None,expand=False):
             else:
                 cache.delete(cache_key)
         else:
-            return HttpResponseRedirect("/")
+            form = forms.PostForm(request.POST,
+                initial={'form_lock': random.randint(0,sys.maxint) })
+            if form.is_valid():
+                return HttpResponseRedirect("/")
+            
     else:
-        form = forms.PostForm(initial={'form_lock': random.randint(0,sys.maxint) })
+        flock = random.randint(0,sys.maxint)
+        form = forms.PostForm(initial={
+            'form_lock': flock })
 
     queryset=thread.post_set.order_by("updated_at").select_related(
         'creator')
@@ -90,6 +96,7 @@ def view_thread(request,id=None,expand=False):
         'thread' : thread,
         'form' : form,
         'expand': expand,
+        'flock' : flock,
         },
         context_instance = RequestContext(request))
 
