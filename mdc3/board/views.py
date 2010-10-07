@@ -1,5 +1,6 @@
 import datetime
 import random
+import sys
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.sites.models import Site
@@ -45,8 +46,8 @@ def view_thread(request,id=None,expand=False):
             form = forms.PostForm(initial={
                 'form_lock': request.POST['form_lock'] })
     else:
-        lock = random.randint(0,2000000000)
-        form = forms.PostForm(initial={'form_lock': lock })
+        random.randint(0,sys.maxint)
+        form = forms.PostForm(initial={'form_lock': random.randint(0,sys.maxint) })
 
     queryset=thread.post_set.order_by("updated_at").select_related(
         'creator')

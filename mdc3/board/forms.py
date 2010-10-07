@@ -1,6 +1,7 @@
+from django.contrib.sites.models import Site
 from django import forms
 from mdc3.board.models import Thread, Post
-from django.contrib.sites.models import Site
+
 
 class ThreadForm(forms.ModelForm):
     class Meta:
@@ -19,8 +20,7 @@ class ThreadForm(forms.ModelForm):
                     
 
 class PostForm(forms.ModelForm):
-    form_lock = forms.IntegerField(required=False,
-        widget = forms.HiddenInput)
+    form_lock = forms.IntegerField(widget = forms.HiddenInput)
     class Meta:
         auto_id = False
         model = Post
