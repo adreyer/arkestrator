@@ -37,7 +37,7 @@
                         {{ thread.subject }}</a>
                 {% endif %}
             </td>
-            <td nowrap="nowrap">{{ thread.last_post|date:"h:i a d-M-y"}} by <a class="smallfont" href="{% url view-profile thread.last_post_by.id %}">{{ thread.last_post_by.username }}</a></td>
+            <td nowrap="nowrap">{{ thread.last_post|date:"h:i a d-M-y"}} by <a class="smallfont" href="{% url view-profile thread.last_post.creator.id %}">{{ thread.last_post.creator.username }}</a></td>
             <td nowrap="nowrap" class="count">{{ thread.total_posts }}</td>
             <td nowrap="nowrap" class="count"><a href="{% url thread-history thread.id %}">
                 {{ thread.total_views }}</a></td>
