@@ -22,6 +22,6 @@ urlpatterns = patterns('',
             name='threads-by'),
     url(r"^threads/posts_by/(?P<id>\d+)/$", views.posts_by,
             name='posts-by'),
-    url(r"^quote/(?P<id>\d+)$", views.get_quote, name='get-quote'),
+    url(r"^quote/(?P<id>\d+)/$", views.get_quote, name='get-quote'),
 )
 

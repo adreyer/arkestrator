@@ -13,6 +13,7 @@ div#content {
 
 blockquote.quote {
     background-color: #{{ object.row2 }};
+    border: 1px solid #{{ object.row1 }};
 }
 
 a { 
