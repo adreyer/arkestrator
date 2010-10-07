@@ -234,6 +234,16 @@ def posts_by(request, id):
             template_name = "board/posts_by.html",
             extra_context = {"poster" : poster.username}
             )
+
+@login_required
+def get_quote(request, id):
+    post = get_object_or_404(Post, pk=id)
+    user = get_object_or_404(User, pk=post.creator.id)
+    return render_to_response("board/get_quote.html", {
+            'post': post,
+            'user': user,
+    })
+
 @login_required
 @permission_required('board.can_lock','/')
 def lock_thread(request, id):

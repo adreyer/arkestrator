@@ -23,4 +23,5 @@ urlpatterns = patterns('',
     (r'^pms/', include('mdc3.pms.urls')),
     url(r'^active/$', 'mdc3.util.views.active_users',
         name='active-users'),
+    url(r'^quote/(?P<id>\d+)/$', 'mdc3.board.views.get_quote', name='get-quote'),
 )

@@ -33,7 +33,7 @@
                 <div class="row2">
             {% endif %}
                 <span id="info_{{ post.id}}"><strong><a href="{% url view-profile post.creator.id %}">{{ post.creator.username }}</a></strong> posted this on {{ post.updated_at|date:"D, d-M-Y \a\t h:m:s a"}}</span>
-                <a href="javascript:;" onclick="quote({{ post.id }})">#{{ post.id }}</a>
+                <a href="javascript:;" onclick="quote('{% url get-quote post.id %}', {{ post.id }})">#{{ post.id }}</a>
             </div>
             <div class="body" id="post_{{ post.id }}">
                 <p>{% bbcode post.body %}</p>
