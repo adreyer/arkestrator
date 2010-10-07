@@ -31,6 +31,11 @@ if(document.getElementById(d).style.display == "none")
     { document.getElementById(d).style.display = "inline"; }
 else { document.getElementById(d).style.display = "none"; }
 }
+
+function quote(p) {
+    var quotation = '[quote][b]'+document.getElementById('info_'+p).innerText+' [url=#post_'+p+']#'+p+'[/url][/b]'+"\n"+document.getElementById('post_'+p).innerText+'[/quote]'+"\n"
+    document.getElementById('id_body').innerHTML = document.getElementById('id_body').innerHTML + quotation 
+}
 //--></script>
 
 
