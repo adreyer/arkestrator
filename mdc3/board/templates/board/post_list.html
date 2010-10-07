@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block extrameta %}
+
+{% block extrahead %}
 <script type="text/javascript" language="JavaScript" src="{{ MEDIA_URL }}js/quote.js"></script>
-{% endblock %}
-{% block tabtitle %}
 <title>{{ thread.subject}} - {{ site_name }}</title>
 {% endblock %}
+
 {% block pagetitle %}
     <h1>{{ thread.subject }} </h1>
 {% endblock %}

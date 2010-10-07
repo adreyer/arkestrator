@@ -3,8 +3,8 @@
 <head>
 <meta name="robots" content="none" />
 <link rel="shortcut icon" href="{{ MEDIA_URL }}images/eor_fav.png" mce_href="{{ MEDIA_URL }}images/eor_fav.png" />
-{% block extrameta %}
-{% endblock extrameta %}
+{% block extrahead %}
+{% endblock extrahead %}
 {% block tabtitle %}
 <title>{{ site_name }}</title>
 {% endblock %}
@@ -19,8 +19,6 @@
             <link rel="stylesheet" href="{% url default-theme-css %}"
                 type="text/css" media="screen" />
         {% endif %}
-    {% endblock %}
-    {% block extrahead %}
     {% endblock %}
 {% endblock %}
 <script type="text/javascript" language="JavaScript" src="{{ MEDIA_URL }}js/base.js"></script>

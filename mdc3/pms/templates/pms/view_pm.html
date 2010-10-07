@@ -1,17 +1,12 @@
 {% extends "pms/pm_base.html" %}
 
-{% block tabtitle %}
+{% block extrahead %}
 <title>{{ pm.subject}} - {{ site_name }}</title>
 {% endblock %}
 
 {% block pagetitle %}
 <h1>{{ pm.subject }}</h1>
 {% endblock %}
-
-{% block extrahead %}
-{% endblock %}
-
-
 
 {% block extrasubmenu %}
 <li class="submenuitem"><a href="{% url del-pm pm.id %}">Delete</a></li>
