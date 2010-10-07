@@ -6,6 +6,9 @@ class ThreadForm(forms.ModelForm):
     class Meta:
         model = Thread
         fields = ('subject',)
+        widgets = {
+            'subject': forms.TextInput(attrs={'size': 70})
+        }
 
     def clean_subject(self):
         subj = self.cleaned_data["subject"]
@@ -20,4 +23,7 @@ class PostForm(forms.ModelForm):
         auto_id = False
         model = Post
         fields = ('body',)
+        widgets = {
+            'body': forms.Textarea(attrs={'cols': 70, 'rows': 12})
+        }
 

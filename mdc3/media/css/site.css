@@ -31,8 +31,8 @@ th.legend {
 }
 
 div.pmbody {
-    margin-right: 1em;
-    border-radius: 0.5em;
+    margin-right: 2em;
+    margin-left: 2em;
 }
 
 .smallfont {
@@ -80,11 +80,18 @@ div#submenu {
     -moz-border-radius-topright: 0.5em;
 }
 
-div#user ul, div#menu ul, div#submenu ul, div#bottombezel ul {
+div#user ul, div#menu ul, div#submenu ul, div#bottombezel ul, ul.errorlist {
     padding-left: 0.2em;
     padding-right: 0.2em;
     margin: 0px;
     list-style-type: none;
+}
+
+ul.errorlist, ul.errorlist li {
+    display: inline;
+    font-weight: bold;
+    background: #ffffff;
+    color: #ff0000;
 }
 
 .menuitem {
@@ -196,7 +203,7 @@ div.post {
     margin-bottom: -1px; /* LOL */
 }
 
-p.replyform {
+.replyform {
    padding: 0.33em;
 }
 

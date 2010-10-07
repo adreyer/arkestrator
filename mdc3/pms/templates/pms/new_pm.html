@@ -6,7 +6,7 @@
         <table>
             <tr>
                 <th nowrap="nowrap" class="legend"><label for="id_recs">To:</label></th>
-                <td>{{ form.recs }}</td>
+                <td>{{ form.recs }} {{ form.recs.errors }}</td>
             </tr>
             <tr>
                 <th />
@@ -14,11 +14,11 @@
             </tr>
             <tr>
                 <th nowrap="nowrap" class="legend"><label for="id_subject">Subject:</label></th>
-                <td>{{ form.subject }}</td>
+                <td>{{ form.subject }} {{ form.subject.errors }}</td>
             </tr>
             <tr>   
                 <th />
-                <td>{{ form.body }}</td>
+                <td>{{ form.body }} {{ form.body.errors }}</td>
             </tr>
             <tr>
                 <th />

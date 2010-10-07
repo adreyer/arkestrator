@@ -19,7 +19,7 @@ a {
     color: #{{ object.background_text_color }}; 
 }
 
-.row1 a, .submenuitem a, .post a { 
+.row1 a, .submenuitem a, .post a, .submenulegend { 
     color: #{{ object.row1_text_color }};
 }
 

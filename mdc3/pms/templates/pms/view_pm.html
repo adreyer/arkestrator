@@ -14,47 +14,40 @@
 {% load bbcode %}
 
 {% block content %}
-    
-    <form method="post" action="{% url view-pm pm.pk %}">
-    {% csrf_token %}
-    <table width="100%">
-        <tr>
-            <th nowrap="nowrap" class="legend">From:</th>
-            <td>{{ pm.sender.username }}</td>
-        </td>
-        <tr>
-            <th nowrap="nowrap" class="legend">To:</th>
-            <td>{{ rec_str }}</td>
-        </tr>
-        <tr>
-            <th />
-            <td width="100%">
-                <div class="body pmbody">        
-                {% bbcode pm.body %}
-                </div>
-                <br />
-            </td>
-        </tr>
-        <tr>
-            <th nowrap="nowrap" class="legend"><label for="id_recs">Reply to:</label></th>
-            <td>{{ form.recs }}</td>
-        </tr>
-        <tr>
-            <th />
-            <td class="smallfont">Separate multiple user names with spaces.</td>
-        </tr>
-        <tr>
-            <th nowrap="nowrap" class="legend"><label for="id_subject">Subject:</label></th>
-            <td>{{ form.subject }}</td>
-        </tr>
-        <tr>   
-            <th />
-            <td>{{ form.body }}</td>
-        </tr>
-        <tr>
-            <th />
-            <td><input type="submit" value="Send" /></td>
-        </tr>
-    </table>
-    </form>
+<div class="body">        
+<p><label class="submenulegend">From:</label> {{ pm.sender.username }}</p>
+<p><label class="submenulegend">To:</label> {{ rec_str }}</p>
+<div class="pmbody">{% bbcode pm.body %}</div>
+</div>
+
+{% endblock %}
+{% block replyform %}
+
+<form method="post" action="{% url view-pm pm.pk %}">
+{% csrf_token %}
+<table class="replyform">
+    <tr>
+        <th nowrap="nowrap" class="legend">
+        <label for="id_recs">Reply to:</label></td>
+        <td>{{ form.recs }} {{ form.recs.errors }}</td>
+    </tr>
+    <tr>
+        <th />
+        <td><span class="smallfont">Separate multiple user names with spaces.</span></td>
+    </tr>
+    <tr>
+        <th nowrap="nowrap" class="legend"><label for="id_subject">Subject:</label></th>
+        <td>{{ form.subject }} {{ form.subject.errors }}</td>
+    </tr>
+    <tr>
+        <th />
+        <td>{{ form.body }} {{ form.body.errors }}</td>
+    </tr>
+    <tr>
+        <th />
+        <td><input type="submit" value="Send" /></td>
+    </tr>
+</table>
+</form>
+
 {% endblock %}
