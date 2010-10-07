@@ -141,9 +141,9 @@ def view_pm(request, pm_id):
             new_pm.save()
             return HttpResponseRedirect("/pms/inbox")
     else:
-        rec_str = pm.get_rec_str()
         form =forms.NewPMForm(instance=reply,
                 initial={'recs' : reply_recs})
+    rec_str = pm.get_rec_str()
     return render_to_response("pms/view_pm.html",
             { 'pm' : pm ,
               'rec_str' : rec_str,
