@@ -64,7 +64,7 @@ else { document.getElementById(d).style.display = "none"; }
                 {% else %}Messages{% endif %}</a></li>
             <li class="menuitem"><a href="{% url list-profiles %}">User list</a></li>
             <li class="menuitem"><a href="http://wiki.mdc2.org/index.php/Main_Page">Wiki</a></li>
-            {% if is_mod %}
+            {% if perms.invites.can_approve %}
                 <li class="menuitem"><a href="{% url invite-list %}">
                  {% if new_invites %}
                     <span class="urgent">Invites ({{ new_invites }})</span>

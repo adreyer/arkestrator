@@ -4,6 +4,11 @@ from django.contrib.auth.models import User
 import datetime
 
 class Invite(models.Model):
+    class Meta:
+        permissions = (
+            ("can_approve","Can approve invites"),
+        )
+        
     inviter = models.ForeignKey(User,null=False,
             related_name='created_invite')
     invitee = models.EmailField(null=False)
