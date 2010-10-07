@@ -31,6 +31,7 @@ def view_thread(request,id=None,expand=False):
             
             if thread.locked:
                 return HttpResponseRedirect("/")
+            
             post = Post(
                 thread = thread,
                 creator = request.user
@@ -42,6 +43,8 @@ def view_thread(request,id=None,expand=False):
                 return HttpResponseRedirect("/")
             else:
                 cache.delete(cache_key)
+        else:
+            HttpResponseRedirect("/")
     else:
         lock = random.randint(0,2000000000)
         form = forms.PostForm(initial={'form_lock': lock })
