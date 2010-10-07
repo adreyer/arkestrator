@@ -100,13 +100,9 @@ div#user ul, div#menu ul, div#submenu ul, div#bottombezel ul {
     -moz-border-radius-topright: 0.5em;
     font-size: 100%;
     list-style-type: none;
-    border-bottom: none;
     margin-bottom: -1px;
 }
 
-.menuitem:hover {
-    border-bottom: none;
-}
 
 .submenuitem {
     display: inline-block;
