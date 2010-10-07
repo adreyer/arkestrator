@@ -3,14 +3,16 @@
 <title>{{ thread.subject}} - {{ site_name }}</title>
 {% endblock %}
 {% block pagetitle %}
-    <h1>{{ thread.subject }}</h1>
+    <h1>{{ thread.subject }} {{expand}} </h1>
 {% endblock %}
 
 {% load bbcode %}
 {% block extramenu %}
     <div id="submenu">
         <ul>
-            <li class="submenuitem"><a href="{% url view-thread-full thread.id %}">Show all ({{ thread.total_posts }})</a></li>
+            {% if not expand %}
+                <li class="submenuitem"><a href="{% url view-thread-full thread.id %}">Show all ({{ thread.total_posts }})</a></li>
+            {% endif %}
             <li class="submenuitem"><a href="/this/does/nothing/lol">Hide images</a></li>
             <li class="submenuitem"><a href="{% url sticky thread.id %}">Toggle sticky</a></li>
             <li class="submenuitem"><a href="{% url thread-history thread.id %}">Thread history</a></li>

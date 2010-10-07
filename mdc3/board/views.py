@@ -70,11 +70,17 @@ def view_thread(request,id=None,expand=False):
     lastread.post = post_list[-1]
     lastread.save()
     del thread.total_views
-    
+
+    print len(post_list)
+    if len(post_list)<= 10:
+        expand = True
+        
     return render_to_response("board/post_list.html", {
         'object_list' : post_list,
         'thread' : thread,
-        'form' : form,},
+        'form' : form,
+        'expand': expand,
+        },
         context_instance = RequestContext(request))
 
 @login_required
