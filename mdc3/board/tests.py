@@ -12,16 +12,15 @@ class ThreadTest(TestCase):
         self.site = Site.objects.get_current()
 
     def test_create_thread(self): 
-        thread = Thread.on_site.create(
+        thread = Thread.objects.create(
             subject="Hello, World",
             creator=self.user,
-            last_post_by=self.user,            site=self.site)
+            site=self.site)
 
     def test_str(self):
-        thread = Thread.on_site.create(
+        thread = Thread.objects.create(
             subject="Hello, World",
             creator=self.user,
-            last_post_by=self.user,
             site=self.site)
 
         self.assertEquals(str(thread),"Hello, World")
@@ -31,10 +30,9 @@ class PostTest(TestCase):
         self.user1 = User.objects.create_user('foo','foo@bar.net','badpass')
         self.user2 = User.objects.create_user('bar','bar@foo.net','badpass')
         self.site = Site.objects.get_current()
-        self.thread = Thread.on_site.create(
+        self.thread = Thread.objects.create(
             subject="Hello, World",
             creator=self.user1,
-            last_post_by=self.user1,
             site=self.site)
     
     def test_create_post(self):
@@ -61,9 +59,9 @@ class PostTest(TestCase):
             thread=self.thread,
             creator=self.user2,
             body="Take and eat; this is my body.",
-            updated_at=ts
+            created_at=ts
         )
 
-        self.assertEqual(self.thread.last_post_by, self.user2)
-        self.assertEqual(self.thread.last_post, ts)
+        self.assertEqual(self.thread.last_post.creator, self.user2)
+        self.assertEqual(self.thread.last_post.created_at, ts)
 

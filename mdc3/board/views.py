@@ -82,7 +82,6 @@ def new_thread(request):
     if request.method == 'POST':
         thread = Thread(
             creator = request.user,
-            last_post_by = request.user,
             site = Site.objects.get_current(),
         )
         post = Post(
@@ -117,8 +116,8 @@ def list_threads(request):
     cache_key = "thread-list-page:%d:%d"%(Site.objects.get_current().id, page)
     page_obj = cache.get(cache_key, None)
     if page_obj is None:
-        queryset = Thread.on_site.order_by("-stuck","-last_post").select_related(
-            "creator","last_post_by")
+        queryset = Thread.objects.order_by("-stuck","-last_post__id"
+            ).select_related("creator","last_post","last_post__creator")
         paginator = Paginator(queryset, 25, allow_empty_first_page=True)
         page_obj = paginator.page(page)
         cache.set(cache_key, page_obj)
@@ -128,11 +127,11 @@ def list_threads(request):
     last_read = LastRead.objects.filter(
         thread__in=[t.id for t in thread_list],
         user = request.user,
-    ).values('thread__id', 'timestamp', 'post__id')
+    ).values('thread__id', 'post__id')
     last_viewed = dict((lr['thread__id'], lr) for lr in last_read)
     for t in thread_list:
         if t.id in last_viewed:
-            t.unread = last_viewed[t.id]['timestamp'] < t.last_post
+            t.unread = last_viewed[t.id]['post__id'] < t.last_post_id
             t.last_post_read = last_viewed[t.id]['post__id']
         else:
             t.unread = True
@@ -193,7 +192,7 @@ def mark_read(request):
 def threads_by(request, id):
     poster = get_object_or_404(User,pk=id)
     queryset = Thread.on_site.filter(creator=id).order_by(
-        '-last_post').select_related('last_post_by')
+        '-last_post').select_related('last_post', 'last_post__creator')
 
     return list_detail.object_list(
             request,

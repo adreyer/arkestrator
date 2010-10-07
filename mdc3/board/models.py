@@ -69,7 +69,8 @@ class LastRead(models.Model):
     read_count = models.IntegerField(default=0)
 
 def update_thread(sender, instance, signal, *args, **kwargs):
-    if instance.id > instance.thread.last_post__id:
+    if instance.id > instance.thread.last_post_id:
+
         instance.thread.last_post = instance
         instance.thread.save()
 
