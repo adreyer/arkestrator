@@ -21,14 +21,15 @@
 {% block content %}
     {% for post in object_list %}
         <div class="post">
-            <a name="{{ post.id }}" />
+            <a name="{{ post.id }}"></a>
             {% if post.creator == user %}
                 <div class="my_post">
             {% else %}
                 <div class="row2">
             {% endif %}
                 <strong><a href="{% url view-profile post.creator.id %}">{{ post.creator.username }}</a></strong> posted this on
-                {{ post.updated_at|date:"D, d-M-Y \a\t h:m a"}}
+                {{ post.updated_at|date:"D, d-M-Y \a\t h:m:s a"}}
+                #{{ post.id }}
             </div>
             <div class="body">
                 <p>{% bbcode post.body %}</p>
@@ -45,7 +46,7 @@
     </div>
 {% endblock %}
 {% block replyform %}
-<a name="post" />
+<a name="post"></a>
     <form method="post" action="{% url view-thread thread.id %}#post">
     {% csrf_token %}
     <p class="replyform">
