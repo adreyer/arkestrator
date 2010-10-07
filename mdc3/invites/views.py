@@ -87,7 +87,7 @@ def approve_invite(request, id):
         inv.approved_on = datetime.datetime.now()
         inv.approved_by = request.user
         inv.invite_code = str(abs(hash(time.time())))
-        invite_url = 'http://board.mdc2.org/invites/' + inv.invite_code
+        invite_url = 'http://mdc3.mdc2.org/invites/' + inv.invite_code
         send_mail(subject='Welcome to MDC',
                 message="""
 Welcome to MDC. Use the link below to create your account
