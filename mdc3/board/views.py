@@ -24,8 +24,9 @@ from mdc3.decorators import super_no_cache
 @login_required
 def view_thread(request,id=None,expand=False):
     thread = get_object_or_404(Thread,pk=id)
-
+    flock = 0
     if request.method == 'POST':
+        flock = request.POST['form_lock']
         cache_key = 'form_lock:' + request.POST['form_lock']
         if  cache.add(cache_key, True): 
             if thread.locked:
