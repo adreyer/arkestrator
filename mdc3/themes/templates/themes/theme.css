@@ -72,8 +72,6 @@ div#submenu {
 .menuitem {
     background-color: #{{ object.row2 }}; 
     border: 1px solid #{{ object.background }};
-    border-bottom: none;
-    margin-bottom: -1px;
     color: #{{ object.row2_text_color }};
 
 }
@@ -81,7 +79,7 @@ div#submenu {
 .menuitem:hover {
     background-color: #{{ object.my_posts }};
     border: 1px solid #{{ object.row2_text_color }};
-    border-bottom: none;
+    color: #{{ object.mypost_text_color }};
 }
 
 .submenuitem {
