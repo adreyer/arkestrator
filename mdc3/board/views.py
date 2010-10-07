@@ -1,4 +1,5 @@
 import datetime
+import random
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.sites.models import Site
@@ -24,19 +25,26 @@ def view_thread(request,id=None,expand=False):
     thread = get_object_or_404(Thread,pk=id)
 
     if request.method == 'POST':
-        if thread.locked:
-            return HttpResponseRedirect("/")
-        post = Post(
-            thread = thread,
-            creator = request.user
-        )
-        form = forms.PostForm(request.POST, instance = post)
-        if form.is_valid():
-            form.save()
-            request.posting_users.add_to_set(request.user.id)
-            return HttpResponseRedirect("/")
+        cache_key = 'form_lock:' + request.POST['form_lock']
+        if not cache.get(cache_key):
+            cache.set(cache_key, True)
+            
+            if thread.locked:
+                return HttpResponseRedirect("/")
+            post = Post(
+                thread = thread,
+                creator = request.user
+            )
+            form = forms.PostForm(request.POST, instance = post)
+            if form.is_valid():
+                form.save()
+                request.posting_users.add_to_set(request.user.id)
+                return HttpResponseRedirect("/")
+            else:
+                cache.delete(cache_key)
     else:
-        form = forms.PostForm()
+        lock = random.randint(0,2000000000)
+        form = forms.PostForm(initial={'form_lock': lock })
 
     queryset=thread.post_set.order_by("updated_at").select_related(
         'creator')

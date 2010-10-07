@@ -56,6 +56,7 @@
     {% csrf_token %}
     <p class="replyform">
         {{ form.body.errors }}<br />{{ form.body }}<br />
+        {{ form.form_lock }}
         <input class="button" type="submit" value="Say it" />
         </p>
     </form>
