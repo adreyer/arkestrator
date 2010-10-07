@@ -8,6 +8,7 @@ body {
 
 div#content {
     background-color: #{{ object.row2 }};
+    color: #{{ object.row2_text_color }};
 }
 
 blockquote.quote {
@@ -18,7 +19,7 @@ a {
     color: #{{ object.background_text_color }}; 
 }
 
-.row1 a, .submenuitem a { 
+.row1 a, .submenuitem a, .post a { 
     color: #{{ object.row1_text_color }};
 }
 
@@ -92,5 +93,5 @@ div#submenu {
 
 .submenuitem:hover {
     background-color: #{{ object.my_posts }};
-    border: 1px solid #{{ object.background_text_color }};
+    border: 1px solid #{{ object.row2_text_color }};
 }
