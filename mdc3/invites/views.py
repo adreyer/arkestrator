@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect,  HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.sites.models import Site
 from django.core.mail import send_mail
 from django.views.generic import list_detail
@@ -67,9 +67,8 @@ def register(request,code):
     
 
 @login_required
+@permission_required('invites.can_approve','/')
 def invite_list(request):
-    if not Profile.objects.get(user=request.user).moderator:
-        return HttpResponseRedirect("/")
     queryset = Invite.objects.filter(rejected=False,
             approved=False).order_by('-created_on')
     return list_detail.object_list(
@@ -78,9 +77,8 @@ def invite_list(request):
         paginate_by = 10)
 
 @login_required
+@permission_required('invites.can_approve','/')
 def approve_invite(request, id):
-    if not Profile.objects.get(user=request.user).moderator:
-        return HttpResponseRedirect("/")
     inv = get_object_or_404(Invite,id=id)
     if not inv.approved:
         inv.approved = True
@@ -101,9 +99,8 @@ Welcome to MDC. Use the link below to create your account
     return HttpResponseRedirect("/invites/")
 
 @login_required
+@permission_required('invites.can_approve','/')
 def reject_invite(request, id):
-    if not Profile.objects.get(user=request.user).moderator:
-        return HttpResponseRedirect("/")
     inv = get_object_or_404(Invite,id=id)
     if not inv.rejected:
         inv.rejected = True
