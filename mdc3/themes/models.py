@@ -31,8 +31,17 @@ class Theme(models.Model):
 
     updated = models.DateTimeField(auto_now=True)
 
-    def text_color(self):
+    def background_text_color(self):
         return invert_color(self.background)
+
+    def row1_text_color(self):
+        return invert_color(self.row1)
+
+    def row2_text_color(self):
+        return invert_color(self.row2)
+
+    def mypost_text_color(self):
+        return invert_color(self.my_posts)
 
     def form_text_color(self):
         return invert_color(self.form_background)

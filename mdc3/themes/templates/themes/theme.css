@@ -3,7 +3,7 @@ body {
     background-color: #{{ object.background }};
     font-family: {{ object.font_face }};
     font-size: {{ object.font_size }}%;
-    color: #{{ object.text_color }};
+    color: #{{ object.background_text_color }};
 }
 
 div#content {
@@ -15,19 +15,34 @@ blockquote.quote {
 }
 
 a { 
-    color: #{{ object.text_color }}; 
+    color: #{{ object.background_text_color }}; 
+}
+
+.row1 a, .submenuitem a { 
+    color: #{{ object.row1_text_color }};
+}
+
+.row2 a, .menuitem a { 
+    color: #{{ object.row2_text_color }};
+}
+
+.my_post a {
+    color: #{{ object.mypost_text_color }};
 }
 
 .row1 { 
     background-color: #{{ object.row1 }}; 
+    color: #{{ object.row1_text_color }};
 }
 
 .row2 { 
     background-color: #{{ object.row2 }}; 
+    color: #{{ object.row2_text_color }};
 }
 
 .my_post { 
     background-color: #{{ object.my_posts }}; 
+    color: #{{ object.mypost_text_color }};
 }
 
 div.post {
@@ -59,20 +74,23 @@ div#submenu {
     border: 1px solid #{{ object.background }};
     border-bottom: none;
     margin-bottom: -1px;
+    color: #{{ object.row2_text_color }};
+
 }
 
 .menuitem:hover {
     background-color: #{{ object.my_posts }};
-    border: 1px solid #{{ object.text_color }};
+    border: 1px solid #{{ object.row2_text_color }};
     border-bottom: none;
 }
 
 .submenuitem {
     background-color: #{{ object.row1 }};
     border: 1px solid #{{ object.row2 }};
+    color: #{{ object.row1_text_color }};
 }
 
 .submenuitem:hover {
     background-color: #{{ object.my_posts }};
-    border: 1px solid #{{ object.text_color }};
+    border: 1px solid #{{ object.background_text_color }};
 }
