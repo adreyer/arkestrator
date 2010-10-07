@@ -1,6 +1,7 @@
 import datetime
 import random
 import sys
+import string
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.sites.models import Site
