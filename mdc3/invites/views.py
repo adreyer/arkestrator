@@ -13,6 +13,7 @@ import time
 
 from mdc3.invites.models import Invite
 from mdc3.profiles.models import Profile
+from mdc3.decorators import moderator_required
 import forms
 
 @login_required
@@ -67,6 +68,8 @@ def register(request,code):
 
 @login_required
 def invite_list(request):
+    if not Profile.objects.get(user=request.user).moderator:
+        return HttpResponseRedirect("/")
     queryset = Invite.objects.filter(rejected=False,
             approved=False).order_by('-created_on')
     return list_detail.object_list(
@@ -76,6 +79,8 @@ def invite_list(request):
 
 @login_required
 def approve_invite(request, id):
+    if not Profile.objects.get(user=request.user).moderator:
+        return HttpResponseRedirect("/")
     inv = get_object_or_404(Invite,id=id)
     if not inv.approved:
         inv.approved = True
@@ -95,7 +100,10 @@ Welcome to MDC. Use the link below to create your account
         inv.save()
     return HttpResponseRedirect("/invites/")
 
+@login_required
 def reject_invite(request, id):
+    if not Profile.objects.get(user=request.user).moderator:
+        return HttpResponseRedirect("/")
     inv = get_object_or_404(Invite,id=id)
     if not inv.rejected:
         inv.rejected = True

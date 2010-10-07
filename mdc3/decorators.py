@@ -79,5 +79,9 @@ def super_no_cache(fn):
         return response
     return _super_no_cache
 
-def moderator_required(redirect_field='/'):
-    lamd
+
+def moderator_required(redirect_field_name='/'):
+    actual_decorator = user_passes_test(
+        lambda u: Profile.objects.get(user=u).moderator ,
+        redirect_field_name=redirect_field_name )
+    return actual_decorator
