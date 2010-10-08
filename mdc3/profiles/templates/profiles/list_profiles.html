@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 {% block extrahead %}
-<title>User List - {{ site_name }}</title>
+<title>User list - {{ site_name }}</title>
 {% endblock %}
 
 {% block pagetitle %}
-<h1>User List</h1>
+<h1>User list</h1>
 {% endblock %}
 
 {% block content %}
@@ -13,7 +13,8 @@
             <tr class="{% cycle "row1" "row2" %}">
             <td> {{ forloop.counter }} </td>
             <td><a href="{% url view-profile profile.id %}">{{ profile.username }}</a></td>
-            <td>joined on {{ profile.date_joined }}</td>
+            <td>joined {{ profile.date_joined|date:"d-M-y" }}</td>
+
         </tr>
     {% endfor %}
     </table>
