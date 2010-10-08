@@ -21,7 +21,7 @@
                 <tr class="{{ row_color }}">
             {% endif %}
             <td nowrap="nowrap"><a href="{% url view-profile thread.creator.id %}">{{ thread.creator.username }}</a></td>
-            <td>{% if thread.unread %}
+            <td class="wwwwwwww">{% if thread.unread %}
                     <b><a href="{% url view-thread thread.id %}{% spaceless %}
                         {% if thread.last_post_read %}
                                 #{{ thread.last_post_read }}

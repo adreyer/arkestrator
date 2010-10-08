@@ -29,6 +29,11 @@ th.legend {
     vertical-align: top;
 }
 
+td.wwwwwwww {
+    max-width: 30em;
+    overflow: hidden;
+}
+
 div.pmbody {
     margin-right: 2em;
     margin-left: 2em;
