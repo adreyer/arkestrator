@@ -1,21 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <form method="post" action="{% url new-thread %}" class="replyform">
+<form method="post" action="{% url new-thread %}" class="replyform">
+    <div class="replyform">
         {% csrf_token %}
-        <table>
-            <tr>
-                <th nowrap="nowrap" class="legend"><label for="id_subject">Subject:</label></th>
-                <td>{{ thread_form.subject }} {{ thread_form.subject.errors }}</td>
-            </tr>
-            <tr>
-                <th nowrap="nowrap" class="legend"><label for="id_body">Body:</label></th>
-                <td>{{ post_form.body }} {{ post_form.body.errors }}</td>
-            </tr>
-            <tr>
-                <th />
-                <td><input type="submit" value="Say It" /></td>
-            </tr>
-        </table>
-    </form>
+        {{ thread_form.subject }} {{ thread_form.subject.errors }}<br />
+        {{ post_form.body }} {{ post_form.body.errors }}<br />
+        <input type="submit" value="Say It" />
+    </div>
+</form>
 {% endblock %}
