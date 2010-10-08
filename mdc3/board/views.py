@@ -24,35 +24,21 @@ from mdc3.decorators import super_no_cache
 @login_required
 def view_thread(request,id=None,expand=False):
     thread = get_object_or_404(Thread,pk=id)
-    flock = 0
+    
     if request.method == 'POST':
-        flock = request.POST['form_lock']
-        cache_key = 'form_lock:' + request.POST['form_lock']
-        if  cache.add(cache_key, True): 
-            if thread.locked:
-                return HttpResponseRedirect("/")
-            
-            post = Post(
-                thread = thread,
-                creator = request.user
-            )
-            form = forms.PostForm(request.POST, instance = post)
-            if form.is_valid():
-                form.save()
-                request.posting_users.add_to_set(request.user.id)
-                return HttpResponseRedirect("/")
-            else:
-                cache.delete(cache_key)
-        else:
-            form = forms.PostForm(request.POST,
-                initial={'form_lock': random.randint(0,sys.maxint) })
-            if form.is_valid():
-                return HttpResponseRedirect("/")
-            
+        if thread.locked:
+            return HttpResponseRedirect("/")  
+        post = Post(
+            thread = thread,
+            creator = request.user
+        )
+        form = forms.PostForm(request.POST, instance = post)
+        if form.is_valid():
+            form.save()
+            request.posting_users.add_to_set(request.user.id)
+            return HttpResponseRedirect("/")
     else:
-        flock = random.randint(0,sys.maxint)
-        form = forms.PostForm(initial={
-            'form_lock': flock })
+        form = forms.PostForm()
 
     queryset=thread.post_set.order_by("updated_at").select_related(
         'creator')
@@ -97,7 +83,6 @@ def view_thread(request,id=None,expand=False):
         'thread' : thread,
         'form' : form,
         'expand': expand,
-        'flock' : flock,
         },
         context_instance = RequestContext(request))
 

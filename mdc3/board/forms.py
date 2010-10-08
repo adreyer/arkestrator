@@ -20,7 +20,6 @@ class ThreadForm(forms.ModelForm):
                     
 
 class PostForm(forms.ModelForm):
-    form_lock = forms.IntegerField(widget = forms.HiddenInput)
     class Meta:
         auto_id = False
         model = Post
