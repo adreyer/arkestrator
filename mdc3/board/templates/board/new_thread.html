@@ -1,5 +1,10 @@
 {% extends "base.html" %}
-
+{% block extrahead %}
+<title>New thread - {{ site_name }}</title>
+{% endblock %}
+{% block pagetitle %}
+<h1>New thread</h1>
+{% endblock %}
 {% block content %}
 <form method="post" action="{% url new-thread %}" class="replyform">
     <div class="replyform">
