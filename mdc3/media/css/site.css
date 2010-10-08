@@ -12,8 +12,8 @@ p {
 }
 
 blockquote.quote {
-    margin: 0.25em 2em 0.25em 2em; 
-    padding: 0.75em; 
+    margin: 0.33em 0.25em 0.25em 0.25em; 
+    padding: 0.5em; 
     border-radius: 0.5em;
     -moz-border-radius: 0.5em;
 }
