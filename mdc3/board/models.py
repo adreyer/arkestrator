@@ -10,7 +10,8 @@ from mdc3.decorators import instance_memcache
 
 import datetime
 
-class Thread(models.Model):
+class Thread(models.Model): 
+    
     subject = models.CharField(max_length=160, blank=False)
     creator = models.ForeignKey(User,null=False,related_name='threads')
     last_post = models.ForeignKey("board.Post", null=True, 
