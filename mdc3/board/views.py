@@ -6,6 +6,8 @@ import string
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse
+from django.db.models import Q
 from django.shortcuts import render_to_response,get_object_or_404
 from django.http import HttpResponseRedirect, Http404
 from django.template import RequestContext
@@ -26,6 +28,9 @@ from mdc3.decorators import super_no_cache
 def view_thread(request,id=None,expand=False):
     thread = get_object_or_404(Thread,pk=id)
     
+    if not thread.can_view(request.user):
+        raise Http404
+
     if request.method == 'POST':
         if thread.locked:
             return HttpResponseRedirect("/")  
@@ -126,7 +131,8 @@ def list_threads(request):
     cache_key = "thread-list-page:%d:%d"%(Site.objects.get_current().id, page)
     page_obj = cache.get(cache_key, None)
     if page_obj is None:
-        queryset = Thread.objects.order_by("-stuck","-last_post__id"
+        queryset = Thread.objects.filter(recipient__isnull=True
+            ).order_by("-stuck","-last_post__id"
             ).select_related("creator","last_post","last_post__creator")
         paginator = Paginator(queryset, 25, allow_empty_first_page=True)
         page_obj = paginator.page(page)
@@ -151,6 +157,8 @@ def list_threads(request):
         'page_obj' : page_obj,
     }, context_instance = RequestContext(request))
 
+@super_no_cache
+@login_required
 @login_required
 def thread_history(request,id=None,expand=False):
     thread = get_object_or_404(Thread,pk=id)
@@ -243,3 +251,43 @@ def lock_thread(request, id):
     thread.save()
     return HttpResponseRedirect("/")
     
+@super_no_cache
+@login_required
+def list_pms(request):
+    queryset = Thread.objects.exclude(recipient__isnull=True).filter(
+        Q(creator=request.user)|Q(recipient=request.user))
+
+    return list_detail.object_list(
+            request,
+            queryset = queryset,
+            paginate_by = 50,
+            template_object_name = 'thread',
+            template_name = "board/thread_list.html",
+            )
+
+@login_required
+def new_pm(request):
+    def thread_factory(**kwargs):
+        kwargs.update({
+            'creator' : request.user,
+            'site' : Site.objects.get_current(),
+        })
+        return Thread(**kwargs)
+
+    def post_factory(**kwargs):
+        kwargs.update({
+            'creator' : request.user,
+        })
+        return Post(**kwargs)
+
+    if request.method == 'POST':
+        pm_form = forms.PMForm(request.POST)
+        if pm_form.is_valid():
+            pm_form.save(thread_factory, post_factory)
+            return HttpResponseRedirect(reverse('list-pms'))
+    else:
+        pm_form = forms.PMForm()
+    return render_to_response("board/new_pm.html",{
+        'form' : pm_form,
+    }, context_instance = RequestContext(request))
+

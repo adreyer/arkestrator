@@ -52,6 +52,13 @@ class Thread(models.Model):
             return 0
         return total
 
+    def can_view(self, user):
+        if not self.recipient:
+            return True
+        if self.creator == user or self.recipient == user:
+            return True
+        return False
+
 class Post(models.Model):
     thread = models.ForeignKey(Thread, null=False)
     creator = models.ForeignKey(User,null=False)

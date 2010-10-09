@@ -83,7 +83,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.media",
     "django.contrib.messages.context_processors.messages",
     "mdc3.context_processors.site_name",
-    "mdc3.pms.context_processors.new_pm",
+#    "mdc3.pms.context_processors.new_pm",
     "mdc3.context_processors.online_users",
     "mdc3.board.context_processors.thread_count",
     "mdc3.board.context_processors.posting_users",
@@ -108,7 +108,7 @@ INSTALLED_APPS = (
     'mdc3.themes',
     'mdc3.profiles',
     'mdc3.invites',
-    'mdc3.pms',
+#    'mdc3.pms',
     'mdc3.util',
     'bbcode',
 )
