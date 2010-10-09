@@ -58,8 +58,12 @@ class Thread(models.Model):
             return 0
         return total
 
+    @property
+    def is_private(self):
+        return self.recipient is not None
+
     def can_view(self, user):
-        if not self.recipient:
+        if not self.is_private:
             return True
         if self.creator == user or self.recipient == user:
             return True

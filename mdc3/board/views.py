@@ -268,8 +268,10 @@ def unlock_thread(request, id):
 @super_no_cache
 @login_required
 def list_pms(request):
-    queryset = Thread.objects.exclude(recipient__isnull=True).filter(
-        Q(creator=request.user)|Q(recipient=request.user))
+    queryset = Thread.objects.exclude(recipient__isnull=True
+        ).filter(Q(creator=request.user)|Q(recipient=request.user)
+        ).order_by("-last_post__id"
+        ).select_related("creator","recipient","last_post","last_post__creator")
 
     return list_detail.object_list(
             request,
