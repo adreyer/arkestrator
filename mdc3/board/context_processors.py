@@ -16,7 +16,7 @@ def thread_count(request):
 
     count = cache.get(key, None)
     if count is None:
-        count = Thread.objects.count()
+        count = Thread.objects.filter(recipient__isnull=True).count()
         cache.set(key, count)
     
     return { 'thread_count': count }
