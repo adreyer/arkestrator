@@ -12,7 +12,7 @@ def invert_color(color):
     g = int(color[2:4], 16)
     b = int(color[4:], 16)
     h,s,v = colorsys.rgb_to_hsv(r,g,b)
-    if v > 127:
+    if v >= 156:
         return "000000"
     else:
         return "ffffff"
