@@ -12,6 +12,7 @@ def new_pm(request):
         )
         pm_count = cache.get(cache_key, None)
         if pm_count is None:
+            
             pm_count = Recipient.objects.filter(
                 recipient=request.user,read=False).count()
             cache.set(cache_key, pm_count)

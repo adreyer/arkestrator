@@ -268,19 +268,37 @@ def unlock_thread(request, id):
 @super_no_cache
 @login_required
 def list_pms(request):
+    try:
+        page = int(request.GET.get('page', 1))
+    except ValueError:
+        raise Http404
+    
     queryset = Thread.objects.exclude(recipient__isnull=True
         ).filter(Q(creator=request.user)|Q(recipient=request.user)
         ).order_by("-last_post__id"
         ).select_related("creator","recipient","last_post","last_post__creator")
+    
+    paginator = Paginator(queryset, 25, allow_empty_first_page=True)
+    page_obj = paginator.page(page)
+    thread_list = page_obj.object_list
 
-    return list_detail.object_list(
-            request,
-            queryset = queryset,
-            paginate_by = 50,
-            template_object_name = 'thread',
-            template_name = "board/pm_list.html",
-            )
+    last_read = LastRead.objects.filter(
+        thread__in=[t.id for t in thread_list],
+        user = request.user,
+    ).values('thread__id', 'post__id')
+    last_viewed = dict((lr['thread__id'], lr) for lr in last_read)
+    for t in thread_list:
+        if t.id in last_viewed:
+            t.unread = last_viewed[t.id]['post__id'] < t.last_post_id
+            t.last_post_read = last_viewed[t.id]['post__id']
+        else:
+            t.unread = True
 
+    return render_to_response("board/pm_list.html", {
+        'thread_list' : thread_list,
+        'page_obj' : page_obj,
+    }, context_instance = RequestContext(request))
+        
 @login_required
 def new_pm(request):
     def thread_factory(**kwargs):

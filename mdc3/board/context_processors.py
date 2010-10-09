@@ -25,3 +25,17 @@ def _invalidate_thread_count(sender, instance, signal, *args, **kwargs):
 
 post_save.connect(_invalidate_thread_count, sender=Thread)
 
+def pm_count(request):
+    if request.user.is_authenticated():
+        cache_key = "pm-count:%d:%d"%(
+            Site.objects.get_current().id,
+            request.user.id,
+        )
+        pm_count = cache.get(cache_key, None)
+        if pm_count is None:
+            pm_count = Recipient.objects.filter(
+                recipient=request.user,read=False).count()
+            cache.set(cache_key, pm_count)
+        return { 'new_pms' : pm_count }
+    else:
+        return { 'new_pms' : 0 }
