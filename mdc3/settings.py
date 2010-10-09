@@ -87,6 +87,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "mdc3.context_processors.online_users",
     "mdc3.board.context_processors.thread_count",
     "mdc3.board.context_processors.posting_users",
+    "mdc3.board.context_processors.pm_count",
     "mdc3.invites.context_processors.new_invites",
 )
 

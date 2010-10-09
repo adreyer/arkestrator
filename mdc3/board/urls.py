@@ -29,4 +29,5 @@ urlpatterns = patterns('',
     url(r"^quote/(?P<id>\d+)/$", views.get_quote, name='get-quote'),
     url(r"^pms/$", views.list_pms, name='list-pms'),
     url(r"^pms/new/$", views.new_pm, name='new-pm'),
+    url(r"^pms/new/(?P<rec_id>\d+)/$", views.new_pm, name='new-pm'),
 )

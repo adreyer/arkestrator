@@ -294,13 +294,22 @@ def list_pms(request):
         else:
             t.unread = True
 
+        if t.creator == request.user:
+            t.other_user = t.recipient
+        else:
+            t.other_user = t.creator
+        
+        t.other_has_read = bool(t.lastread_set.filter(user = t.other_user
+            ).filter(post__id__gte=t.last_post_id
+            ).count())
+
     return render_to_response("board/pm_list.html", {
         'thread_list' : thread_list,
         'page_obj' : page_obj,
     }, context_instance = RequestContext(request))
         
 @login_required
-def new_pm(request):
+def new_pm(request, rec_id=None):
     def thread_factory(**kwargs):
         kwargs.update({
             'creator' : request.user,
@@ -314,13 +323,20 @@ def new_pm(request):
         })
         return Post(**kwargs)
 
+    initial = {}
+    if rec_id:
+        try:
+            initial['recipients']  = User.objects.get(pk = rec_id).username
+        except User.DoesNotExist:
+            pass
+
     if request.method == 'POST':
-        pm_form = forms.PMForm(request.POST)
+        pm_form = forms.PMForm(request.POST, initial = initial)
         if pm_form.is_valid():
             pm_form.save(thread_factory, post_factory)
             return HttpResponseRedirect(reverse('list-pms'))
     else:
-        pm_form = forms.PMForm()
+        pm_form = forms.PMForm(initial = initial)
     return render_to_response("board/new_pm.html",{
         'form' : pm_form,
     }, context_instance = RequestContext(request))
