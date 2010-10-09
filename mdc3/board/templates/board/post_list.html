@@ -74,6 +74,8 @@
         </p>
     </form>
 {% else %}
+{% block locknotice %}
     <div class="notice">This thread is locked. No more replies may be added.</div>
+{% endblock %}
 {% endif %}
 {% endblock %}
