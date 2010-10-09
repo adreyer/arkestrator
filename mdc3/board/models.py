@@ -87,7 +87,7 @@ class Post(models.Model):
         db_index = True)
 
     def __unicode__(self):
-        return "%s: %s"%(str(self.thread),self.body[:20])
+        return "%s: %s"%(unicode(self.thread),self.body[:20])
     
 class LastRead(models.Model):
     user = models.ForeignKey(User)
