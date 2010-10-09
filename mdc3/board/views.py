@@ -24,12 +24,15 @@ import forms
 
 from mdc3.decorators import super_no_cache
 
+def _check_thread_privacy(thread, user):
+    if not thread.can_view(user):
+        raise Http404
+
 @login_required
 def view_thread(request,id=None,expand=False):
     thread = get_object_or_404(Thread,pk=id)
     
-    if not thread.can_view(request.user):
-        raise Http404
+    _check_thread_privacy(thread, request.user)
 
     if request.method == 'POST':
         if thread.locked:
@@ -131,8 +134,7 @@ def list_threads(request):
     cache_key = "thread-list-page:%d:%d"%(Site.objects.get_current().id, page)
     page_obj = cache.get(cache_key, None)
     if page_obj is None:
-        queryset = Thread.objects.filter(recipient__isnull=True
-            ).order_by("-stuck","-last_post__id"
+        queryset = Thread.public_objects.order_by("-stuck","-last_post__id"
             ).select_related("creator","last_post","last_post__creator")
         paginator = Paginator(queryset, 25, allow_empty_first_page=True)
         page_obj = paginator.page(page)
@@ -163,6 +165,8 @@ def list_threads(request):
 def thread_history(request,id=None,expand=False):
     thread = get_object_or_404(Thread,pk=id)
 
+    _check_thread_privacy(thread, request.user)
+
     queryset = LastRead.objects.filter(thread = thread).order_by("-timestamp")
     queryset = queryset.select_related('user')
 
@@ -175,6 +179,9 @@ def thread_history(request,id=None,expand=False):
 @permission_required('board.can_sticky','/')
 def sticky(request,id):
     thread = get_object_or_404(Thread,pk=id)
+
+    _check_thread_privacy(thread, request.user)
+
     thread.stuck = True
     thread.save()
     return HttpResponseRedirect("/")
@@ -183,13 +190,16 @@ def sticky(request,id):
 @permission_required('board.can_sticky','/')
 def unsticky(request,id):
     thread = get_object_or_404(Thread,pk=id)
+
+    _check_thread_privacy(thread, request.user)
+
     thread.stuck = False
     thread.save()
     return HttpResponseRedirect("/")
 
 @login_required
 def mark_read(request):
-    thread_list = Thread.on_site.order_by("-stuck","-last_post")[0:50]
+    thread_list = Thread.public_objects.order_by("-stuck","-last_post")[0:50]
     lr_list = LastRead.objects.filter(
         thread__in=[t.id for t in thread_list],
         user = request.user,
@@ -215,7 +225,7 @@ def mark_read(request):
 @login_required
 def threads_by(request, id):
     poster = get_object_or_404(User,pk=id)
-    queryset = Thread.objects.filter(creator=id).order_by(
+    queryset = Thread.public_objects.filter(creator=id).order_by(
         '-last_post').select_related('last_post', 'last_post__creator')
 
     return list_detail.object_list(
