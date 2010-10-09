@@ -46,7 +46,7 @@
     {% endfor %}
 {% endif %}
 {% if not perms.invites.can_approve or not object_list %}
-    <form method="post" action="{% url new-invite %}">
+    <form method="post" action="{% url invite-list %}">
         {% csrf_token %}
         <table>
             <tr>
@@ -87,7 +87,7 @@
 {% block replyform %}
 {% if perms.invites.can_approve and object_list %}
 
-    <form method="post" action="{% url new-invite %}">
+    <form method="post" action="{% url invite-list %}">
         {% csrf_token %}
         <table>
             <tr>
