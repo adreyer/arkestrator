@@ -41,7 +41,7 @@ def view_thread(request,id=None,expand=False):
     else:
         form = forms.PostForm()
 
-    queryset=thread.post_set.order_by("updated_at").select_related(
+    queryset=thread.post_set.order_by("created_at").select_related(
         'creator')
 
     try:
@@ -50,7 +50,7 @@ def view_thread(request,id=None,expand=False):
             thread = thread
         )
         if not expand:
-            queryset = queryset.filter(updated_at__gte=lastread.timestamp)
+            queryset = queryset.filter(created_at__gte=lastread.timestamp)
     except LastRead.DoesNotExist:
         lastread = LastRead(user = request.user,
             thread = thread,
@@ -216,7 +216,7 @@ def threads_by(request, id):
 def posts_by(request, id):
     poster = get_object_or_404(User,pk=id)
     queryset = Post.objects.filter(creator=poster).order_by(
-        '-updated_at').select_related('thread__subject')
+        '-created_at').select_related('thread__subject')
 
     return list_detail.object_list(
             request,
