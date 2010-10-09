@@ -34,6 +34,11 @@ td.wwwwwwww {
     overflow: hidden;
 }
 
+td.icons {
+    text-align: right;
+    width: 0;
+}
+
 div.pmbody {
     margin-right: 2em;
     margin-left: 2em;
