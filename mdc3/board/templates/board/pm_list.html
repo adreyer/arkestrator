@@ -20,6 +20,7 @@
                 <a href="{% url view-profile thread.other_user.id %}">{{ thread.other_user.username }}</a>
                 {% if not thread.other_has_read %}</b>{% endif %}
             </td>
+            <td nowrap="nowrap" class="icons">{% if thread.locked %}<a href="{% url unlock-thread thread.id %}">&#10005;</a>{% endif %}{% if thread.stuck %}<a href="{% url unsticky thread.id %}">&#9733;</a>{% endif %}</td>
             <td class="wwwwwwww">{% if thread.unread %}
                     <b><a href="{% url view-thread thread.id %}{% spaceless %}
                         {% if thread.last_post_read %}
