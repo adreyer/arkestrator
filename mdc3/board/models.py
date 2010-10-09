@@ -16,6 +16,7 @@ class Thread(models.Model):
     last_post = models.ForeignKey("board.Post", null=True, 
         related_name='last_post_on')
     stuck = models.BooleanField(default=False)
+    locked = models.BooleanField(default=False)
     site = models.ForeignKey(Site, null=False)
     last_read = models.ManyToManyField(User,
         through = 'LastRead',
