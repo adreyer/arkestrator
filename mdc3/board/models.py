@@ -19,6 +19,8 @@ class Thread(models.Model):
     
     subject = models.CharField(max_length=160, blank=False)
     creator = models.ForeignKey(User,null=False,related_name='threads')
+    recipient = models.ForeignKey(User, null=True, blank=True,
+        related_name = 'pms_received')
     last_post = models.ForeignKey("board.Post", null=True, 
         related_name='last_post_on')
     stuck = models.BooleanField(default=False)
@@ -55,6 +57,13 @@ class Thread(models.Model):
         if not total:
             return 0
         return total
+
+    def can_view(self, user):
+        if not self.recipient:
+            return True
+        if self.creator == user or self.recipient == user:
+            return True
+        return False
 
 class Post(models.Model):
     thread = models.ForeignKey(Thread, null=False)
