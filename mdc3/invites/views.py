@@ -22,6 +22,7 @@ def new_invite(request):
         form = forms.NewInviteForm(request.POST)
         if form.is_valid():
             form.save(request.user)
+            cache.delete('inv_count')
             return HttpResponseRedirect("/")
     else:
         form = forms.NewInviteForm()
