@@ -29,6 +29,12 @@ th.legend {
     vertical-align: top;
 }
 
+th.heading {
+    font-size: small;
+    text-align: left;
+    padding: 0.25em;
+}
+
 td.wwwwwwww {
     max-width: 30em;
     overflow: hidden;

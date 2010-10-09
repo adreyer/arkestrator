@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load cache util %}
 {% block extrahead %} 
 <title>Threads by {{poster}} - {{ site_name }}</title>
 {% endblock %}
@@ -6,7 +7,6 @@
     <h1>Threads by {{poster}}</h1>
 {% endblock %}
 
-{% load cache util%}
 {% block extramenu %}
     <div id="submenu">
         <ul>
