@@ -21,7 +21,7 @@
                 <tr class="{{ row_color }}">
             {% endif %}
             <td nowrap="nowrap"><a href="{% url view-profile thread.creator.id %}">{{ thread.creator.username }}</a></td>
-            <td nowrap="nowrap" class="icons">{% if thread.locked %}&#10005;{% endif %}{% if thread.stuck %}&#9733;{% endif %}</td>
+            <td nowrap="nowrap" class="icons">{% if thread.locked %}<a href="{% url unlock-thread thread.id %}">&#10005;</a>{% endif %}{% if thread.stuck %}<a href="{% url unsticky thread.id %}">&#9733;</a>{% endif %}</td>
             <td class="wwwwwwww">{% if thread.unread %}
                     <b><a href="{% url view-thread thread.id %}{% spaceless %}
                         {% if thread.last_post_read %}

@@ -73,5 +73,7 @@
         <input class="button" type="submit" id="postbutton" value="Say it" />
         </p>
     </form>
+{% else %}
+    <div class="notice">This thread is locked. No more replies may be added.</div>
 {% endif %}
 {% endblock %}
