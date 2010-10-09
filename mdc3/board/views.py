@@ -239,7 +239,15 @@ def get_quote(request, id):
 @permission_required('board.can_lock','/')
 def lock_thread(request, id):
     thread = get_object_or_404(Thread,pk=id)
-    thread.locked = not thread.locked
+    thread.locked = True
+    thread.save()
+    return HttpResponseRedirect("/")
+
+@login_required
+@permission_required('board.can_lock','/')
+def unlock_thread(request, id):
+    thread = get_object_or_404(Thread,pk=id)
+    thread.locked = False
     thread.save()
     return HttpResponseRedirect("/")
     

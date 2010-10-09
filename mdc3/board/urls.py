@@ -14,6 +14,8 @@ urlpatterns = patterns('',
         name='sticky'),
     url(r"^threads/lock/(?P<id>\d+)/$",views.lock_thread,
         name='lock-thread'),
+    url(r"^threads/unlock/(?P<id>\d+)/$",views.unlock_thread,
+        name='unlock-thread'),
     url(r"^threads/(?P<id>\d+)/history/$",views.thread_history,
         name='thread-history'),
     url(r"^threads/new/$",views.new_thread,name='new-thread'),
@@ -24,4 +26,3 @@ urlpatterns = patterns('',
             name='posts-by'),
     url(r"^quote/(?P<id>\d+)/$", views.get_quote, name='get-quote'),
 )
-
