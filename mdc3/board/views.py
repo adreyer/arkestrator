@@ -276,7 +276,7 @@ def list_pms(request):
             queryset = queryset,
             paginate_by = 50,
             template_object_name = 'thread',
-            template_name = "board/thread_list.html",
+            template_name = "board/pm_list.html",
             )
 
 @login_required
