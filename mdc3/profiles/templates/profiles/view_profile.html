@@ -13,15 +13,15 @@
         <ul>
             {% if not view_user.id == user.id %}
                 <li class="submenuitem"><a href="{% url new-pm view_user.id %}">Send {{ view_user.username }} a message</a></li>
-                <li class="submenuitem"><a href="{% url threads-by view_user.id %}">Threads by {{view_user.username}}</a></li>
-                <li class="submenuitem"><a href="{% url posts-by view_user.id %}">Posts by {{view_user.username}}</a></li>
+                <li class="submenuitem"><a href="{% url threads-by view_user.id %}">Threads by {{view_user.username}} ({{ view_user.get_profile.total_threads }})</a></li>
+                <li class="submenuitem"><a href="{% url posts-by view_user.id %}">Posts by {{view_user.username}} ({{ view_user.get_profile.total_posts }})</a></li>
             {% else %}
                 <li class="submenuitem"><a href="{% url edit-prefs %}">Preferences</a></li>
                 <li class="submenuitem"><a href="{% url edit-info %}">Edit profile</a></li>
                 <li class="submenuitem"><a href="{% url edit-theme %}">Edit theme</a></li>
                 <li class="submenuitem"><a href="{% url passwd %}">Change password</a></li>
-                <li class="submenuitem"><a href="{% url threads-by view_user.id %}">My threads</a></li>
-                <li class="submenuitem"><a href="{% url posts-by view_user.id %}">My posts</a></li>
+                <li class="submenuitem"><a href="{% url threads-by view_user.id %}">My threads ({{ view_user.get_profile.total_threads }})</a></li>
+                <li class="submenuitem"><a href="{% url posts-by view_user.id %}">My posts ({{ view_user.get_profile.total_posts }})</a></li>
             {% endif %}
         </ul>
     </div>
