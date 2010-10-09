@@ -8,20 +8,14 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         
-        # Deleting field 'LastRead.date'
-        db.delete_column('board_lastread', 'date')
-
-        # Adding field 'LastRead.timestamp'
-        db.add_column('board_lastread', 'timestamp', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime.now), keep_default=False)
+        # Adding field 'Thread.locked'
+        db.add_column('board_thread', 'locked', self.gf('django.db.models.fields.BooleanField')(default=False), keep_default=False)
 
 
     def backwards(self, orm):
         
-        # Adding field 'LastRead.date'
-        db.add_column('board_lastread', 'date', self.gf('django.db.models.fields.DateField')(default=datetime.datetime.now), keep_default=False)
-
-        # Deleting field 'LastRead.timestamp'
-        db.delete_column('board_lastread', 'timestamp')
+        # Deleting field 'Thread.locked'
+        db.delete_column('board_thread', 'locked')
 
 
     models = {
@@ -58,27 +52,29 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'LastRead'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'post': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['board.Post']"}),
+            'read_count': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
             'thread': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['board.Thread']"}),
-            'timestamp': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
+            'timestamp': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'db_index': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"})
         },
         'board.post': {
             'Meta': {'object_name': 'Post'},
             'body': ('django.db.models.fields.TextField', [], {}),
+            'created_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'db_index': 'True'}),
             'creator': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'thread': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['board.Thread']"}),
-            'updated_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'})
+            'thread': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['board.Thread']"})
         },
         'board.thread': {
             'Meta': {'object_name': 'Thread'},
             'creator': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'threads'", 'to': "orm['auth.User']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'last_post': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'last_post_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'last_post_by'", 'to': "orm['auth.User']"}),
+            'last_post': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'last_post_on'", 'null': 'True', 'to': "orm['board.Post']"}),
             'last_read': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'last_read'", 'symmetrical': 'False', 'through': "orm['board.LastRead']", 'to': "orm['auth.User']"}),
+            'locked': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'site': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['sites.Site']"}),
-            'subject': ('django.db.models.fields.CharField', [], {'max_length': '60'})
+            'stuck': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'subject': ('django.db.models.fields.CharField', [], {'max_length': '160'})
         },
         'contenttypes.contenttype': {
             'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},

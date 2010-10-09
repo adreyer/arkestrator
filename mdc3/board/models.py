@@ -11,29 +11,18 @@ from mdc3.decorators import instance_memcache
 import datetime
 
 class Thread(models.Model):
-    class Meta:
-        permissions = (
-            ("can_lock","Can lock threads"),
-        )
-    
     subject = models.CharField(max_length=160, blank=False)
     creator = models.ForeignKey(User,null=False,related_name='threads')
-    
-    last_post_by = models.ForeignKey(User,null=False,
-        related_name='last_post_by')
-    last_post = models.DateTimeField('Last Post',
-        default = datetime.datetime.now,
-        db_index = True) # w00t denormalization
+    last_post = models.ForeignKey("board.Post", null=True, 
+        related_name='last_post_on')
+    stuck = models.BooleanField(default=False)
+    locked = models.BooleanField(default=False)
     site = models.ForeignKey(Site, null=False)
-    
     last_read = models.ManyToManyField(User,
         through = 'LastRead',
         related_name='last_read')
 
-    on_site = CurrentSiteManager()
-
-    stuck = models.BooleanField(default=False)
-    locked = models.BooleanField(default=False)
+    objects = CurrentSiteManager()
 
     def __unicode__(self):
         return self.subject
@@ -65,7 +54,7 @@ class Post(models.Model):
     thread = models.ForeignKey(Thread, null=False)
     creator = models.ForeignKey(User,null=False)
     body = BBCodeTextField(blank=False)
-    updated_at = models.DateTimeField('Created at',
+    created_at = models.DateTimeField('Created at',
         default = datetime.datetime.now, 
         db_index = True)
 
@@ -81,9 +70,9 @@ class LastRead(models.Model):
     read_count = models.IntegerField(default=0)
 
 def update_thread(sender, instance, signal, *args, **kwargs):
-    if instance.updated_at > instance.thread.last_post:
-        instance.thread.last_post = instance.updated_at
-        instance.thread.last_post_by = instance.creator
+    if instance.id > instance.thread.last_post_id:
+
+        instance.thread.last_post = instance
         instance.thread.save()
 
         try:
@@ -91,14 +80,14 @@ def update_thread(sender, instance, signal, *args, **kwargs):
                 user = instance.creator,
                 thread = instance.thread
             )
-            lastread.timestamp = instance.updated_at
+            lastread.timestamp = instance.created_at
             lastread.post = instance
             lastread.save()
         except LastRead.DoesNotExist:
             lastread = LastRead.objects.create(
                 user = instance.creator,
                 thread = instance.thread,
-                timestamp = instance.updated_at,
+                timestamp = instance.created_at,
                 post = instance,
             )
 

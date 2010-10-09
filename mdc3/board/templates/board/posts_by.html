@@ -20,7 +20,7 @@
         <div class="row2">
             <strong>Subject: </strong>{{ post.thread.subject }} <br/>
             <strong>Posted:</strong>
-                {{ post.updated_at|date:"D, d-M-Y \a\t h:m a"}}
+                {{ post.created_at|date:"D, d-M-Y \a\t h:m a"}}
             </div>
             <div class="body">
                 <p>{% bbcode post.body %}</p>
