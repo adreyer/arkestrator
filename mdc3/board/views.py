@@ -164,12 +164,18 @@ def thread_history(request,id=None,expand=False):
     }, context_instance = RequestContext(request))
 
 @login_required
-def toggle_sticky(request,id):
+@permission_required('board.can_sticky','/')
+def sticky(request,id):
     thread = get_object_or_404(Thread,pk=id)
-    if thread.stuck:
-        thread.stuck = False
-    else:
-        thread.stuck = True
+    thread.stuck = True
+    thread.save()
+    return HttpResponseRedirect("/")
+
+@login_required
+@permission_required('board.can_sticky','/')
+def unsticky(request,id):
+    thread = get_object_or_404(Thread,pk=id)
+    thread.stuck = False
     thread.save()
     return HttpResponseRedirect("/")
 
