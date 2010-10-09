@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block extrahead %}
+<title>New Private Message - {{ site_name }}</title>
+{% endblock %}
+{% block pagetitle %}
+<h1>New thread</h1>
+{% endblock %}
+{% block content %}
+    <form method="post" action="{% url new-pm %}">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th nowrap="nowrap" class="legend"><label for="id_recs">To:</label></th>
+                <td>{{ form.recipients }} {{ form.recipients.errors }}</td>
+            </tr>
+            <tr>
+                <th />
+                <td class="smallfont">Separate multiple user names with spaces.</td>
+            </tr>
+            <tr>
+                <th nowrap="nowrap" class="legend"><label for="id_subject">Subject:</label></th>
+                <td>{{ form.subject }} {{ form.subject.errors }}</td>
+            </tr>
+            <tr>   
+                <th />
+                <td>{{ form.body }} {{ form.body.errors }}</td>
+            </tr>
+            <tr>
+                <th />
+                <td><input type="submit" value="Send" /></td>
+            </tr>
+        </table>
+    </form>
+{% endblock %}

@@ -1,5 +1,7 @@
+from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django import forms
+from bbcode.fields import BBCodeFormField
 from mdc3.board.models import Thread, Post
 
 
@@ -28,3 +30,36 @@ class PostForm(forms.ModelForm):
             'body': forms.Textarea(attrs={'cols': 70, 'rows': 12})
         }
 
+class PMForm(forms.Form):
+    recipients = forms.CharField(required = True,
+            label = "To:", widget = forms.TextInput(attrs = {'size': 70}))
+    subject = forms.CharField(required=True, label = "Subject:",
+            widget = forms.TextInput(attrs = {'size': 70, 'maxlength': 160}))
+    body = BBCodeFormField(required = True,
+            label = "Body:", 
+            widget = forms.Textarea(attrs={'cols': 70, 'rows': 12}))
+
+    def clean_recipients(self):
+        recipient_list = self.cleaned_data['recipients'].split()
+        user_list = []
+        for rec in recipient_list:
+            try:
+                user_list.append(User.objects.get(username=rec))
+            except User.DoesNotExist:
+                raise forms.ValidationError(("User "+ rec +" not found"))
+                                            
+        self.cleaned_data['recipients_user'] = set(user_list)
+        return self.cleaned_data
+
+    def save(self, thread_factory, post_factory):
+        threads = []
+        for user in self.cleaned_data['recipients_user']:
+            tf = ThreadForm(self.cleaned_data, 
+                instance = thread_factory(recipient = user))
+            thread = tf.save()
+
+            pf = PostForm(self.cleaned_data, 
+                instance = post_factory(thread = thread))
+            post = pf.save()
+            threads.append(thread)
+        return threads
