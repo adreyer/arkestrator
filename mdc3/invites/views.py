@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.http import HttpResponseRedirect,  HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
@@ -44,11 +44,8 @@ def register(request,code):
                 instance=temp_profile)
         if user_form.is_valid() and profile_form.is_valid():
                 user = user_form.save()
-                #this is really ugly at the least add a
-                #password feild not attached to the model
-                #then clean them and set
                 user.set_password(user_form.cleaned_data["pass2"])
-                user.groups.add(2)
+                user.groups.add(Group.objects.get(name='everyone').id)
                 user.save()
                 temp_profile.user = user
                 profile_form = forms.ProfileRegistrationForm(request.POST,
