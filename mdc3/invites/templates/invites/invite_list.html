@@ -67,3 +67,23 @@
     </div>
 {% endblock %}
 
+{% block replyform %}
+    <form method="post" action="{% url new-invite %}">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th class="legend">Email: </th>
+                <td>{{ form.invitee }}</td>
+            </tr>
+            <tr>
+                <th class="legend">Explain: </th>
+                <td>{{ form.explanation }}</td>
+            </tr>
+            <tr>
+                <th/>
+                <td><input type="submit" value="Save" /></td>
+            </tr>
+        </table>
+    </form>
+{% endblock %}
+
