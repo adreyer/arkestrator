@@ -239,8 +239,9 @@ def threads_by(request, id):
 @login_required
 def posts_by(request, id):
     poster = get_object_or_404(User,pk=id)
-    queryset = Post.objects.filter(creator=poster).order_by(
-        '-created_at').select_related('thread__subject')
+    queryset = Post.objects.filter(creator = poster,
+        thread__recipient__isnull = True,
+        ).order_by('-created_at').select_related('thread__subject')
 
     return list_detail.object_list(
             request,
