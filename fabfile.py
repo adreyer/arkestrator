@@ -98,6 +98,8 @@ def syncdb():
         --pythonpath=%(current_symlink)s
     django-admin.py migrate --settings=%(settings_module)s \
         --pythonpath=%(current_symlink)s
+    django-admin.py syncdb --all --settings=%(settings_module)s \
+            --pythonpath=%(current_symlink)s
     """%env)
 
 def cleanup():

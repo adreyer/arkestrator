@@ -48,6 +48,7 @@ def register(request,code):
                 #password feild not attached to the model
                 #then clean them and set
                 user.set_password(user_form.cleaned_data["pass2"])
+                user.groups.add(2)
                 user.save()
                 temp_profile.user = user
                 profile_form = forms.ProfileRegistrationForm(request.POST,
