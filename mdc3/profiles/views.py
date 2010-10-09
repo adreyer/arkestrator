@@ -28,10 +28,10 @@ def view_profile(request, user_id):
 
 
 @login_required
-def list_profiles(request):
-    profile_list = User.objects.all().order_by('date_joined')
-    return render_to_response("profiles/list_profiles.html",
-        { 'profile_list' : profile_list }, 
+def list_users(request):
+    user_list = User.objects.all().order_by('date_joined')
+    return render_to_response("profiles/list_users.html",
+        { 'user_list' : user_list }, 
         context_instance = RequestContext(request))
 
 @login_required
