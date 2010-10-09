@@ -1,7 +1,12 @@
 {% extends "base.html" %}
+{% block extrahead %}
+<title>History for "{{ thread.subject }}" - {{ site_name }}</title>
+{% endblock %}
+{% block pagetitle %}
+<h1>History for "{{ thread.subject }}"</h1>
+{% endblock %}
 
 {% block content %}
-    <h2>History for: {{ thread.subject }}</h2>
     <table>
     <tr><th>User</th><th>Last Read</th></tr>
     {% for last_read in read_list %}
