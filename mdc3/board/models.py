@@ -35,6 +35,8 @@ class Thread(models.Model):
     last_read = models.ManyToManyField(User,
         through = 'LastRead',
         related_name='last_read')
+    deleted_by = models.ForeignKey(User, null=True,
+        related_name = 'deleted_threads')
 
     objects = CurrentSiteManager()
     public_objects = PublicThreadManager()

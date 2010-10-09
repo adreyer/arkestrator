@@ -128,6 +128,24 @@ def new_thread(request):
             'post_form' : post_form,
         }, context_instance = RequestContext(request))
 
+@login_required
+def delete_thread(request,id=None):
+    thread = get_object_or_404(Thread,pk=id)
+    
+    if not thread.is_private:
+        raise Http404
+
+    _check_thread_privacy(thread, request.user)
+
+    if thread.deleted_by != request.user or thread.creator == thread.recipient:
+        thread.delete()
+    else:
+        thread.locked = True
+        thread.deleted_by = request.user
+        thread.save()
+
+    return HttpResponseRedirect(reverse('list-pms'))
+
 @super_no_cache
 @login_required
 def list_threads(request):
@@ -269,6 +287,7 @@ def get_quote(request, id):
 @permission_required('board.can_lock','/')
 def lock_thread(request, id):
     thread = get_object_or_404(Thread,pk=id)
+    _check_thread_privacy(thread, request.user)
     thread.locked = True
     thread.save()
     return HttpResponseRedirect("/")
@@ -277,6 +296,7 @@ def lock_thread(request, id):
 @permission_required('board.can_lock','/')
 def unlock_thread(request, id):
     thread = get_object_or_404(Thread,pk=id)
+    _check_thread_privacy(thread, request.user)
     thread.locked = False
     thread.save()
     return HttpResponseRedirect("/")
@@ -289,7 +309,8 @@ def list_pms(request):
     except ValueError:
         raise Http404
     
-    queryset = Thread.objects.exclude(recipient__isnull=True
+    queryset = Thread.objects.exclude(recipient__isnull=True, 
+            deleted_by = request.user
         ).filter(Q(creator=request.user)|Q(recipient=request.user)
         ).order_by("-last_post__id"
         ).select_related("creator","recipient","last_post","last_post__creator")
