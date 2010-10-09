@@ -1,7 +1,6 @@
 from django.conf.urls.defaults import *
 
 urlpatterns = patterns('mdc3.invites.views',
-        url(r"^new_invite/$", 'new_invite', name='new-invite'),
         url(r"^(?P<code>\w+)/$", 'register', name='register'),
         url(r"^$", 'invite_list', name='invite-list'),
         url(r"^approve_invite/(?P<id>\w+)/$", 'approve_invite',

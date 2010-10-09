@@ -52,16 +52,11 @@
                 {% else %}Messages{% endif %}</a></li>
             <li class="menuitem"><a href="{% url list-users %}">User list</a></li>
             <li class="menuitem"><a href="http://wiki.mdc2.org/index.php/Main_Page">Wiki</a></li>
-            {% if perms.invites.can_approve %}
-                <li class="menuitem"><a href="{% url invite-list %}">
-                 {% if new_invites %}
+            <li class="menuitem"><a href="{% url invite-list %}">
+                {% if new_invites and perms.invites.can_approve %}
                     <span class="urgent">Invites ({{ new_invites }})</span>
-                 {% else %}Invites{% endif %}</a></li>
-            {% else %}
-                <li class="menuitem"><a href="{% url new-invite %}">Invite</a></li>
-            {% endif %}
-
-                
+                 {% else %}Invite{% endif %}</a></li>
+             
             {% if user.is_staff %}
             <li class="menuitem"><a href="/admin/">Admin</a></li>
             {% endif %}

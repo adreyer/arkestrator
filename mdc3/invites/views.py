@@ -17,7 +17,7 @@ from mdc3.decorators import moderator_required
 import forms
 
 @login_required
-def new_invite(request):
+def invite_list(request):
     if request.method == 'POST':
         form = forms.NewInviteForm(request.POST)
         if form.is_valid():
@@ -26,9 +26,16 @@ def new_invite(request):
             return HttpResponseRedirect("/")
     else:
         form = forms.NewInviteForm()
-    return render_to_response("invites/new_invite.html",
-            { 'form' : form },
-            context_instance = RequestContext(request))
+        queryset = Invite.objects.filter(rejected=False,
+            approved=False).order_by('-created_on')
+    return list_detail.object_list(
+        request,
+        queryset = queryset,
+        paginate_by = 10,
+        extra_context={
+            'form':form,
+        })
+
 
 
 def register(request,code):
@@ -65,15 +72,10 @@ def register(request,code):
          context_instance = RequestContext(request))
     
 
-@login_required
-@permission_required('invites.can_approve','/')
-def invite_list(request):
-    queryset = Invite.objects.filter(rejected=False,
-            approved=False).order_by('-created_on')
-    return list_detail.object_list(
-        request,
-        queryset = queryset,
-        paginate_by = 10)
+##@login_required
+##@permission_required('invites.can_approve','/')
+##def invite_list(request):
+##
 
 @login_required
 @permission_required('invites.can_approve','/')

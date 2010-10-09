@@ -7,15 +7,10 @@
 {% endblock %}
 
 {% load bbcode %}
-{% block extramenu %}
-    <div id="submenu">
-        <ul>
-            <li class="submenuitem"><a href="{% url new-invite %}">New Invite</a></li>
-        </ul>
-    </div>
-{% endblock %}
+
 
 {% block content %}
+{% if perms.invites.can_approve %}
     {% for invite in object_list %}
         <div class="post">
         <div class="row2">
@@ -49,10 +44,31 @@
             </div>
         </div>
     {% endfor %}
+{% endif %}
+{% if not perms.invites.can_approve or not object_list %}
+    <form method="post" action="{% url invite-list %}">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th class="legend">Email: </th>
+                <td>{{ form.invitee }}</td>
+            </tr>
+            <tr>
+                <th class="legend">Explain: </th>
+                <td>{{ form.explanation }}</td>
+            </tr>
+            <tr>
+                <th/>
+                <td><input type="submit" value="Save" /></td>
+            </tr>
+        </table>
+    </form>
+{% endif %}
 {% endblock %}
 
 
 {% block bottombezel %}
+{% if perms.invites.can_approve and object_list %}
     <div id="bottombezel">
          <ul>
             <li class="submenulegend">Page:</li>
@@ -65,5 +81,29 @@
             {% endfor %}
         </ul>
     </div>
+{% endif %}
+{% endblock %}
+
+{% block replyform %}
+{% if perms.invites.can_approve and object_list %}
+
+    <form method="post" action="{% url invite-list %}">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <th class="legend">Email: </th>
+                <td>{{ form.invitee }}</td>
+            </tr>
+            <tr>
+                <th class="legend">Explain: </th>
+                <td>{{ form.explanation }}</td>
+            </tr>
+            <tr>
+                <th/>
+                <td><input type="submit" value="Save" /></td>
+            </tr>
+        </table>
+    </form>
+{% endif %}
 {% endblock %}
 
