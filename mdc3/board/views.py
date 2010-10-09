@@ -309,7 +309,8 @@ def list_pms(request):
     except ValueError:
         raise Http404
     
-    queryset = Thread.objects.exclude(recipient__isnull=True
+    queryset = Thread.objects.exclude(recipient__isnull=True, 
+            deleted_by = request.user
         ).filter(Q(creator=request.user)|Q(recipient=request.user)
         ).order_by("-last_post__id"
         ).select_related("creator","recipient","last_post","last_post__creator")
