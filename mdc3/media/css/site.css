@@ -255,6 +255,17 @@ div#gtfo p {
     -moz-border-radius: 0.5em;
 }
 
+div.notice {
+    width: 40em;
+    text-align: center;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    font-size: large;
+    font-weight: bold;
+}
+
 .urgent {
     text-decoration: blink;
     font-weight: bold;
