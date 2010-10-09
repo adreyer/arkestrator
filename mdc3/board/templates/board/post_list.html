@@ -17,10 +17,20 @@
                 <li class="submenuitem"><a href="{% url view-thread-full thread.id %}">Show all ({{ thread.total_posts }})</a></li>
             {% endif %}
             <li class="submenuitem"><a href="/this/does/nothing/lol">Hide images</a></li>
-            <li class="submenuitem"><a href="{% url sticky thread.id %}">Toggle sticky</a></li>
             <li class="submenuitem"><a href="{% url thread-history thread.id %}">Thread history</a></li>
+            {% if perms.board.can_sticky %}
+              {% if thread.stuck %}
+                <li class="submenuitem"><a href="{% url unsticky thread.id %}">Unsticky thread</a></li>
+              {% else %}
+                <li class="submenuitem"><a href="{% url sticky thread.id %}">Sticky thread</a></li>
+              {% endif %}
+            {% endif %}
             {% if perms.board.can_lock %}
-                <li class="submenuitem"><a href="{% url lock-thread thread.id %}">Lock Thread</a></li>
+                {% if thread.locked %}
+                <li class="submenuitem"><a href="{% url unlock-thread thread.id %}">Unlock thread</a></li>
+                {% else %}
+                <li class="submenuitem"><a href="{% url lock-thread thread.id %}">Lock thread</a></li>
+                {% endif %}
              {% endif %}
             <li class="submenuitem floatright"><a href="#pagebottom">Jump to bottom</a></li>
         </ul>
