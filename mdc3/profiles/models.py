@@ -1,8 +1,11 @@
+import datetime
 from django.db import models
 from django.contrib.auth.models import User
 from mdc3.invites.models import Invite
+from mdc3.board.models import LastRead
 
-import datetime
+
+
 
 class Profile(models.Model):
     #data
@@ -45,3 +48,10 @@ class Profile(models.Model):
 
     def total_threads(self):
         return self.user.threads.count()
+
+    def last_seen(self):
+        lr = LastRead.objects.filter(user=user).order_by(
+                '-timestamp')
+        if lr == []:
+            return user.date_joined
+        return lr[0].timestamp

@@ -5,7 +5,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from models import Profile
-from mdc3.board.models import LastRead
+
 
 import forms
 
@@ -13,23 +13,21 @@ import forms
 @login_required
 def view_profile(request, user_id):
     user = get_object_or_404(User,pk=user_id)
-    #change after everyone has a profile
     profile = get_object_or_404(Profile,user=user)
     if request.user != user:
         profile.profile_views += 1
         profile.save()
-    last_seen = LastRead.objects.filter(user=user).order_by(
-            '-timestamp')[0].timestamp
     return render_to_response("profiles/view_profile.html",
         {   'view_user' : user,
             'view_profile' : profile,
-            'last_seen' : last_seen},
+        },
         context_instance = RequestContext(request))
 
 
 @login_required
 def list_users(request):
-    user_list = User.objects.all().order_by('date_joined')
+    user_list = User.objects.exclude(
+        profile__isnull=True).order_by('date_joined')
     return render_to_response("profiles/list_users.html",
         { 'user_list' : user_list }, 
         context_instance = RequestContext(request))
