@@ -137,7 +137,8 @@ def delete_thread(request,id=None):
 
     _check_thread_privacy(thread, request.user)
 
-    if thread.deleted_by != request.user or thread.creator == thread.recipient:
+    if (thread.deleted_by and thread.deleted_by != request.user) or \
+            thread.creator == thread.recipient:
         thread.delete()
     else:
         thread.locked = True
