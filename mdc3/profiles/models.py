@@ -39,5 +39,9 @@ class Profile(models.Model):
     
     def __str__(self):
         return self.user.username
-    
-    
+
+    def total_posts(self):
+        return self.user.post_set.count()
+
+    def total_threads(self):
+        return self.user.threads.count()
