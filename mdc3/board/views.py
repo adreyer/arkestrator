@@ -336,7 +336,6 @@ def list_pms(request):
             t.other_user = t.recipient
         else:
             t.other_user = t.creator
-        print t.creator, request.user, t.recipient
         
         t.other_has_read = bool(t.lastread_set.filter(user = t.other_user
             ).filter(post__id__gte=t.last_post_id
