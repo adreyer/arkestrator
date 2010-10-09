@@ -5,7 +5,7 @@
         {% csrf_token %}
         <table>
         {{ profile_form.as_table }}
+        <th/><input type="submit" value="Save" />
         </table>
-        <input type="submit" value="Save" />
     </form>
 {% endblock %}
