@@ -13,6 +13,8 @@ import datetime
 class Thread(models.Model):
     subject = models.CharField(max_length=160, blank=False)
     creator = models.ForeignKey(User,null=False,related_name='threads')
+    recipient = models.ForeignKey(User, null=True, blank=True,
+        related_name = 'pms_received')
     last_post = models.ForeignKey("board.Post", null=True, 
         related_name='last_post_on')
     stuck = models.BooleanField(default=False)
