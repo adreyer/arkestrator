@@ -132,7 +132,7 @@ def new_thread(request):
 def delete_thread(request,id=None):
     thread = get_object_or_404(Thread,pk=id)
     
-    if not thread.is_private():
+    if not thread.is_private:
         raise Http404
 
     _check_thread_privacy(thread, request.user)
