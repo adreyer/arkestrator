@@ -294,6 +294,15 @@ def list_pms(request):
         else:
             t.unread = True
 
+        if t.creator == request.user:
+            t.other_user = t.recipient
+        else:
+            t.other_user = t.creator
+        
+        t.other_has_read = bool(t.lastread_set.filter(user = t.other_user
+            ).filter(post__id__gte=t.last_post_id
+            ).count())
+
     return render_to_response("board/pm_list.html", {
         'thread_list' : thread_list,
         'page_obj' : page_obj,

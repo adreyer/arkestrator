@@ -15,11 +15,11 @@
     {% withcycle "row1" "row2" as row_color %}
         {% for thread in thread_list %}
             <tr class="{{ row_color }}">
-                {% if thread.creator == user %}
-                    <td nowrap="nowrap"><a href="{% url view-profile thread.recipient.id %}">{{ thread.recipient.username }}</a></td>
-                {% else %}
-                    <td nowrap="nowrap"><a href="{% url view-profile thread.creator.id %}">{{ thread.creator.username }}</a></td>
-                {% endif %}
+            <td nowrap="nowrap">
+                {% if not thread.other_has_read %}<b>{% endif %}
+                <a href="{% url view-profile thread.other_user.id %}">{{ thread.other_user.username }}</a>
+                {% if not thread.other_has_read %}</b>{% endif %}
+            </td>
             <td class="wwwwwwww">{% if thread.unread %}
                     <b><a href="{% url view-thread thread.id %}{% spaceless %}
                         {% if thread.last_post_read %}
