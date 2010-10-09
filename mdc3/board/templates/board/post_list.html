@@ -55,12 +55,12 @@
 {% block replyform %}
 {% if not thread.locked %}
 <a name="post"></a>
-    <form method="post" action="{% url view-thread thread.id %}#post">
+    <form method="post" action="{% url view-thread thread.id %}#post" onSubmit="document.getElementById('postbutton').style.display='none';">
     {% csrf_token %}
     <p class="replyform">
         {{ form.body.errors }}<br />{{ form.body }}<br />
         {{ form.form_lock }}
-        <input class="button" type="submit" value="Say it" />
+        <input class="button" type="submit" id="postbutton" value="Say it" />
         </p>
     </form>
 {% endif %}

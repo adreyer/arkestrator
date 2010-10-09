@@ -6,12 +6,12 @@
 <h1>New thread</h1>
 {% endblock %}
 {% block content %}
-<form method="post" action="{% url new-thread %}" class="replyform">
+<form method="post" action="{% url new-thread %}" onSubmit="document.getElementById('postbutton').style.display='none';" class="replyform">
     <div class="replyform">
         {% csrf_token %}
         {{ thread_form.subject }} {{ thread_form.subject.errors }}<br />
         {{ post_form.body }} {{ post_form.body.errors }}<br />
-        <input type="submit" value="Say It" />
+        <input type="submit" id="postbutton" value="Say It" />
     </div>
 </form>
 {% endblock %}
