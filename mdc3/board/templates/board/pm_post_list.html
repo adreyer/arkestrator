@@ -1,0 +1,23 @@
+{% extends "board/post_list.html" %}
+
+{% block extramenu %}
+    <div id="submenu">
+        <ul>
+            {% if not expand %}
+                <li class="submenuitem"><a href="{% url view-thread-full thread.id %}">Show all ({{ thread.total_posts }})</a></li>
+            {% endif %}
+            <li class="submenuitem"><a href="/this/does/nothing/lol">Hide images</a></li>
+            <li class="submenuitem"><a href="{% url thread-history thread.id %}">Thread history</a></li>
+            <li class="submenuitem floatright"><a href="#pagebottom">Jump to bottom</a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block bottombezel %}
+    <div id="bottombezel">
+        <ul>
+            <li class="submenuitem"><a href="{% url list-pms %}">Go back</a></li>
+            <li class="submenuitem floatright"><a href="#pagetop">Jump to top</a></li>
+        </ul>
+    </div>
+{% endblock %}

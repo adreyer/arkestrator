@@ -87,7 +87,12 @@ def view_thread(request,id=None,expand=False):
     if len(post_list)< 10:
         expand = True
         
-    return render_to_response("board/post_list.html", {
+    if thread.is_private:
+        template = "board/pm_post_list.html"
+    else:
+        template = "board/post_list.html"
+
+    return render_to_response(template, {
         'object_list' : post_list,
         'thread' : thread,
         'form' : form,
