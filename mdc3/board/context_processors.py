@@ -34,8 +34,8 @@ def pm_count(request):
         )
         pm_count = cache.get(cache_key, None)
         if pm_count is None:
-            pm_count = LastRead.objects.exclude(thread__recipient__isnull=True,
-                    thread__deleted_by = request.user
+            pm_count = LastRead.objects.exclude(thread__recipient__isnull=True
+                ).exclude(thread__deleted_by = request.user
                 ).filter(user=request.user
                 ).filter(Q(thread__creator=request.user)|Q(
                     thread__recipient=request.user)
