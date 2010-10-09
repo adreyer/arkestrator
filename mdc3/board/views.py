@@ -89,14 +89,20 @@ def view_thread(request,id=None,expand=False):
         
     if thread.is_private:
         template = "board/pm_post_list.html"
+        if thread.creator == request.user:
+            other_user = thread.recipient
+        else:
+            other_user = thread.creator
     else:
         template = "board/post_list.html"
+        other_user = "There are no other users.  This thread is not private."
 
     return render_to_response(template, {
         'object_list' : post_list,
         'thread' : thread,
         'form' : form,
         'expand': expand,
+        'other_user': other_user,
         },
         context_instance = RequestContext(request))
 
