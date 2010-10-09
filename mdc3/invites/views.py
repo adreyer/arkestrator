@@ -96,6 +96,7 @@ Welcome to MDC. Use the link below to create your account
                 from_email = 'cmr@mdc2.org',
                 recipient_list = [inv.invitee],
                 fail_silently=False)
+        cache.delete('inv_count')
         inv.save()
     return HttpResponseRedirect("/invites/")
 
@@ -107,5 +108,6 @@ def reject_invite(request, id):
         inv.rejected = True
         inv.approved_on = datetime.datetime.now()
         inv.approved_by = request.user
+        cache.delete('inv_count')
         inv.save()
     return HttpResponseRedirect("/invites/")
