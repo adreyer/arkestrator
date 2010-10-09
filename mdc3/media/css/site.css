@@ -244,21 +244,19 @@ div#ra {
     float: right;
 }
 
-div#gtfo p {
+ div#gtfo p {
     width: 40em; 
     text-align: center; 
     color: white; 
     background-color: #800000; 
-    border: 0.5em solid white; 
-    margin: 0.5em;
+    border: 0.25em solid white; 
     margin-right: auto; 
     margin-left: auto; 
+    margin-top: 0;
     padding: 0.5em; 
     font-size: large; 
     font-weight: bold; 
     text-transform: uppercase;
-    border-radius: 0.5em;
-    -moz-border-radius: 0.5em;
 }
 
 div.notice {

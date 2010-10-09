@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% block header %}
-    <h1>Authorized Users Only</h1>
+    <h1>{{ site_name }}</h1>
 {% endblock %}
 
+{% block loginbezel %}<div id="submenu"><br /></div>{% endblock %}
 {%  block content %}
 <div id="gtfo">
 <p>ACCESS TO THIS SYSTEM IS RESTRICTED TO AUTHORIZED USERS ONLY. INDIVIDUALS ATTEMPTING UNAUTHORIZED ACCESS WILL BE PROSECUTED. IF UNAUTHORIZED, TERMINATE ACCESS NOW!</p>
@@ -16,16 +17,19 @@
 {% csrf_token %}
 <table>
 <tr>
-    <td>{{ form.username.label_tag }}</td>
+    <th>{{ form.username.label_tag }}</td>
     <td>{{ form.username }}</td>
 </tr>
 <tr>
-    <td>{{ form.password.label_tag }}</td>
+    <th>{{ form.password.label_tag }}</td>
     <td>{{ form.password }}</td>
+</tr>
+<tr>
+    <th/>
+    <td><input type="submit" value="login" /></td>
 </tr>
 </table>
 
-<input type="submit" value="login" />
 <input type="hidden" name="next" value="/" />
 </form>
 
