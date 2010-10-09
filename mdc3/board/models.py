@@ -86,7 +86,7 @@ class Post(models.Model):
         default = datetime.datetime.now, 
         db_index = True)
 
-    def __str__(self):
+    def __unicode__(self):
         return "%s: %s"%(str(self.thread),self.body[:20])
     
 class LastRead(models.Model):
