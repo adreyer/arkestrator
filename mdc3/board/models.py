@@ -10,7 +10,12 @@ from mdc3.decorators import instance_memcache
 
 import datetime
 
-class Thread(models.Model): 
+class Thread(models.Model):
+    class Meta:
+        permissions=(
+            ('can_sticky', 'Can sticky threads'),
+            ('can_lock', 'Can lock threads'),
+            )
     
     subject = models.CharField(max_length=160, blank=False)
     creator = models.ForeignKey(User,null=False,related_name='threads')
