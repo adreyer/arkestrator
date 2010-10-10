@@ -11,14 +11,14 @@
 {% block content %}
 <div class="body">
 <div>{{ online_users }} user{{ online_users|pluralize }} viewing, 
-{{ posting_users }} user{{ posting_users|pluralize }} posting
+{{ posting_users }} user{{ posting_users|pluralize }} posting<br />
 </div>
 <div>{% for user in user_list %}
 <a href="{% url view-profile user.id %}">{% spaceless %}
     {% if user.is_posting %}
-        <b>{{ user.username }}</b>
+        <b>&nbsp;{{ user.username }}&nbsp;</b>
     {% else %}
-        {{ user.username }}
+        &nbsp;{{ user.username }}&nbsp;
     {% endif %}
 {% endspaceless %}</a>
 {% endfor %}</div>
