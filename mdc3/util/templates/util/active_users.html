@@ -16,7 +16,7 @@
 <div>{% for user in user_list %}
 <a href="{% url view-profile user.id %}">{% spaceless %}
     {% if user.is_posting %}
-        <b>{{ user.username }}<b>
+        <b>{{ user.username }}</b>
     {% else %}
         {{ user.username }}
     {% endif %}
