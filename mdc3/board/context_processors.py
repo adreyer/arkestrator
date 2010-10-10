@@ -41,6 +41,7 @@ def pm_count(request):
                     thread__recipient=request.user)
                 ).filter(post__id__lt=F('thread__last_post__id')
                 ).count()
+            cache.set(cache_key, pm_count)
         return { 'new_pms' : pm_count }
     else:
         return { 'new_pms' : 0 }
