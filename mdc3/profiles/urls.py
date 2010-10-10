@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import *
-from django.contrib.auth.views import password_change
+from django.contrib.auth.views import password_change, password_reset
 import views
 
 urlpatterns = patterns('',
@@ -12,5 +12,9 @@ urlpatterns = patterns('',
         (r'^password/done/$',
              'django.contrib.auth.views.password_change_done',
              { 'template_name' : 'profiles/passdone.html' }),
+        url("^password_reset/$", password_reset,
+            { 'template_name' : 'profiles/password_reset.html'},
+            name='password-reset'),
+        url("^password_reset_done/$", 'django.contrib.auth.views.password_reset_done'),
         url(r"^list_users/$", views.list_users, name='list-users'),
 )
