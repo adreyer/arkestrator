@@ -62,10 +62,16 @@ class PMForm(forms.Form):
                 instance = post_factory(thread = thread))
             post = pf.save()
             threads.append(thread)
-            LastRead.objects.create(
-                user = user,
-                thread = thread,
-                post = None
-            )
-
+            try:
+                LastRead.objects.get(
+                    user = user,
+                    thread = thread,
+                )
+            except LastRead.DoesNotExist:
+                LastRead.objects.create(
+                    user = user,
+                    thread = thread,
+                    post = None,
+                )
+                
         return threads
