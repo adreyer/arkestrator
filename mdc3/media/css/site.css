@@ -40,6 +40,11 @@ td.wwwwwwww {
     overflow: hidden;
 }
 
+div.wwwwwwww {
+    max-height: 2.5em;
+    overflow: hidden;
+}
+
 td.icons {
     text-align: right;
     width: 0;
