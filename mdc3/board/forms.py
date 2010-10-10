@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django import forms
 from bbcode.fields import BBCodeFormField
-from mdc3.board.models import Thread, Post
+from mdc3.board.models import Thread, Post, LastRead
 
 
 class ThreadForm(forms.ModelForm):
@@ -62,4 +62,10 @@ class PMForm(forms.Form):
                 instance = post_factory(thread = thread))
             post = pf.save()
             threads.append(thread)
+            LastRead.objects.create(
+                user = user,
+                thread = thread,
+                post = None
+            )
+
         return threads
