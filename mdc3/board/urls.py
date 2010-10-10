@@ -7,9 +7,26 @@ import models
 urlpatterns = patterns('',
     url(r"^$",views.list_threads, name='list-threads'),
     url(r"^threads/(?P<id>\d+)/$",views.view_thread,name='view-thread'),
+    url(r"^threads/(?P<id>\d+)/(?P<start>\d+)/$",views.view_thread,
+        name='view-thread-start'),
     url(r"^threads/(?P<id>\d+)/full/$",views.view_thread,{
         'expand' : True,
     }, name='view-thread-full'),
+    url(r"^threads/(?P<id>\d+)/(?P<start>\d+)/full/$",views.view_thread,{
+        'expand' : True,
+    }, name='view-thread-full-start'),
+    url(r"^threads/(?P<id>\d+)/(?P<start>\d+)/full/show/$",views.view_thread,{
+        'expand' : True, 'hide' : False,
+    }, name='view-thread-full-show'),
+    url(r"^threads/(?P<id>\d+)/(?P<start>\d+)/full/hide/$",views.view_thread,{
+        'expand' : True, 'hide' : True,
+    }, name='view-thread-full-hide'),
+    url(r"^threads/(?P<id>\d+)/(?P<start>\d+)/hide/$",views.view_thread,{
+        'expand' : False, 'hide' : True,
+    }, name='view-thread-hide'),
+    url(r"^threads/(?P<id>\d+)/(?P<start>\d+)/show/$",views.view_thread,{
+        'expand' : False, 'hide' : False,
+    }, name='view-thread-show'),
     url(r"^threads/sticky/(?P<id>\d+)/$",views.sticky,
         name='sticky'),
     url(r"^threads/unsticky/(?P<id>\d+)/$",views.unsticky,

@@ -29,9 +29,9 @@ def _check_thread_privacy(thread, user):
         raise Http404
 
 @login_required
-def view_thread(request,id=None,expand=False):
+def view_thread(request,id=None,start=False,expand=False,hide=None):
     thread = get_object_or_404(Thread,pk=id)
-    
+
     _check_thread_privacy(thread, request.user)
 
     if request.method == 'POST':
@@ -58,20 +58,25 @@ def view_thread(request,id=None,expand=False):
             thread = thread
         )
         if not expand:
-            queryset = queryset.filter(created_at__gte=lastread.timestamp)
+            if start:
+                queryset = queryset.filter(pk__gte=start)
+            else:
+                queryset = queryset.filter(created_at__gte=lastread.timestamp)
     except LastRead.DoesNotExist:
         lastread = LastRead(user = request.user,
             thread = thread,
             read_count = 0,
         )
 
-    if not expand and queryset.count() < 10:
+    if not expand and not start and queryset.count() < 10:
+        print 'really'
         queryset = thread.default_post_list
 
     post_list = list(queryset)
     #this is a hack to hide images
     try:
-        if not request.user.get_profile().show_images:
+        if (not hide is False) and (hide or not request.user.get_profile().show_images):
+            hide = True
             for post in post_list:
                 post.body = post.body.replace('[img','(img)[url')
                 post.body = post.body.replace('[/img]','[/url]')
@@ -97,12 +102,17 @@ def view_thread(request,id=None,expand=False):
         template = "board/post_list.html"
         other_user = "There are no other users.  This thread is not private."
 
+    if not start and post_list:
+        start = post_list[0].id
+
     return render_to_response(template, {
         'object_list' : post_list,
         'thread' : thread,
         'form' : form,
         'expand': expand,
+        'hide': hide,
         'other_user': other_user,
+        'start': start
         },
         context_instance = RequestContext(request))
 

@@ -14,9 +14,31 @@
     <div id="submenu">
         <ul>
             {% if not expand %}
-                <li class="submenuitem"><a href="{% url view-thread-full thread.id %}">Show all ({{ thread.total_posts }})</a></li>
+                {% if hide %}
+                <li class="submenuitem"><a href="{% url view-thread-full-hide thread.id start %}">Show all ({{ thread.total_posts }})</a></li>
+                {% else %}
+                <li class="submenuitem"><a href="{% url view-thread-full-start thread.id start %}">Show all ({{ thread.total_posts }})</a></li>
+                {% endif %}
+            {% else %}
+                {% if hide %}
+                <li class="submenuitem"><a href="{% url view-thread-hide thread.id start %}">Collapse</a></li>
+                {% else %}
+                <li class="submenuitem"><a href="{% url view-thread-start thread.id start %}">Collapse</a></li>
+                {% endif %}
             {% endif %}
-            <li class="submenuitem"><a href="/this/does/nothing/lol">Hide images</a></li>
+            {% if hide %}
+                {% if expand %}
+                    <li class="submenuitem"><a href="{% url view-thread-full-show thread.id start %}">Show Images</a></li>
+                {% else %}
+                    <li class="submenuitem"><a href="{% url view-thread-show thread.id start %}">Show Images</a></li>
+                {% endif %}
+            {% else %}
+                {% if expand %}
+                    <li class="submenuitem"><a href="{% url view-thread-full-hide thread.id start %}">Hide Images</a></li>
+                {% else %}
+                    <li class="submenuitem"><a href="{% url view-thread-hide thread.id start %}">Hide Images</a></li>
+                {% endif %}
+            {% endif %}
             <li class="submenuitem"><a href="{% url thread-history thread.id %}">Thread history</a></li>
             {% if perms.board.can_sticky %}
               {% if thread.stuck %}
