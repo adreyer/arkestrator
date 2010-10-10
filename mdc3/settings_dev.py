@@ -13,7 +13,7 @@ DATABASES = {
         'USER': 'mdc3_dev',                      # Not used with sqlite3.
         'PASSWORD': 'g4mm4r4Y',                  # Not used with sqlite3.
         'HOST': '127.0.0.1',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '5433',                      # Set to empty string for default. Not used with sqlite3.
+        'PORT': '5432',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
 
