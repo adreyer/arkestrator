@@ -285,6 +285,9 @@ def posts_by(request, id):
 def get_quote(request, id):
     post = get_object_or_404(Post, pk=id)
     user = get_object_or_404(User, pk=post.creator.id)
+
+    _check_thread_privacy(post.thread, request.user)
+
     return render_to_response("board/get_quote.html", {
             'post': post,
             'user': user,
