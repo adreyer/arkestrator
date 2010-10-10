@@ -242,6 +242,8 @@ div#bottombezel {
 
 div#ra {
     float: right;
+    margin: 0.25em;
+    margin-top: 0.5em;
 }
 
  div#gtfo p {
