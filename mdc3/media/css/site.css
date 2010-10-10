@@ -118,7 +118,7 @@ ul.errorlist, ul.errorlist li {
     display: inline-block;
     margin-left: 1pt;
     margin-right: 1pt;
-    padding: 0.25em;
+    padding: 0.33em 0.5em 0.25em 0.5em;
     padding-right: 0.5em;
     padding-left: 0.5em;
     border-top-left-radius: 0.5em;
@@ -137,7 +137,7 @@ ul.errorlist, ul.errorlist li {
     margin-bottom: 0.25em;
     margin-left: 1pt;
     margin-right: 1pt;
-    padding: 2pt;
+    padding: 3pt;
     padding-right: 0.33em;
     padding-left: 0.33em;
     font-size: 93%;
