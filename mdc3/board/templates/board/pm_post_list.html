@@ -1,5 +1,14 @@
 {% extends "board/post_list.html" %}
 
+{% block extrahead %}
+<script type="text/javascript" language="JavaScript" src="{{ MEDIA_URL }}js/quote.js"></script>
+<title>Messages with {{ other_user }} - {{ site_name }}</title>
+{% endblock %}
+
+{% block pagetitle %}
+    <h1>Messages with {{ other_user }} </h1>
+{% endblock %}
+
 {% block extramenu %}
     <div id="submenu">
         <ul>
@@ -12,6 +21,27 @@
             <li class="submenuitem floatright"><a href="#pagebottom">Jump to bottom</a></li>
         </ul>
     </div>
+{% endblock %}
+
+{% load bbcode %}
+{% block content %}
+    {% for post in object_list %}
+        <div class="post">
+            <a name="{{ post.id }}"></a>
+            {% if post.creator == user %}
+                <div class="my_post">
+            {% else %}
+                <div class="row2">
+            {% endif %}
+                <span id="info_{{ post.id}}"><strong><a href="{% url view-profile post.creator.id %}">{{ post.creator.username }}</a></strong> posted this on {{ post.created_at|date:"D, d-M-Y \a\t h:m:s a"}}</span>
+                <strong><a href="javascript:;" onclick="quote('{% url get-quote post.id %}')">#{{ post.id }}</a></strong>
+                <span class="button"><a href="{% url delete-post post.id %}">Delete</a></span>
+            </div>
+            <div class="body" id="post_{{ post.id }}">
+                <p>{% bbcode post.body %}</p>
+            </div>
+        </div>
+    {% endfor %}
 {% endblock %}
 
 {% block bottombezel %}

@@ -34,8 +34,6 @@ class PostForm(forms.ModelForm):
 class PMForm(forms.Form):
     recipients = forms.CharField(required = True,
             label = "To:", widget = forms.TextInput(attrs = {'size': 70}))
-    subject = forms.CharField(required=True, label = "Subject:",
-            widget = forms.TextInput(attrs = {'size': 70, 'maxlength': 160}))
     body = BBCodeFormField(required = True,
             label = "Body:", 
             widget = forms.Textarea(attrs={'cols': 70, 'rows': 12}))
@@ -52,20 +50,23 @@ class PMForm(forms.Form):
         self.cleaned_data['recipients_user'] = set(user_list)
         return self.cleaned_data
 
-    def save(self, thread_factory, post_factory, poster):
+    def save(self, post_factory, sender, site):
         threads = []
         for user in self.cleaned_data['recipients_user']:
             try:
                 thread = Thread.objects.get(Q(
-                    Q(creator=poster) & Q(recipient=user) |
-                    Q(creator=user) & Q(recipient=poster)))
-                if thread.delete_by:
+                    Q(creator=sender) & Q(recipient=user) |
+                    Q(creator=user) & Q(recipient=sender)))
+                if thread.deleted_by:
                     thread.deleted_by = None
                     thread.save()
-            except Thread.DoesNotExist:                                   
-                tf = ThreadForm(self.cleaned_data, 
-                    instance = thread_factory(recipient = user))
-                thread = tf.save()
+            except Thread.DoesNotExist:
+                subject = 'PM: ' + sender.username + ' ' + user.username
+                thread = Thread(subject=subject,
+                        site=site,
+                        recipient=user,
+                        creator=sender)
+                thread.save()
 
             pf = PostForm(self.cleaned_data, 
                 instance = post_factory(thread = thread))

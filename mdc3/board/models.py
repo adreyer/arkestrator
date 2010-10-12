@@ -85,6 +85,8 @@ class Post(models.Model):
     created_at = models.DateTimeField('Created at',
         default = datetime.datetime.now, 
         db_index = True)
+    deleted_by = models.ForeignKey(User, null=True,
+        related_name = 'deleted_posts')
 
     def __unicode__(self):
         return "%s: %s"%(unicode(self.thread),self.body[:20])

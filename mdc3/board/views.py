@@ -52,7 +52,7 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
     else:
         form = forms.PostForm()
 
-    queryset=thread.post_set.exclude(deleted_by=reques.user).order_by(
+    queryset=thread.post_set.exclude(deleted_by=request.user).order_by(
         "created_at").select_related('creator')
 
     try:
@@ -161,21 +161,24 @@ def delete_thread(request,id=None):
     else:
         thread.deleted_by = request.user
         thread.save()
+        Post.objects.filter(thread=thread).exclude(
+            deleted_by__isnull=True,deleted_by=request.user).delete()
+        Post.objects.filter(thread=thread).update(deleted_by=request.user)
 
     return HttpResponseRedirect(reverse('list-pms'))
 
 def delete_post(request, id=None):
     post = get_object_or_404(Post,pk=id)
-    thread = get_object_or_404(Thread,pk=post.thread)
-
-    if not thread.is_private:
+    thread_id = post.thread.id
+    if not post.thread.is_private:
         raise http404
-    if (post.delete_by and post.deleted_by != request.user) or \
-       thread.creator == thread.recipient:
-        thread.delete()
+    if (post.deleted_by and post.deleted_by != request.user) or \
+       post.thread.creator == post.thread.recipient:
+        post.delete()
     else:
-        post.delete_by = request.user
-    return httpResponseRedirect(reverse('view_pm', id))
+        post.deleted_by = request.user
+        post.save()
+    return HttpResponseRedirect(reverse('list-pms'))
 
 @super_no_cache
 @login_required
@@ -407,7 +410,7 @@ def new_pm(request, rec_id=None):
     if request.method == 'POST':
         pm_form = forms.PMForm(request.POST, initial = initial)
         if pm_form.is_valid():
-            pm_form.save(thread_factory, post_factory,request.user)
+            pm_form.save(post_factory,request.user,Site.objects.get_current())
             return HttpResponseRedirect(reverse('list-pms'))
     else:
         pm_form = forms.PMForm(initial = initial)
