@@ -244,12 +244,13 @@ def mark_read(request):
         thread__in=[t.id for t in thread_list],
         user = request.user,
     ).select_related('thread__id', 'timestamp')
-    last_read = lr_list.values('thread__id', 'timestamp')
-    last_viewed = dict((lr['thread__id'], lr['timestamp']) for lr in last_read)
+    last_read = lr_list.values('thread__id', 'post')
+    last_viewed = dict((lr['thread__id'], lr['post']) for lr in last_read)
     for t in thread_list:
         if t.id in last_viewed and last_viewed[t.id] < t.last_post:
             lr = lr_list.get(thread__id=t.id)
             lr.timestamp = datetime.datetime.now()
+            lr.post = t.last_post
             lr.save()
         else:
             try:
@@ -257,8 +258,9 @@ def mark_read(request):
                     user = request.user,thread = t)
             except LastRead.DoesNotExist:
                 lr = LastRead(user = request.user,
-                    thread = t, read_count = 0)
-            lr.timestamp = datetime.datetime.now()
+                    thread = t,
+                    post = t.last_post,
+                    read_count = 0)
             lr.save()
     return HttpResponseRedirect("/")
 
