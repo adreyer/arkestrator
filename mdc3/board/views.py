@@ -44,13 +44,16 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
         form = forms.PostForm(request.POST, instance = post)
         if form.is_valid():
             form.save()
+            if thread.deleted_by:
+                thread.deleted_by=None
+                thread.save()
             request.posting_users.add_to_set(request.user.id)
             return HttpResponseRedirect("/")
     else:
         form = forms.PostForm()
 
-    queryset=thread.post_set.order_by("created_at").select_related(
-        'creator')
+    queryset=thread.post_set.exclude(deleted_by=reques.user).order_by(
+        "created_at").select_related('creator')
 
     try:
         lastread = LastRead.objects.get(
@@ -73,7 +76,6 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
         queryset = thread.default_post_list
 
     post_list = list(queryset)
-    #this is a hack to hide images
     try:
         if (not hide is False) and (hide or not request.user.get_profile().show_images):
             hide = True
@@ -157,11 +159,23 @@ def delete_thread(request,id=None):
             thread.creator == thread.recipient:
         thread.delete()
     else:
-        thread.locked = True
         thread.deleted_by = request.user
         thread.save()
 
     return HttpResponseRedirect(reverse('list-pms'))
+
+def delete_post(request, id=None):
+    post = get_object_or_404(Post,pk=id)
+    thread = get_object_or_404(Thread,pk=post.thread)
+
+    if not thread.is_private:
+        raise http404
+    if (post.delete_by and post.deleted_by != request.user) or \
+       thread.creator == thread.recipient:
+        thread.delete()
+    else:
+        post.delete_by = request.user
+    return httpResponseRedirect(reverse('view_pm', id))
 
 @super_no_cache
 @login_required
@@ -335,7 +349,8 @@ def list_pms(request):
         ).exclude(deleted_by = request.user
         ).filter(Q(creator=request.user)|Q(recipient=request.user)
         ).order_by("-last_post__id"
-        ).select_related("creator","recipient","last_post","last_post__creator")
+        ).select_related("creator","recipient","last_post",
+            "last_post__creator","last_post__body")
     
     paginator = Paginator(queryset, 25, allow_empty_first_page=True)
     page_obj = paginator.page(page)
@@ -362,7 +377,7 @@ def list_pms(request):
             ).filter(post__id__gte=t.last_post_id
             ).count())
 
-    return render_to_response("board/pm_list.html", {
+    return render_to_response("board/pm_list2.html", {
         'thread_list' : thread_list,
         'page_obj' : page_obj,
     }, context_instance = RequestContext(request))
@@ -392,7 +407,7 @@ def new_pm(request, rec_id=None):
     if request.method == 'POST':
         pm_form = forms.PMForm(request.POST, initial = initial)
         if pm_form.is_valid():
-            pm_form.save(thread_factory, post_factory)
+            pm_form.save(thread_factory, post_factory,request.user)
             return HttpResponseRedirect(reverse('list-pms'))
     else:
         pm_form = forms.PMForm(initial = initial)

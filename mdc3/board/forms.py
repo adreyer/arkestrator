@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django import forms
+from django.db.models import Q
 from bbcode.fields import BBCodeFormField
 from mdc3.board.models import Thread, Post, LastRead
 
@@ -51,12 +52,20 @@ class PMForm(forms.Form):
         self.cleaned_data['recipients_user'] = set(user_list)
         return self.cleaned_data
 
-    def save(self, thread_factory, post_factory):
+    def save(self, thread_factory, post_factory, poster):
         threads = []
         for user in self.cleaned_data['recipients_user']:
-            tf = ThreadForm(self.cleaned_data, 
-                instance = thread_factory(recipient = user))
-            thread = tf.save()
+            try:
+                thread = Thread.objects.get(Q(
+                    Q(creator=poster) & Q(recipient=user) |
+                    Q(creator=user) & Q(recipient=poster)))
+                if thread.delete_by:
+                    thread.deleted_by = None
+                    thread.save()
+            except Thread.DoesNotExist:                                   
+                tf = ThreadForm(self.cleaned_data, 
+                    instance = thread_factory(recipient = user))
+                thread = tf.save()
 
             pf = PostForm(self.cleaned_data, 
                 instance = post_factory(thread = thread))
