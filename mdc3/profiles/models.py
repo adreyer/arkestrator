@@ -52,6 +52,6 @@ class Profile(models.Model):
         from mdc3.board.models import LastRead
         lr = LastRead.objects.filter(user=self.user).order_by(
                 '-timestamp')
-        if lr == []:
-            return self.user.date_joined
-        return lr[0].timestamp
+        if lr:
+            return lr[0].timestamp
+        return self.user.date_joined
