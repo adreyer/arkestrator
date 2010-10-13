@@ -73,7 +73,7 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
 
     if not expand and not start and queryset.count() < 10:
         if not thread.is_private:
-            queryset = thread.default_post_list(request.user)
+            queryset = thread.default_post_list
         else:
             queryset = queryset=thread.post_set.exclude(
                 deleted_by=request.user).order_by(
