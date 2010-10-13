@@ -71,8 +71,8 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
             read_count = 0,
         )
 
-    if not expand and not start and queryset.count() < 10:
-        queryset = thread.default_post_list.exclude(deleted_by=request.user)
+    if not expand and not start and queryset.count() < 10 and not thread.is_private:
+        queryset = thread.default_post_list
     post_list = list(queryset)
     try:
         if (not hide is False) and (hide or not request.user.get_profile().show_images):
