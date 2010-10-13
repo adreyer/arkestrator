@@ -72,9 +72,7 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
         )
 
     if not expand and not start and queryset.count() < 10:
-        print 'really'
-        queryset = thread.default_post_list
-
+        queryset = thread.default_post_list.exclude(deleted_by=request.user)
     post_list = list(queryset)
     try:
         if (not hide is False) and (hide or not request.user.get_profile().show_images):
@@ -119,6 +117,12 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
         context_instance = RequestContext(request))
 
 @login_required
+def view_post(request, id):
+    post = get_object_or_404(Post, pk=id)
+    return view_thread(request, id=post.thread.id,start=id)
+    
+
+@login_required
 def new_thread(request):
     if request.method == 'POST':
         thread = Thread(
@@ -159,10 +163,12 @@ def delete_thread(request,id=None):
             thread.creator == thread.recipient:
         thread.delete()
     else:
+        other_user = thread.creator
+        if other_user == request.user:
+            other_user = thread.recipient
         thread.deleted_by = request.user
         thread.save()
-        Post.objects.filter(thread=thread).exclude(
-            deleted_by__isnull=True,deleted_by=request.user).delete()
+        Post.objects.filter(thread=thread,deleted_by=other_user).delete()
         Post.objects.filter(thread=thread).update(deleted_by=request.user)
 
     return HttpResponseRedirect(reverse('list-pms'))
