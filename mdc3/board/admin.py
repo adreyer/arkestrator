@@ -6,6 +6,9 @@ class PostInline(admin.StackedInline):
     model = Post
     extra = 1
 
+class PostAdmin(admin.ModelAdmin):
+    list_display = ('thread','body','created_at')
+    
 class ThreadAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['subject','creator','site','stuck']}),
@@ -13,5 +16,5 @@ class ThreadAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Thread,ThreadAdmin)
-admin.site.register(Post)
+admin.site.register(Post,PostAdmin)
 
