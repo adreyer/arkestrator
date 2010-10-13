@@ -85,7 +85,8 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
 
     lastread.timestamp = datetime.datetime.now()
     lastread.read_count += 1
-    lastread.post = post_list[-1]
+    if post_list:
+        lastread.post = post_list[-1]
     lastread.save()
     del thread.total_views
 
