@@ -182,7 +182,8 @@ def pm_thread(request, pm_id):
     return render_to_response("pms/show_thread.html",
             { 'pm_list' : queryset,
               'pm' : pm,
-              'form' : form, },
+              'form' : form,
+              'thread' : True, },
             context_instance = RequestContext(request))
     
         
