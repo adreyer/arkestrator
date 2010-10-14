@@ -127,7 +127,7 @@ def view_pm(request, pm_id):
                 instance=reply)
         if form.is_valid():
             new_pm = form.save(request.user)
-            new_pm.parent = pm
+            new_pm.parent = pm.parent
             new_pm.save()
             return HttpResponseRedirect("/pms/inbox")
     else:
@@ -173,7 +173,7 @@ def pm_thread(request, pm_id):
                 instance=reply)
         if form.is_valid():
             new_pm = form.save(request.user)
-            new_pm.parent = pm
+            new_pm.parent = pm.parent
             new_pm.save()
             return HttpResponseRedirect("/pms/inbox")
     else:
