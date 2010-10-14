@@ -264,8 +264,6 @@ def get_quote(request, id):
     post = get_object_or_404(Post, pk=id)
     user = get_object_or_404(User, pk=post.creator.id)
 
-    _check_thread_privacy(post.thread, request.user)
-
     return render_to_response("board/get_quote.html", {
             'post': post,
             'user': user,
@@ -275,7 +273,6 @@ def get_quote(request, id):
 @permission_required('board.can_lock','/')
 def lock_thread(request, id):
     thread = get_object_or_404(Thread,pk=id)
-    _check_thread_privacy(thread, request.user)
     thread.locked = True
     thread.save()
     return HttpResponseRedirect("/")
@@ -284,7 +281,6 @@ def lock_thread(request, id):
 @permission_required('board.can_lock','/')
 def unlock_thread(request, id):
     thread = get_object_or_404(Thread,pk=id)
-    _check_thread_privacy(thread, request.user)
     thread.locked = False
     thread.save()
     return HttpResponseRedirect("/")
