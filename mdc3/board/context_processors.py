@@ -16,7 +16,7 @@ def thread_count(request):
 
     count = cache.get(key, None)
     if count is None:
-        count = Thread.objects.filter(recipient__isnull=True).count()
+        count = Thread.objects.all().count()
         cache.set(key, count)
     
     return { 'thread_count': count }
@@ -25,48 +25,4 @@ def _invalidate_thread_count(sender, instance, signal, *args, **kwargs):
     cache.delete(_thread_count_key(Site.objects.get_current()))
 
 post_save.connect(_invalidate_thread_count, sender=Thread)
-
-def pm_count(request):
-    if request.user.is_authenticated():
-        cache_key = "pm-count:%d:%d"%(
-            Site.objects.get_current().id,
-            request.user.id,
-        )
-        pm_count = cache.get(cache_key, None)
-        if pm_count is None:
-            pm_count = LastRead.objects.exclude(thread__recipient__isnull=True
-                ).filter(thread__deleted_by__isnull = True
-                ).filter(user=request.user
-                ).filter(Q(thread__creator=request.user)|Q(
-                    thread__recipient=request.user)
-                ).filter(Q(post__isnull = True)|Q(
-                    post__id__lt=F('thread__last_post__id'))
-                ).count()
-            cache.set(cache_key, pm_count)
-        return { 'new_pms' : pm_count }
-    else:
-        return { 'new_pms' : 0 }
-
-def _invalidate_pm_count_on_read(sender, instance, signal, *args, **kwargs):
-    if instance.thread.is_private:
-        cache_key = "pm-count:%d:%d"%(
-            Site.objects.get_current().id,
-            instance.user.id,
-        )
-        cache.delete(cache_key)
-
-def _invalidate_pm_count_on_post(sender, instance, signal, *args, **kwargs):
-    if instance.is_private:
-        cache_keys = [
-            "pm-count:%d:%d"%(
-                Site.objects.get_current().id,
-                instance.creator.id),
-            "pm-count:%d:%d"%(
-                Site.objects.get_current().id,
-                instance.recipient.id),
-        ]
-        cache.delete_many(cache_keys)
-
-post_save.connect(_invalidate_pm_count_on_read, sender=LastRead)
-post_save.connect(_invalidate_pm_count_on_post, sender=Thread)
 

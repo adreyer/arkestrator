@@ -25,8 +25,6 @@ class Thread(models.Model):
     
     subject = models.CharField(max_length=160, blank=False)
     creator = models.ForeignKey(User,null=False,related_name='threads')
-    recipient = models.ForeignKey(User, null=True, blank=True,
-        related_name = 'pms_received')
     last_post = models.ForeignKey("board.Post", null=True, 
         related_name='last_post_on')
     stuck = models.BooleanField(default=False)
@@ -35,8 +33,6 @@ class Thread(models.Model):
     last_read = models.ManyToManyField(User,
         through = 'LastRead',
         related_name='last_read')
-    deleted_by = models.ForeignKey(User, null=True,
-        related_name = 'deleted_threads')
 
     objects = CurrentSiteManager()
     public_objects = PublicThreadManager()
@@ -67,16 +63,6 @@ class Thread(models.Model):
             return 0
         return total
 
-    @property
-    def is_private(self):
-        return self.recipient is not None
-
-    def can_view(self, user):
-        if not self.is_private:
-            return True
-        if self.creator == user or self.recipient == user:
-            return True
-        return False
 
 class Post(models.Model):
     thread = models.ForeignKey(Thread, null=False)
@@ -85,8 +71,6 @@ class Post(models.Model):
     created_at = models.DateTimeField('Created at',
         default = datetime.datetime.now, 
         db_index = True)
-    deleted_by = models.ForeignKey(User, null=True,
-        related_name = 'deleted_posts')
 
     def __unicode__(self):
         return "%s: %s"%(unicode(self.thread),self.body[:20])

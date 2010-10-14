@@ -31,9 +31,6 @@ def _check_thread_privacy(thread, user):
 @login_required
 def view_thread(request,id=None,start=False,expand=False,hide=None):
     thread = get_object_or_404(Thread,pk=id)
-
-    _check_thread_privacy(thread, request.user)
-
     if request.method == 'POST':
         if thread.locked:
             return HttpResponseRedirect("/")  
@@ -44,15 +41,12 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
         form = forms.PostForm(request.POST, instance = post)
         if form.is_valid():
             form.save()
-            if thread.deleted_by:
-                thread.deleted_by=None
-                thread.save()
             request.posting_users.add_to_set(request.user.id)
             return HttpResponseRedirect("/")
     else:
         form = forms.PostForm()
 
-    queryset=thread.post_set.exclude(deleted_by=request.user).order_by(
+    queryset=thread.post_set.order_by(
         "created_at").select_related('creator')
 
     try:
@@ -72,13 +66,10 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
         )
 
     if not expand and not start and queryset.count() < 10:
-        if not thread.is_private:
-            queryset = thread.default_post_list
-        else:
-            queryset = queryset=thread.post_set.exclude(
-                deleted_by=request.user).order_by(
-                "created_at").select_related('creator')
-            queryset = queryset[max(0,queryset.count()-10):]
+        queryset = thread.default_post_list
+        queryset = queryset=thread.post_set.order_by(
+            "created_at").select_related('creator')
+        queryset = queryset[max(0,queryset.count()-10):]
  
             
     post_list = list(queryset)
@@ -93,34 +84,22 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
 
     lastread.timestamp = datetime.datetime.now()
     lastread.read_count += 1
-    if post_list:
-        lastread.post = post_list[-1]
+    lastread.post = post_list[-1]
     lastread.save()
     del thread.total_views
 
     if len(post_list)< 10:
         expand = True
-        
-    if thread.is_private:
-        template = "board/pm_post_list.html"
-        if thread.creator == request.user:
-            other_user = thread.recipient
-        else:
-            other_user = thread.creator
-    else:
-        template = "board/post_list.html"
-        other_user = "There are no other users.  This thread is not private."
 
     if not start and post_list:
         start = post_list[0].id
 
-    return render_to_response(template, {
+    return render_to_response("board/post_list.html", {
         'object_list' : post_list,
         'thread' : thread,
         'form' : form,
         'expand': expand,
         'hide': hide,
-        'other_user': other_user,
         'start': start
         },
         context_instance = RequestContext(request))
@@ -159,41 +138,6 @@ def new_thread(request):
             'post_form' : post_form,
         }, context_instance = RequestContext(request))
 
-@login_required
-def delete_thread(request,id=None):
-    thread = get_object_or_404(Thread,pk=id)
-    
-    if not thread.is_private:
-        raise Http404
-
-    _check_thread_privacy(thread, request.user)
-
-    if (thread.deleted_by and thread.deleted_by != request.user) or \
-            thread.creator == thread.recipient:
-        thread.delete()
-    else:
-        other_user = thread.creator
-        if other_user == request.user:
-            other_user = thread.recipient
-        thread.deleted_by = request.user
-        thread.save()
-        Post.objects.filter(thread=thread,deleted_by=other_user).delete()
-        Post.objects.filter(thread=thread).update(deleted_by=request.user)
-
-    return HttpResponseRedirect(reverse('list-pms'))
-
-def delete_post(request, id=None):
-    post = get_object_or_404(Post,pk=id)
-    thread_id = post.thread.id
-    if not post.thread.is_private:
-        raise http404
-    if (post.deleted_by and post.deleted_by != request.user) or \
-       post.thread.creator == post.thread.recipient:
-        post.delete()
-    else:
-        post.deleted_by = request.user
-        post.save()
-    return HttpResponseRedirect(reverse('list-pms'))
 
 @super_no_cache
 @login_required
@@ -206,7 +150,7 @@ def list_threads(request):
     cache_key = "thread-list-page:%d:%d"%(Site.objects.get_current().id, page)
     page_obj = cache.get(cache_key, None)
     if page_obj is None:
-        queryset = Thread.public_objects.order_by("-stuck","-last_post__id"
+        queryset = Thread.objects.order_by("-stuck","-last_post__id"
             ).select_related("creator","last_post","last_post__creator")
         paginator = Paginator(queryset, 25, allow_empty_first_page=True)
         page_obj = paginator.page(page)
@@ -233,11 +177,8 @@ def list_threads(request):
 
 @super_no_cache
 @login_required
-@login_required
 def thread_history(request,id=None,expand=False):
     thread = get_object_or_404(Thread,pk=id)
-
-    _check_thread_privacy(thread, request.user)
 
     queryset = LastRead.objects.filter(thread = thread).order_by("-timestamp")
     queryset = queryset.select_related('user')
@@ -251,9 +192,6 @@ def thread_history(request,id=None,expand=False):
 @permission_required('board.can_sticky','/')
 def sticky(request,id):
     thread = get_object_or_404(Thread,pk=id)
-
-    _check_thread_privacy(thread, request.user)
-
     thread.stuck = True
     thread.save()
     return HttpResponseRedirect("/")
@@ -262,9 +200,6 @@ def sticky(request,id):
 @permission_required('board.can_sticky','/')
 def unsticky(request,id):
     thread = get_object_or_404(Thread,pk=id)
-
-    _check_thread_privacy(thread, request.user)
-
     thread.stuck = False
     thread.save()
     return HttpResponseRedirect("/")
@@ -299,7 +234,7 @@ def mark_read(request):
 @login_required
 def threads_by(request, id):
     poster = get_object_or_404(User,pk=id)
-    queryset = Thread.public_objects.filter(creator=id).order_by(
+    queryset = Thread.filter(creator=id).order_by(
         '-last_post').select_related('last_post', 'last_post__creator')
 
     return list_detail.object_list(
@@ -313,9 +248,8 @@ def threads_by(request, id):
 @login_required
 def posts_by(request, id):
     poster = get_object_or_404(User,pk=id)
-    queryset = Post.objects.filter(creator = poster,
-        thread__recipient__isnull = True,
-        ).order_by('-created_at').select_related('thread__subject')
+    queryset = Post.objects.filter(creator = poster).order_by(
+        '-created_at').select_related('thread__subject')
 
     return list_detail.object_list(
             request,
@@ -355,84 +289,3 @@ def unlock_thread(request, id):
     thread.save()
     return HttpResponseRedirect("/")
     
-@super_no_cache
-@login_required
-def list_pms(request):
-    try:
-        page = int(request.GET.get('page', 1))
-    except ValueError:
-        raise Http404
-    
-    queryset = Thread.objects.exclude(recipient__isnull=True
-        ).exclude(deleted_by = request.user
-        ).filter(Q(creator=request.user)|Q(recipient=request.user)
-        ).order_by("-last_post__id"
-        ).select_related("creator","recipient","last_post",
-            "last_post__creator","last_post__body")
-    
-    paginator = Paginator(queryset, 25, allow_empty_first_page=True)
-    page_obj = paginator.page(page)
-    thread_list = page_obj.object_list
-
-    last_read = LastRead.objects.filter(
-        thread__in=[t.id for t in thread_list],
-        user = request.user,
-    ).values('thread__id', 'post__id')
-    last_viewed = dict((lr['thread__id'], lr) for lr in last_read)
-    for t in thread_list:
-        if t.id in last_viewed:
-            t.unread = last_viewed[t.id]['post__id'] < t.last_post_id
-            t.last_post_read = last_viewed[t.id]['post__id']
-        else:
-            t.unread = True
-
-        if t.creator == request.user:
-            t.other_user = t.recipient
-        else:
-            t.other_user = t.creator
-
-        if len(t.last_post.body) > 160:
-            t.last_post.body = t.last_post.body[:160]
-        
-        t.other_has_read = bool(t.lastread_set.filter(user = t.other_user
-            ).filter(post__id__gte=t.last_post_id
-            ).count())
-
-    return render_to_response("board/pm_list2.html", {
-        'thread_list' : thread_list,
-        'page_obj' : page_obj,
-    }, context_instance = RequestContext(request))
-        
-@login_required
-def new_pm(request, rec_id=None):
-    def thread_factory(**kwargs):
-        kwargs.update({
-            'creator' : request.user,
-            'site' : Site.objects.get_current(),
-        })
-        return Thread(**kwargs)
-
-    def post_factory(**kwargs):
-        kwargs.update({
-            'creator' : request.user,
-        })
-        return Post(**kwargs)
-
-    initial = {}
-    if rec_id:
-        try:
-            initial['recipients']  = User.objects.get(pk = rec_id).username
-        except User.DoesNotExist:
-            pass
-
-    if request.method == 'POST':
-        pm_form = forms.PMForm(request.POST, initial = initial)
-        if pm_form.is_valid():
-            pm_form.save(post_factory,request.user,Site.objects.get_current())
-            return HttpResponseRedirect(reverse('list-pms'))
-    else:
-        pm_form = forms.PMForm(initial = initial)
-    return render_to_response("board/new_pm.html",{
-        'form' : pm_form,
-    }, context_instance = RequestContext(request))
-

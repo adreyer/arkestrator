@@ -45,7 +45,7 @@
     <div id="menu">
         <ul>
             <li class="menuitem"><a href="{% url list-threads %}">Index</a></li>
-            <li class="menuitem"><a href="{% url list-pms %}">
+            <li class="menuitem"><a href="{% url inbox %}">
                 {% if new_pms %}
                     <span class="urgent">Messages ({{ new_pms }})</span>
                 {% else %}Messages{% endif %}</a></li>
