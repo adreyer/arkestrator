@@ -151,15 +151,15 @@ def pm_thread(request, pm_id):
 
     
     pm_list = list(queryset)
-    if not Profile.objects.get(user=request.user).show_images:
-        for tpm in pm_list:
-            try:
-                recip = Recipient.objects.get(message=pm,
-                        recipient=request.user, read=False)
-                recip.read=True
-                recip.save()
-            except Recipient.DoesNotExist:
-                pass
+    for tpm in pm_list:
+        try:
+            recip = Recipient.objects.get(message=tpm,
+                    recipient=request.user, read=False)
+            recip.read=True
+            recip.save()
+        except Recipient.DoesNotExist:
+            pass
+        if not Profile.objects.get(user=request.user).show_images:
             tpm.body = tpm.body.replace('[img','(img)[url')
             tpm.body = tpm.body.replace('[/img]','[/url]')
         
