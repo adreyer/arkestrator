@@ -1,3 +1,4 @@
+from copy import copy
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.shortcuts import render_to_response,get_object_or_404
@@ -5,12 +6,13 @@ from django.http import HttpResponseRedirect, Http404
 from django.template import RequestContext
 from django.views.generic import list_detail
 from django.core.paginator import Paginator, InvalidPage
-from copy import copy
+from django.contrib.auth.models import User
+from django.db.models import Q
+
 
 
 from models import PM, Recipient
 from mdc3.profiles.models import Profile
-from django.contrib.auth.models import User
 import forms
 
 @login_required
@@ -18,7 +20,9 @@ def new_pm(request, rec_id=0):
     if request.method == 'POST':
         form =forms.NewPMForm(request.POST)
         if form.is_valid():
-            form.save(request.user)
+            pm = form.save(request.user)
+            pm.parent = pm
+            pm.save()
             return HttpResponseRedirect("/pms/inbox")
     else:
         rec=''
@@ -111,6 +115,7 @@ def view_pm(request, pm_id):
             pass
     
     reply = copy(pm)
+    reply.body = ''
 ##    reply.parent=pm
 ##    reply.body = reply.body.replace('[hidden]','')
 ##    reply.body = reply.body.replace('[/hidden]','')
@@ -149,6 +154,21 @@ def view_pm(request, pm_id):
               'rec_str' : rec_str,
               'form' : form },
             context_instance = RequestContext(request))
+
+def pm_thread(request, pm_id):
+    pm = get_object_or_404(PM,pk=pm_id)
+
+    
+    queryset = PM.objects.filter(parent=pm.parent).filter(Q(
+        Q(sender=request.user) | Q(
+        recipient__recipient=request.user))).order_by(
+        '-created_on')
+    print pm.parent
+    print queryset
+    return render_to_response("pms/show_thread.html",
+            { 'pm_list' : queryset, },
+            context_instance = RequestContext(request))
+    
         
 def del_pm(request, pm_id):
     pm = get_object_or_404(PM,pk=pm_id)
