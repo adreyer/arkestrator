@@ -111,22 +111,21 @@ def view_pm(request, pm_id):
             pass
     
     reply = copy(pm)
-    reply.parent=pm
-    reply.body = reply.body.replace('[hidden]','')
-    reply.body = reply.body.replace('[/hidden]','')
-    reply.body = """
-
-
-
-[hidden][quote]""" + reply.body + '[/quote][/hidden]'
-
-    #this is messy and slow and should be fixed
-    rec_list = Recipient.objects.filter(message=pm).select_related(
-            'recipient__username')
+##    reply.parent=pm
+##    reply.body = reply.body.replace('[hidden]','')
+##    reply.body = reply.body.replace('[/hidden]','')
+##    reply.body = """
+##
+##
+##
+##[hidden][quote]""" + reply.body + '[/quote][/hidden]'
+##
+##    rec_list = Recipient.objects.filter(message=pm).select_related(
+##            'recipient__username')
     reply_recs = pm.sender.username
-    for rec in rec_list:
-        if rec.recipient != request.user and rec.recipient != pm.sender:
-            reply_recs = reply_recs + ' ' + rec.recipient.username
+##    for rec in rec_list:
+##        if rec.recipient != request.user and rec.recipient != pm.sender:
+##            reply_recs = reply_recs + ' ' + rec.recipient.username
 
     #this is a hack to hide images
     if not Profile.objects.get(user=request.user).show_images:
