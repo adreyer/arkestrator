@@ -116,23 +116,8 @@ def view_pm(request, pm_id):
     
     reply = copy(pm)
     reply.body = ''
-##    reply.parent=pm
-##    reply.body = reply.body.replace('[hidden]','')
-##    reply.body = reply.body.replace('[/hidden]','')
-##    reply.body = """
-##
-##
-##
-##[hidden][quote]""" + reply.body + '[/quote][/hidden]'
-##
-##    rec_list = Recipient.objects.filter(message=pm).select_related(
-##            'recipient__username')
+    reply.parent = pm.parent
     reply_recs = pm.sender.username
-##    for rec in rec_list:
-##        if rec.recipient != request.user and rec.recipient != pm.sender:
-##            reply_recs = reply_recs + ' ' + rec.recipient.username
-
-    #this is a hack to hide images
     if not Profile.objects.get(user=request.user).show_images:
         pm.body = pm.body.replace('[img','(img)[url')
         pm.body = pm.body.replace('[/img]','[/url]')
@@ -162,11 +147,42 @@ def pm_thread(request, pm_id):
     queryset = PM.objects.filter(parent=pm.parent).filter(Q(
         Q(sender=request.user) | Q(
         recipient__recipient=request.user))).order_by(
-        '-created_on')
-    print pm.parent
-    print queryset
+        'created_on').select_related('body')
+
+    
+    pm_list = list(queryset)
+    if not Profile.objects.get(user=request.user).show_images:
+        for tpm in pm_list:
+            try:
+                recip = Recipient.objects.get(message=pm,
+                        recipient=request.user, read=False)
+                recip.read=True
+                recip.save()
+            except Recipient.DoesNotExist:
+                pass
+            tpm.body = tpm.body.replace('[img','(img)[url')
+            tpm.body = tpm.body.replace('[/img]','[/url]')
+        
+    reply = copy(pm)
+    reply.body = ''
+    reply.parent = pm.parent
+    reply_recs = pm.sender.username
+        
+    if request.method == 'POST':
+        form =forms.NewPMForm(request.POST,
+                instance=reply)
+        if form.is_valid():
+            new_pm = form.save(request.user)
+            new_pm.parent = pm
+            new_pm.save()
+            return HttpResponseRedirect("/pms/inbox")
+    else:
+        form =forms.NewPMForm(instance=reply,
+                initial={'recs' : reply_recs})
     return render_to_response("pms/show_thread.html",
-            { 'pm_list' : queryset, },
+            { 'pm_list' : queryset,
+              'pm' : pm,
+              'form' : form, },
             context_instance = RequestContext(request))
     
         

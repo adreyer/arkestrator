@@ -10,6 +10,9 @@
 
 {% block extrasubmenu %}
 <li class="submenuitem"><a href="{% url del-pm pm.id %}">Delete</a></li>
+{% if not thread %}
+    <li class="submenuitem"><a href="{% url pm-thread pm.id %}">Show Thread</a></li>
+{% endif %}
 {% endblock %}
 
 {% load bbcode %}
