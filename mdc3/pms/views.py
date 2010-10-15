@@ -61,6 +61,8 @@ def outbox(request):
             pm_rec_list.append(rec_list[0])
             rec_list = rec_list[1:]
         pm.rec_list = pm_rec_list
+        if pm.parent != pm:
+            pm.reply = 'Re: '
 
     return render_to_response('pms/outbox.html',
             { 'pm_rec_list' : pm_list,
@@ -82,6 +84,9 @@ def inbox(request):
     page_obj = paginator.page(page)
 
     pm_list = page_obj.object_list
+    for pm in pm_list:
+        if pm.message.parent != pm.message:
+            pm.reply = 'Re: '
     
     return render_to_response('pms/inbox.html',
             { 'pm_list' : pm_list,

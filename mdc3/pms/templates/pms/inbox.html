@@ -16,9 +16,9 @@
             <td>
                 <a href="{% url view-pm pm.message.pk %}">{% spaceless %}
                 {% if pm.read %}
-                    {{ pm.message.subject }}
+                    {{ pm.reply}}{{ pm.message.subject }}
                 {% else %}
-                    <strong>{{ pm.message.subject }}</strong>
+                    <strong>{{ pm.reply }}{{ pm.message.subject }}</strong>
                 {% endif %}
                 {% endspaceless %}</a></td>
             <td> {{ pm.message.created_on|date:"h:i a d-M-y" }}</td>
