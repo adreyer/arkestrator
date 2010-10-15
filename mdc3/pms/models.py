@@ -36,7 +36,8 @@ class PM(models.Model):
         reply_all = self.sender.username
         recips = Recipient.objects.filter(message=self).exclude(
             recipient=user).exclude(
-            recipient=self.sender)
+            recipient=self.sender).select_related(
+                'recipient__username')
         for recip in recips:
             reply_all = ' ' + recip.recipient.username
         return reply_all

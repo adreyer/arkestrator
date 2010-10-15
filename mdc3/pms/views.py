@@ -149,7 +149,8 @@ def pm_thread(request, pm_id):
     queryset = PM.objects.filter(parent=pm.parent).filter(Q(
         Q(sender=request.user) | Q(
         recipient__recipient=request.user))).order_by(
-        'created_on').select_related('body')
+        'created_on').select_related('body', 'subject',
+            'sender__username')
 
     
     pm_list = list(queryset)
