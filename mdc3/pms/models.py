@@ -39,7 +39,7 @@ class PM(models.Model):
             recipient=self.sender).select_related(
                 'recipient__username')
         for recip in recips:
-            reply_all = ' ' + recip.recipient.username
+            reply_all = reply_all + ' ' + recip.recipient.username
         return reply_all
 
 
