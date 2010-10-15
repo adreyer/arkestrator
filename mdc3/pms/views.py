@@ -117,8 +117,6 @@ def view_pm(request, pm_id):
     reply = copy(pm)
     reply.body = ''
     reply.parent = pm.parent
-    reply_recs = pm.sender.username
-
     if not Profile.objects.get(user=request.user).show_images:
         pm.body = pm.body.replace('[img','(img)[url')
         pm.body = pm.body.replace('[/img]','[/url]')
@@ -133,13 +131,14 @@ def view_pm(request, pm_id):
             return HttpResponseRedirect("/pms/inbox")
     else:
         form =forms.NewPMForm(instance=reply,
-                initial={'recs' : reply_recs})
+                initial={'recs' : pm.sender.username })
     rec_str = pm.get_rec_str()
     return render_to_response("pms/view_pm.html",
             { 'pm' : pm ,
               'rec_str' : rec_str,
               'form' : form ,
-              'reply_all' : pm.get_reply_all(request.user), },
+              'reply_all' : pm.get_reply_all(request.user),
+               'rec_str': rec_str},
             context_instance = RequestContext(request))
 
 def pm_thread(request, pm_id):

@@ -12,6 +12,7 @@
 {% load bbcode %}
 {% block content %}
     {% for pm in pm_list %}
+    <div class="post">
             {% if pm.sender == user %}
                 <div class="my_post">
             {% else %}
@@ -24,7 +25,7 @@
             <div class="body" id="post_{{ pm.id }}">
                 <p>{% bbcode pm.body %}</p>
             </div>
-        </div>
+    </div>
     {% endfor %}
 {% endblock %}
 {% block bottombezel %}
@@ -33,6 +34,5 @@
             <li class="submenuitem"><a href="{% url list-threads %}">Go back</a></li>
             <li class="submenuitem floatright"><a href="#pagetop">Jump to top</a></li>
         </ul>
-    </div>
 {% endblock %}
 

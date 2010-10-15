@@ -18,18 +18,40 @@
 {% load bbcode %}
 
 {% block content %}
-<div class="body">        
-<p><label class="submenulegend">From:</label> {{ pm.sender.username }}</p>
-<p><label class="submenulegend">To:</label> {{ rec_str }}</p>
-<div class="pmbody">{% bbcode pm.body %}</div>
+<div class="post">
+    {% if pm.sender == user %}
+        <div class="my_post">
+    {% else %}
+        <div class="row2">
+    {% endif %}
+        <span id="info_{{ pm.id}}"><strong><a href="{% url view-profile pm.sender.id %}">{{ pm.sender.username }}</a></strong> posted this on {{ pm.created_on|date:"D, d-M-Y \a\t h:i:s a"}} to {{ rec_str }}</span><br />
+         <strong>Subject: </strong>{{ pm.subject }}
+         </div>
+
+         <div class="body">
+                <p>{% bbcode pm.body %}</p>
+         </div>
 </div>
+{% endblock %}
+{% block bottombezel %}
+    <div id="bottombezel">
+        <ul>
+            <li class="submenuitem"><a href="javascript:;" onClick="fill_field('id_body','{{ pm.body }}',True)"> Quote</a></li>
+            <li class="submenuitem"><a href="javascript:;" onClick="getElementById('id_recs').value='{{ reply_all }}'">Reply All </a></li>
+        </ul>
+    </div>
 
 {% endblock %}
+
 {% block replyform %}
 
 <form method="post" action="{% url view-pm pm.pk %}">
 {% csrf_token %}
 <table class="replyform">
+    <tr>
+        
+         
+    </tr>
     <tr>
         <th nowrap="nowrap" class="legend">
         <label for="id_recs">Reply to:</label></td>
@@ -37,8 +59,7 @@
     </tr>
     <tr>
         <th />
-        <td><a href="javascript:;" onClick="getElementById('id_recs').value='{{ reply_all }}'">Reply All</a>
-            <span class="smallfont">Separate multiple user names with spaces.</span></td>
+        <td><span class="smallfont">Separate multiple user names with spaces.</span></td>
     </tr>
     <tr>
         <th nowrap="nowrap" class="legend"><label for="id_subject">Subject:</label></th>
