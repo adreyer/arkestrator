@@ -90,7 +90,7 @@ def approve_invite(request, id):
         inv.approved_by = request.user
         md = md5.new()
         md.update(str(time.time()))
-        inv.invite_code = md.digest()
+        inv.invite_code = str(md.hexdigest())
         invite_url = 'http://mdc3.mdc2.org/invites/' + inv.invite_code
         send_mail(subject='Welcome to MDC',
                 message="""
