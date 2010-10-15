@@ -25,7 +25,7 @@
     {% else %}
         <div class="row2">
     {% endif %}
-        <span id="info_{{ pm.id}}"><strong><a href="{% url view-profile pm.sender.id %}">{{ pm.sender.username }}</a></strong> posted this on {{ pm.created_on|date:"D, d-M-Y \a\t h:i:s a"}} to {{ rec_str }}</span><br />
+        <span id="info_{{ pm.id}}"><strong><a href="{% url view-profile pm.sender.id %}">{{ pm.sender.username }}</a></strong> posted this on {{ pm.created_at|date:"D, d-M-Y \a\t h:i:s a"}} to {{ rec_str }}</span><br />
          <strong>Subject: </strong>{{ pm.subject }}
          </div>
 

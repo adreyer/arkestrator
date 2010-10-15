@@ -16,8 +16,11 @@ class PM(models.Model):
     recipients = models.ManyToManyField(User,
             related_name='recieved_pms',
             through='Recipient')
-    created_on = models.DateTimeField(default=datetime.datetime.now)
-    parent = models.ForeignKey('self',null=True)
+    created_at = models.DateTimeField(default=datetime.datetime.now)
+    parent = models.ForeignKey('self',null=True,
+        related_name ='parent_of')
+    root_parent = models.ForeignKey('self',null=True,
+        related_name ='root_parent_of')
     deleted = models.BooleanField(default=False)
 
     def __str__(self):
