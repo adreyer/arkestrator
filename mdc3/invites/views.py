@@ -1,6 +1,6 @@
 import datetime
 import time
-import md5
+import hashlib
 
 from django.contrib.auth.models import User, Group
 from django.http import HttpResponseRedirect,  HttpResponse
@@ -88,9 +88,7 @@ def approve_invite(request, id):
             inv.rejected=False
         inv.approved_on = datetime.datetime.now()
         inv.approved_by = request.user
-        md = md5.new()
-        md.update(str(time.time()))
-        inv.invite_code = str(md.hexdigest())
+        inv.invite_code = hashlib.sha224(str(time.time())).hexdigest()
         invite_url = 'http://mdc3.mdc2.org/invites/' + inv.invite_code
         send_mail(subject='Welcome to MDC',
                 message="""
