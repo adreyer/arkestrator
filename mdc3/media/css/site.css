@@ -17,6 +17,10 @@ blockquote.quote {
     border-radius: 0.5em;
 }
 
+blockquote a {
+    font-style: italic;
+}
+
 th {
     text-align: right;
     font-weight: bold;

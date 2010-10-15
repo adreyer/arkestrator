@@ -13,17 +13,19 @@
 {% block extramenu %}
     <div id="submenu">
         <ul>
-            {% if not expand %}
-                {% if hide %}
-                <li class="submenuitem"><a href="{% url view-thread-full-hide thread.id start %}">Show all ({{ thread.total_posts }})</a></li>
+            {% if thread.total_posts > 10 %}
+                {% if not expand %}
+                    {% if hide %}
+                    <li class="submenuitem"><a href="{% url view-thread-full-hide thread.id start %}">Show all ({{ thread.total_posts }})</a></li>
+                    {% else %}
+                    <li class="submenuitem"><a href="{% url view-thread-full-start thread.id start %}">Show all ({{ thread.total_posts }})</a></li>
+                    {% endif %}
                 {% else %}
-                <li class="submenuitem"><a href="{% url view-thread-full-start thread.id start %}">Show all ({{ thread.total_posts }})</a></li>
-                {% endif %}
-            {% else %}
-                {% if hide %}
-                <li class="submenuitem"><a href="{% url view-thread-hide thread.id start %}">Collapse</a></li>
-                {% else %}
-                <li class="submenuitem"><a href="{% url view-thread-start thread.id start %}">Collapse</a></li>
+                    {% if hide %}
+                    <li class="submenuitem"><a href="{% url view-thread-hide thread.id start %}">Collapse</a></li>
+                    {% else %}
+                    <li class="submenuitem"><a href="{% url view-thread-start thread.id start %}">Collapse</a></li>
+                    {% endif %}
                 {% endif %}
             {% endif %}
             {% if hide %}
