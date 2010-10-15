@@ -46,7 +46,7 @@
 
 {% block replyform %}
 
-<form method="post" action="{% url view-pm pm.pk %}">
+<form method="post" action="{% url view-pm pm.pk %}" onSubmit="document.getElementById('postbutton').style.display='none';">
 {% csrf_token %}
 <table class="replyform">
     <tr>
@@ -72,7 +72,7 @@
     </tr>
     <tr>
         <th />
-        <td><input type="submit" value="Send" /></td>
+        <td><input type="submit" id="postbutton" value="Send" /></td>
     </tr>
 </table>
 </form>
