@@ -6,9 +6,10 @@ else { document.getElementById(d).style.display = "none"; }
 }
 
 
-function fill_field(fid,fill,ins){
-    alert('FUCKFUCKFUCKFUCK')
-    stuff = ''
-    if ins{stuff=getElementById(fid).value};
-    getElementById(fid).value = stuff + fill;
+function fill_field(field, newtext, append) {
+    var contents='';
+    if (append) {
+        var contents=document.getElementById(field).value
+    }
+    document.getElementById(field).value = contents + newtext;
 }

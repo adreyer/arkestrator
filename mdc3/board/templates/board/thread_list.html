@@ -23,11 +23,11 @@
             <td nowrap="nowrap"><a href="{% url view-profile thread.creator.id %}">{{ thread.creator.username }}</a></td>
             <td nowrap="nowrap" class="icons">{% if thread.locked %}<a href="{% url unlock-thread thread.id %}">&#10005;</a>{% endif %}{% if thread.stuck %}<a href="{% url unsticky thread.id %}">&#9733;</a>{% endif %}</td>
             <td class="wwwwwwww"><div class="wwwwwwww">{% if thread.unread %}
-                    <b><a href="{% url view-thread thread.id %}{% spaceless %}
+                    <a class="unread" href="{% url view-thread thread.id %}{% spaceless %}
                         {% if thread.last_post_read %}
                                 #{{ thread.last_post_read }}
                             {% endif %}{% endspaceless %}">
-                        {{ thread.subject }}</a></b>
+                        {{ thread.subject }}</a>
                 {% else %}
                     <a href="{% url view-thread thread.id %}{% spaceless %}
                         {% if thread.last_post_read %}
