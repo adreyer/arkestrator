@@ -149,7 +149,7 @@ def pm_thread(request, pm_id):
         Q(sender=request.user) | Q(
         recipient__recipient=request.user))).order_by(
         'created_on').select_related('body', 'subject',
-            'sender__username')
+            'sender__username').distinct()
 
     
     pm_list = list(queryset)
