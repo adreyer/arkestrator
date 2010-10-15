@@ -1,3 +1,7 @@
+import datetime
+import time
+import md5
+
 from django.contrib.auth.models import User, Group
 from django.http import HttpResponseRedirect,  HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
@@ -7,9 +11,6 @@ from django.contrib.sites.models import Site
 from django.core.mail import send_mail
 from django.views.generic import list_detail
 from django.core.cache import cache
-
-import datetime
-import time
 
 from mdc3.invites.models import Invite
 from mdc3.profiles.models import Profile
@@ -87,7 +88,9 @@ def approve_invite(request, id):
             inv.rejected=False
         inv.approved_on = datetime.datetime.now()
         inv.approved_by = request.user
-        inv.invite_code = str(abs(hash(time.time())))
+        md = md5.new()
+        md.update(str(time.time()))
+        inv.invite_code = md.digest()
         invite_url = 'http://mdc3.mdc2.org/invites/' + inv.invite_code
         send_mail(subject='Welcome to MDC',
                 message="""

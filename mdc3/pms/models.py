@@ -42,7 +42,13 @@ class PM(models.Model):
             reply_all = reply_all + ' ' + recip.recipient.username
         return reply_all
 
-
+    def check_privacy(self, user):
+        if self.sender==user:
+            return True
+        if Recipient.objects.filter(message=self,recipient=user):
+            return True
+        return False
+    
 class Recipient(models.Model):
     recipient = models.ForeignKey(User)
     message = models.ForeignKey(PM)

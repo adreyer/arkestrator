@@ -205,6 +205,8 @@ def del_pm(request, pm_id):
 @login_required
 def get_quote(request, id):
     pm = get_object_or_404(PM, pk=id)
+    if not pm.check_privacy(request.user):
+        return Http404
     user = pm.sender
 
     return render_to_response("pms/get_quote.html", {
