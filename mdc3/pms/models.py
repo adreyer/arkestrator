@@ -48,6 +48,7 @@ class PM(models.Model):
         if Recipient.objects.filter(message=self,recipient=user):
             return True
         return False
+
     
 class Recipient(models.Model):
     recipient = models.ForeignKey(User)
