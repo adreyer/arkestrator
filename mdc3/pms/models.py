@@ -31,7 +31,15 @@ class PM(models.Model):
         for rec in rec_list:
             rec_str += rec.recipient.username + ' '
         return rec_str
-        
+    
+    def get_reply_all(self, user):
+        reply_all = self.sender.username
+        recips = Recipient.objects.filter(message=self).exclude(
+            recipient=user).exclude(
+            recipient=self.sender)
+        for recip in recips:
+            reply_all = ' ' + recip.recipient.username
+        return reply_all
 
 
 class Recipient(models.Model):

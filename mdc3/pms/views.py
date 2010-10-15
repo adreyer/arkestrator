@@ -118,6 +118,7 @@ def view_pm(request, pm_id):
     reply.body = ''
     reply.parent = pm.parent
     reply_recs = pm.sender.username
+
     if not Profile.objects.get(user=request.user).show_images:
         pm.body = pm.body.replace('[img','(img)[url')
         pm.body = pm.body.replace('[/img]','[/url]')
@@ -137,7 +138,8 @@ def view_pm(request, pm_id):
     return render_to_response("pms/view_pm.html",
             { 'pm' : pm ,
               'rec_str' : rec_str,
-              'form' : form },
+              'form' : form ,
+              'reply_all' : pm.get_reply_all(request.user), },
             context_instance = RequestContext(request))
 
 def pm_thread(request, pm_id):
@@ -183,7 +185,8 @@ def pm_thread(request, pm_id):
             { 'pm_list' : queryset,
               'pm' : pm,
               'form' : form,
-              'thread' : True, },
+              'thread' : True,
+              'reply_all' : pm.get_reply_all(request.user), },
             context_instance = RequestContext(request))
     
         
