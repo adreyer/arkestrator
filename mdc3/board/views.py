@@ -152,7 +152,7 @@ def list_threads(request):
     if page_obj is None:
         queryset = Thread.objects.order_by("-stuck","-last_post__id"
             ).select_related("creator","last_post","last_post__creator")
-        paginator = Paginator(queryset, 25, allow_empty_first_page=True)
+        paginator = Paginator(queryset, 50, allow_empty_first_page=True)
         page_obj = paginator.page(page)
         cache.set(cache_key, page_obj)
 
