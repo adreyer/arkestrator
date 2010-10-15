@@ -11,10 +11,6 @@ from mdc3.decorators import instance_memcache
 
 import datetime
 
-class PublicThreadManager(CurrentSiteManager):
-    def get_query_set(self):
-        return super(PublicThreadManager, self).get_query_set().filter(
-            recipient__isnull = True)
 
 class Thread(models.Model):
     class Meta:
@@ -35,7 +31,6 @@ class Thread(models.Model):
         related_name='last_read')
 
     objects = CurrentSiteManager()
-    public_objects = PublicThreadManager()
 
     def __unicode__(self):
         return self.subject
