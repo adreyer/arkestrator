@@ -149,14 +149,20 @@ def pm_thread(request, pm_id):
         Q(sender=request.user) | Q(
         recipient__recipient=request.user))).order_by(
         'created_on').select_related('body', 'subject',
-            'sender__username').distinct()
+            'deleted','sender__username').distinct()
 
     
     pm_list = list(queryset)
-    for tpm in pm_list:
+    for i, tpm in enumerate(pm_list):
+        popped = False
+        if tpm.sender==request.user and tpm.deleted:
+            pm_list.pop(i)
+            popped=True
         try:
             recip = Recipient.objects.get(message=tpm,
                     recipient=request.user, read=False)
+            if not popped and recip.deleted:
+                pm_list.pop(i)
             recip.read=True
             recip.save()
         except Recipient.DoesNotExist:
