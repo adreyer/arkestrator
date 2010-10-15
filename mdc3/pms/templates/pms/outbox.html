@@ -21,7 +21,7 @@
                         <strong>{{ rec.recipient.username }}</strong>
                     {% endif %}
                 {% endfor %}</div></td>
-            <td><a href="{% url view-pm pm_rec.pk %}">{{ pm_rec.subject }}</a></td>
+            <td><a href="{% url view-pm pm_rec.pk %}">{{ pm_rec.reply }}{{ pm_rec.subject }}</a></td>
             <td nowrap="nowrap"> {{ pm_rec.created_on|date:"h:i a d-M-y" }}</td>
         </tr>
     {% endfor %}

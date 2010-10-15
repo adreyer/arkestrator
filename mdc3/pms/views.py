@@ -61,6 +61,8 @@ def outbox(request):
             pm_rec_list.append(rec_list[0])
             rec_list = rec_list[1:]
         pm.rec_list = pm_rec_list
+        if pm.parent != pm:
+            pm.reply = 'Re: '
 
     return render_to_response('pms/outbox.html',
             { 'pm_rec_list' : pm_list,
@@ -82,6 +84,9 @@ def inbox(request):
     page_obj = paginator.page(page)
 
     pm_list = page_obj.object_list
+    for pm in pm_list:
+        if pm.message.parent != pm.message:
+            pm.reply = 'Re: '
     
     return render_to_response('pms/inbox.html',
             { 'pm_list' : pm_list,
@@ -149,14 +154,20 @@ def pm_thread(request, pm_id):
         Q(sender=request.user) | Q(
         recipient__recipient=request.user))).order_by(
         'created_on').select_related('body', 'subject',
-            'sender__username')
+            'deleted','sender__username').distinct()
 
     
     pm_list = list(queryset)
-    for tpm in pm_list:
+    for i, tpm in enumerate(pm_list):
+        popped = False
+        if tpm.sender==request.user and tpm.deleted:
+            pm_list.pop(i)
+            popped=True
         try:
             recip = Recipient.objects.get(message=tpm,
                     recipient=request.user, read=False)
+            if not popped and recip.deleted:
+                pm_list.pop(i)
             recip.read=True
             recip.save()
         except Recipient.DoesNotExist:
@@ -205,6 +216,8 @@ def del_pm(request, pm_id):
 @login_required
 def get_quote(request, id):
     pm = get_object_or_404(PM, pk=id)
+    if not pm.check_privacy(request.user):
+        raise Http404
     user = pm.sender
 
     return render_to_response("pms/get_quote.html", {

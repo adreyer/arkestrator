@@ -24,9 +24,6 @@ import forms
 
 from mdc3.decorators import super_no_cache
 
-def _check_thread_privacy(thread, user):
-    if not thread.can_view(user):
-        raise Http404
 
 @login_required
 def view_thread(request,id=None,start=False,expand=False,hide=None):
@@ -152,7 +149,7 @@ def list_threads(request):
     if page_obj is None:
         queryset = Thread.objects.order_by("-stuck","-last_post__id"
             ).select_related("creator","last_post","last_post__creator")
-        paginator = Paginator(queryset, 25, allow_empty_first_page=True)
+        paginator = Paginator(queryset, 50, allow_empty_first_page=True)
         page_obj = paginator.page(page)
         cache.set(cache_key, page_obj)
 
@@ -206,7 +203,7 @@ def unsticky(request,id):
 
 @login_required
 def mark_read(request):
-    thread_list = Thread.public_objects.order_by("-stuck","-last_post")[0:50]
+    thread_list = Thread.objects.order_by("-stuck","-last_post")[0:50]
     lr_list = LastRead.objects.filter(
         thread__in=[t.id for t in thread_list],
         user = request.user,
