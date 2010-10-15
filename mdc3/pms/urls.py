@@ -10,4 +10,5 @@ urlpatterns = patterns('mdc3.pms',
     url(r"^(?P<pm_id>\d+)/$", 'views.view_pm',name='view-pm'),
     url(r"^(?P<pm_id>\d+)/show_thread/$", 'views.pm_thread',name='pm-thread'),
     url(r"^del/(?P<pm_id>\d+)/$", 'views.del_pm',name='del-pm'),
+    url(r"^quote/(?P<id>\d+)/$", 'views.get_quote', name='get-pm-quote'),
 )

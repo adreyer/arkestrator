@@ -201,3 +201,13 @@ def del_pm(request, pm_id):
         pm.delete()
         rec_list.delete()
     return HttpResponseRedirect("/pms/inbox")
+
+@login_required
+def get_quote(request, id):
+    pm = get_object_or_404(PM, pk=id)
+    user = pm.sender
+
+    return render_to_response("pms/get_quote.html", {
+            'pm': pm,
+            'user': user,
+    })

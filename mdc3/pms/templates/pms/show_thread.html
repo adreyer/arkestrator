@@ -2,7 +2,7 @@
 
 {% block extrahead %}
 <script type="text/javascript" language="JavaScript" src="{{ MEDIA_URL }}js/quote.js"></script>
-<title>{{ thread.subject}} - {{ site_name }}</title>
+<title>{{ PM.subject}} - {{ site_name }}</title>
 {% endblock %}
 
 {% block pagetitle %}
@@ -12,13 +12,14 @@
 {% load bbcode %}
 {% block content %}
     {% for pm in pm_list %}
+    <a name="PM{{ pm.id }}"></a>
     <div class="post">
             {% if pm.sender == user %}
                 <div class="my_post">
             {% else %}
                 <div class="row2">
             {% endif %}
-                <span id="info_{{ pm.id}}"><strong><a href="{% url view-profile pm.sender.id %}">{{ pm.sender.username }}</a></strong> posted this on {{ pm.created_on|date:"D, d-M-Y \a\t h:i:s a"}}</span><br />
+                <span id="info_{{ pm.id}}"><strong><a href="{% url view-profile pm.sender.id %}">{{ pm.sender.username }}</a></strong> posted this on {{ pm.created_on|date:"D, d-M-Y \a\t h:i:s a"}}</span><strong><a href="javascript:;" onclick="quote('{% url get-pm-quote pm.id %}')">#PM{{ pm.id }}</a></strong><br />
                 <strong>Subject:</strong>{{ pm.subject }}
                 </div>
 

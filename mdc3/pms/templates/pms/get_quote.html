@@ -1,0 +1,2 @@
+{% autoescape off %}[quote={{ user.username }} posted this on {{ pm.created_on|date:"D, d-M-Y \a\t h:m:s a" }}] [url=#PM{{ pm.id}}]#PM{{ pm.id }}[/url]
+{{ pm.body }}[/quote]{% endautoescape %}

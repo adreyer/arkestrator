@@ -2,6 +2,7 @@
 
 {% block extrahead %}
 <title>{{ pm.subject}} - {{ site_name }}</title>
+<script type="text/javascript" language="JavaScript" src="{{ MEDIA_URL }}js/quote.js"></script>
 {% endblock %}
 
 {% block pagetitle %}
@@ -36,7 +37,7 @@
 {% block bottombezel %}
     <div id="bottombezel">
         <ul>
-            <li class="submenuitem"><a href="javascript:;" onClick="fill_field('id_body', '{{ pm.body }}', true)"> Quote</a></li>
+            <li class="submenuitem"><a href="javascript:;" onclick="quote('{% url get-pm-quote pm.id %}')">Quote</a></li>
             <li class="submenuitem"><a href="javascript:;" onClick="getElementById('id_recs').value='{{ reply_all }}'">Reply All </a></li>
         </ul>
     </div>
