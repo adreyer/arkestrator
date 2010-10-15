@@ -138,9 +138,16 @@ def view_pm(request, pm_id):
         form =forms.NewPMForm(instance=reply,
                 initial={'recs' : pm.sender.username })
     rec_str = pm.get_rec_str()
+    parent = pm.parent
+    parent_rec_str = ''
+    if parent:
+        if parent.check_privacy(request.user):
+            parent_rec_str = parent.get_rec_str()
     return render_to_response("pms/view_pm.html",
             { 'pm' : pm ,
+              'parent' : parent,
               'rec_str' : rec_str,
+              'parent_rec_str' : parent_rec_str,
               'form' : form ,
               'reply_all' : pm.get_reply_all(request.user),
                'rec_str': rec_str},

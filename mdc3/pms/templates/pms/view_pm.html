@@ -19,6 +19,23 @@
 {% load bbcode %}
 
 {% block content %}
+{% if parent %}
+<div class="post">
+    {% if pm.sender == user %}
+        <div class="my_post">
+    {% else %}
+        <div class="row2">
+    {% endif %}
+        <span id="info_{{ parent.id}}"><strong><a href="{% url view-profile parent.sender.id %}">{{ parent.sender.username }}</a></strong> posted this on {{ parent.created_at|date:"D, d-M-Y \a\t h:i:s a"}} to {{ parent_rec_str }}</span><br />
+         <strong>Subject: </strong>{{ parent.subject }}
+         </div>
+
+         <div class="body">
+                <p>{% bbcode parent.body %}</p>
+         </div>
+
+</div>
+{% endif %}
 <div class="post">
     {% if pm.sender == user %}
         <div class="my_post">
