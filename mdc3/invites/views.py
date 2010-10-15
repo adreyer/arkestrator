@@ -88,7 +88,7 @@ def approve_invite(request, id):
             inv.rejected=False
         inv.approved_on = datetime.datetime.now()
         inv.approved_by = request.user
-        inv.invite_code = hashlib.sha224(str(time.time())).hexdigest()
+        inv.invite_code = hashlib.sha224(str(time.time())).hexdigest()[:16]
         invite_url = 'http://mdc3.mdc2.org/invites/' + inv.invite_code
         send_mail(subject='Welcome to MDC',
                 message="""
