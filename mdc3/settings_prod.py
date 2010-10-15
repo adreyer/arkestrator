@@ -1,1 +1,1 @@
-../../settings_prod.py
+../../../settings_prod.py
