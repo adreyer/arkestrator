@@ -291,3 +291,18 @@ div.notice {
     font-weight: bold;
 }
 
+.big {
+    font-size: large;
+}
+
+.huge {
+    font-size: xx-large;
+}
+
+.small {
+    font-size: small;
+}
+
+.tiny {
+    font-size: xx-small;
+}
