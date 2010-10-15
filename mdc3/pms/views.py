@@ -21,7 +21,7 @@ def new_pm(request, rec_id=0):
         form =forms.NewPMForm(request.POST)
         if form.is_valid():
             pm = form.save(request.user)
-            pm.parent = pm
+            pm.root_parent = pm
             pm.save()
             return HttpResponseRedirect("/pms/inbox")
     else:
@@ -45,7 +45,7 @@ def outbox(request):
         raise Http404
 
     queryset = PM.objects.filter(sender=request.user,
-                deleted=False).order_by('-created_on')
+                deleted=False).order_by('-created_at')
 
     paginator = Paginator(queryset, 25, allow_empty_first_page=True)
     page_obj = paginator.page(page)
@@ -53,7 +53,7 @@ def outbox(request):
     pm_list = page_obj.object_list
 
     rec_list = list(Recipient.objects.filter(message__in=pm_list).order_by(
-        '-message__created_on').select_related('recipient'))
+        '-message__created_at').select_related('recipient'))
 
     for pm in pm_list:
         pm_rec_list = []
@@ -61,7 +61,7 @@ def outbox(request):
             pm_rec_list.append(rec_list[0])
             rec_list = rec_list[1:]
         pm.rec_list = pm_rec_list
-        if pm.parent != pm:
+        if pm.root_parent != pm:
             pm.reply = 'Re: '
 
     return render_to_response('pms/outbox.html',
@@ -77,7 +77,7 @@ def inbox(request):
         raise Http404
 
     queryset = Recipient.objects.filter(recipient=request.user,
-        deleted=False).order_by("-message__created_on").select_related(
+        deleted=False).order_by("-message__created_at").select_related(
         'message', 'message__sender')
 
     paginator = Paginator(queryset, 25, allow_empty_first_page=True)
@@ -85,7 +85,7 @@ def inbox(request):
 
     pm_list = page_obj.object_list
     for pm in pm_list:
-        if pm.message.parent != pm.message:
+        if pm.message.root_parent != pm.message:
             pm.reply = 'Re: '
     
     return render_to_response('pms/inbox.html',
@@ -121,7 +121,6 @@ def view_pm(request, pm_id):
     
     reply = copy(pm)
     reply.body = ''
-    reply.parent = pm.parent
     if not Profile.objects.get(user=request.user).show_images:
         pm.body = pm.body.replace('[img','(img)[url')
         pm.body = pm.body.replace('[/img]','[/url]')
@@ -131,7 +130,8 @@ def view_pm(request, pm_id):
                 instance=reply)
         if form.is_valid():
             new_pm = form.save(request.user)
-            new_pm.parent = pm.parent
+            new_pm.root_parent = pm.root_parent
+            new_pm.parent = pm
             new_pm.save()
             return HttpResponseRedirect("/pms/inbox")
     else:
@@ -150,10 +150,10 @@ def pm_thread(request, pm_id):
     pm = get_object_or_404(PM,pk=pm_id)
 
     
-    queryset = PM.objects.filter(parent=pm.parent).filter(Q(
+    queryset = PM.objects.filter(root_parent=pm.root_parent).filter(Q(
         Q(sender=request.user) | Q(
         recipient__recipient=request.user))).order_by(
-        'created_on').select_related('body', 'subject',
+        'created_at').select_related('body', 'subject',
             'deleted','sender__username').distinct()
 
     
@@ -178,7 +178,7 @@ def pm_thread(request, pm_id):
         
     reply = copy(pm)
     reply.body = ''
-    reply.parent = pm.parent
+    reply.root_parent = pm.root_parent
     reply_recs = pm.sender.username
         
     if request.method == 'POST':
@@ -186,7 +186,7 @@ def pm_thread(request, pm_id):
                 instance=reply)
         if form.is_valid():
             new_pm = form.save(request.user)
-            new_pm.parent = pm.parent
+            new_pm.root_parent = pm.root_parent
             new_pm.save()
             return HttpResponseRedirect("/pms/inbox")
     else:

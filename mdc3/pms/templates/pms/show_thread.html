@@ -19,7 +19,7 @@
             {% else %}
                 <div class="row2">
             {% endif %}
-                <span id="info_{{ pm.id}}"><strong><a href="{% url view-profile pm.sender.id %}">{{ pm.sender.username }}</a></strong> posted this on {{ pm.created_on|date:"D, d-M-Y \a\t h:i:s a"}} to {{ pm.get_rec_str }}</span><strong><a href="javascript:;" onclick="quote('{% url get-pm-quote pm.id %}')">PM#{{ pm.id }}</a></strong><br />
+                <span id="info_{{ pm.id}}"><strong><a href="{% url view-profile pm.sender.id %}">{{ pm.sender.username }}</a></strong> posted this on {{ pm.created_at|date:"D, d-M-Y \a\t h:i:s a"}} to {{ pm.get_rec_str }}</span><strong><a href="javascript:;" onclick="quote('{% url get-pm-quote pm.id %}')">PM#{{ pm.id }}</a></strong><br />
                 <strong>Subject:</strong>{{ pm.subject }}
                 </div>
 
