@@ -143,6 +143,8 @@ def view_pm(request, pm_id):
     if parent:
         if parent.check_privacy(request.user):
             parent_rec_str = parent.get_rec_str()
+        else:
+            parent=None
     return render_to_response("pms/view_pm.html",
             { 'pm' : pm ,
               'parent' : parent,
