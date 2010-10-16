@@ -30,7 +30,7 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
     thread = get_object_or_404(Thread,pk=id)
     if request.method == 'POST':
         if thread.locked:
-            return HttpResponseRedirect("/")  
+            return HttpResponseRedirect(reverse('list-threads'))
         post = Post(
             thread = thread,
             creator = request.user
@@ -39,7 +39,7 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
         if form.is_valid():
             form.save()
             request.posting_users.add_to_set(request.user.id)
-            return HttpResponseRedirect("/")
+            return HttpResponseRedirect(reverse('list-threads'))
     else:
         form = forms.PostForm()
 
@@ -126,7 +126,7 @@ def new_thread(request):
             post_form = forms.PostForm(request.POST, instance = post)
             post_form.save()
             request.posting_users.add_to_set(request.user.id)
-            return HttpResponseRedirect("/")
+            return HttpResponseRedirect(reverse('list-threads'))
     else:
         thread_form = forms.ThreadForm()
         post_form = forms.PostForm()
@@ -186,20 +186,20 @@ def thread_history(request,id=None,expand=False):
     }, context_instance = RequestContext(request))
 
 @login_required
-@permission_required('board.can_sticky','/')
+@permission_required('board.can_sticky',reverse('list-threads'))
 def sticky(request,id):
     thread = get_object_or_404(Thread,pk=id)
     thread.stuck = True
     thread.save()
-    return HttpResponseRedirect("/")
+    return HttpResponseRedirect(reverse('list-threads'))
 
 @login_required
-@permission_required('board.can_sticky','/')
+@permission_required('board.can_sticky',reverse('list-threads'))
 def unsticky(request,id):
     thread = get_object_or_404(Thread,pk=id)
     thread.stuck = False
     thread.save()
-    return HttpResponseRedirect("/")
+    return HttpResponseRedirect(reverse('list-threads'))
 
 @login_required
 def mark_read(request):
@@ -226,7 +226,7 @@ def mark_read(request):
                     post = t.last_post,
                     read_count = 0)
             lr.save()
-    return HttpResponseRedirect("/")
+    return HttpResponseRedirect(reverse('list-threads'))
 
 @login_required
 def threads_by(request, id):
@@ -267,18 +267,18 @@ def get_quote(request, id):
     })
 
 @login_required
-@permission_required('board.can_lock','/')
+@permission_required('board.can_lock',reverse('list-threads'))
 def lock_thread(request, id):
     thread = get_object_or_404(Thread,pk=id)
     thread.locked = True
     thread.save()
-    return HttpResponseRedirect("/")
+    return HttpResponseRedirect(reverse('list-threads'))
 
 @login_required
-@permission_required('board.can_lock','/')
+@permission_required('board.can_lock',reverse('list-threads'))
 def unlock_thread(request, id):
     thread = get_object_or_404(Thread,pk=id)
     thread.locked = False
     thread.save()
-    return HttpResponseRedirect("/")
+    return HttpResponseRedirect(reverse('list-threads'))
     
