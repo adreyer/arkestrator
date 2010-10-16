@@ -1,4 +1,5 @@
 from copy import copy
+import re
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.shortcuts import render_to_response,get_object_or_404
@@ -122,9 +123,7 @@ def view_pm(request, pm_id):
     
     reply = copy(pm)
     reply.body = ''
-    if not Profile.objects.get(user=request.user).show_images:
-        pm.body = pm.body.replace('[img','(img)[url')
-        pm.body = pm.body.replace('[/img]','[/url]')
+    
         
     if request.method == 'POST':
         form =forms.NewPMForm(request.POST,
@@ -146,6 +145,14 @@ def view_pm(request, pm_id):
             parent_rec_str = parent.get_rec_str()
         else:
             parent=None
+    if not Profile.objects.get(user=request.user).show_images:
+        img_start = re.compile('\[img', re.IGNORECASE)
+        img_end = re.compile('\[/img\]', re.IGNORECASE)
+        pm.body = img_start.sub('(img)[url',pm.body)
+        pm.body = img_end.sub('[/url]',pm.body)
+        if parent:
+            parent.body = img_start.sub('(img)[url',parent.body)
+            parent.body = img_end.sub('[/url]',parent.body)
     return render_to_response("pms/view_pm.html",
             { 'pm' : pm ,
               'parent' : parent,
@@ -168,6 +175,8 @@ def pm_thread(request, pm_id):
 
     
     pm_list = list(queryset)
+    img_start = re.compile('\[img', re.IGNORECASE)
+    img_end = re.compile('\[/img\]', re.IGNORECASE)
     for i, tpm in enumerate(pm_list):
         popped = False
         if tpm.sender==request.user and tpm.deleted:
@@ -183,8 +192,8 @@ def pm_thread(request, pm_id):
         except Recipient.DoesNotExist:
             pass
         if not Profile.objects.get(user=request.user).show_images:
-            tpm.body = tpm.body.replace('[img','(img)[url')
-            tpm.body = tpm.body.replace('[/img]','[/url]')
+            tpm.body = img_start.sub('(img)[url',tpm.body)
+            tpm.body = img_end.sub('[/url]',tpm.body)
         
     reply = copy(pm)
     reply.body = ''
