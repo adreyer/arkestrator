@@ -234,7 +234,7 @@ def mark_read(request):
 @login_required
 def threads_by(request, id):
     poster = get_object_or_404(User,pk=id)
-    queryset = Thread.filter(creator=id).order_by(
+    queryset = Thread.objects.filter(creator=id).order_by(
         '-last_post').select_related('last_post', 'last_post__creator')
 
     return list_detail.object_list(
