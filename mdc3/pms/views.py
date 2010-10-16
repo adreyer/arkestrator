@@ -8,6 +8,7 @@ from django.views.generic import list_detail
 from django.core.paginator import Paginator, InvalidPage
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.core.urlresolvers import reverse
 
 
 
@@ -23,7 +24,7 @@ def new_pm(request, rec_id=0):
             pm = form.save(request.user)
             pm.root_parent = pm
             pm.save()
-            return HttpResponseRedirect("/pms/inbox")
+            return HttpResponseRedirect(reverse('inbox'))
     else:
         rec=''
         if rec_id:
@@ -133,7 +134,7 @@ def view_pm(request, pm_id):
             new_pm.root_parent = pm.root_parent
             new_pm.parent = pm
             new_pm.save()
-            return HttpResponseRedirect("/pms/inbox")
+            return HttpResponseRedirect(reverse('inbox'))
     else:
         form =forms.NewPMForm(instance=reply,
                 initial={'recs' : pm.sender.username })
@@ -197,7 +198,7 @@ def pm_thread(request, pm_id):
             new_pm = form.save(request.user)
             new_pm.root_parent = pm.root_parent
             new_pm.save()
-            return HttpResponseRedirect("/pms/inbox")
+            return HttpResponseRedirect(reverse('inbox'))
     else:
         form =forms.NewPMForm(instance=reply,
                 initial={'recs' : reply_recs})

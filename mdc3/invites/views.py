@@ -11,6 +11,7 @@ from django.contrib.sites.models import Site
 from django.core.mail import send_mail
 from django.views.generic import list_detail
 from django.core.cache import cache
+from django.core.urlresolvers import reverse
 
 from mdc3.invites.models import Invite
 from mdc3.profiles.models import Profile
@@ -24,7 +25,7 @@ def invite_list(request):
         if form.is_valid():
             form.save(request.user)
             cache.delete('inv_count')
-            return HttpResponseRedirect("/")
+            return HttpResponseRedirect(reverse('list-threads'))
     else:
         form = forms.NewInviteForm()
         queryset = Invite.objects.filter(rejected=False,
@@ -61,7 +62,7 @@ def register(request,code):
                 profile_form.save(user)
                 invite.used = True
                 invite.save()
-                return HttpResponseRedirect("/")
+                return HttpResponseRedirect(reverse('list-threads'))
     else:
         user_form = forms.UserRegistrationForm()
         profile_form = forms.ProfileRegistrationForm(
@@ -99,7 +100,7 @@ Welcome to MDC. Use the link below to create your account
                 fail_silently=False)
         cache.delete('inv_count')
         inv.save()
-    return HttpResponseRedirect("/invites/")
+    return HttpResponseRedirect(reverse('list-threads'))
 
 @login_required
 @permission_required('invites.can_approve','/')
@@ -111,4 +112,4 @@ def reject_invite(request, id):
         inv.approved_by = request.user
         cache.delete('inv_count')
         inv.save()
-    return HttpResponseRedirect("/invites/")
+    return HttpResponseRedirect(reverse("list-threads"))
