@@ -1,7 +1,7 @@
 # Django settings for mdc3 project.
 import os
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 BASE_DIR=os.path.dirname(os.path.abspath(__file__))

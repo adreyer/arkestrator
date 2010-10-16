@@ -2,6 +2,7 @@ import datetime
 import random
 import sys
 import string
+import re
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.sites.models import Site
@@ -74,8 +75,10 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
         if (not hide is False) and (hide or not request.user.get_profile().show_images):
             hide = True
             for post in post_list:
-                post.body = post.body.replace('[img','(img)[url')
-                post.body = post.body.replace('[/img]','[/url]')
+                img_start = re.compile('\[img', re.IGNORECASE)
+                img_end = re.compile('\[/img\]', re.IGNORECASE)
+                post.body = img_start.sub('(img)[url',post.body)
+                post.body = img_end.sub('[/url]',post.body)
     except ObjectDoesNotExist:
         pass
 
