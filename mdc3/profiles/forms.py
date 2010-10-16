@@ -9,10 +9,10 @@ class InfoUserForm(forms.ModelForm):
         fields = ('email')
 
 class InfoProfileForm(forms.ModelForm):
-    email_public = forms.CharField(label='Public email', widget=forms.TextInput(attrs={'size': 70, 'maxlength': 160}))
-    aim_name = forms.CharField(label='AIM', widget=forms.TextInput(attrs={'size': 70, 'maxlength': 160}))
-    gtalk_name = forms.CharField(label='Jabber', widget=forms.TextInput(attrs={'size': 70, 'maxlength': 160}))
-    photo_url = forms.CharField(label='Picture URL', widget=forms.TextInput(attrs={'size': 70, 'maxlength': 160}))
+    email_public = forms.CharField(label='Public email', widget=forms.TextInput(attrs={'size': 70, 'maxlength': 160}), required=False)
+    aim_name = forms.CharField(label='AIM', widget=forms.TextInput(attrs={'size': 70, 'maxlength': 160}), required=False)
+    gtalk_name = forms.CharField(label='Jabber', widget=forms.TextInput(attrs={'size': 70, 'maxlength': 160}), required=False)
+    photo_url = forms.CharField(label='Picture URL', widget=forms.TextInput(attrs={'size': 70, 'maxlength': 160}), required=False)
     class Meta:
         model = Profile
         fields = ('name', 'location', 'phone', 'email_public',
