@@ -186,7 +186,7 @@ def thread_history(request,id=None,expand=False):
     }, context_instance = RequestContext(request))
 
 @login_required
-@permission_required('board.can_sticky',reverse('list-threads'))
+@permission_required('board.can_sticky')
 def sticky(request,id):
     thread = get_object_or_404(Thread,pk=id)
     thread.stuck = True
@@ -194,7 +194,7 @@ def sticky(request,id):
     return HttpResponseRedirect(reverse('list-threads'))
 
 @login_required
-@permission_required('board.can_sticky',reverse('list-threads'))
+@permission_required('board.can_sticky')
 def unsticky(request,id):
     thread = get_object_or_404(Thread,pk=id)
     thread.stuck = False
@@ -267,7 +267,7 @@ def get_quote(request, id):
     })
 
 @login_required
-@permission_required('board.can_lock',reverse('list-threads'))
+@permission_required('board.can_lock')
 def lock_thread(request, id):
     thread = get_object_or_404(Thread,pk=id)
     thread.locked = True
@@ -275,7 +275,7 @@ def lock_thread(request, id):
     return HttpResponseRedirect(reverse('list-threads'))
 
 @login_required
-@permission_required('board.can_lock',reverse('list-threads'))
+@permission_required('board.can_lock')
 def unlock_thread(request, id):
     thread = get_object_or_404(Thread,pk=id)
     thread.locked = False
