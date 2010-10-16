@@ -1,6 +1,7 @@
 import datetime
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from mdc3.invites.models import Invite
 
 
@@ -37,7 +38,7 @@ class Profile(models.Model):
     
     
     def get_absolute_url(self):
-        return "/profiles/%i/" % self.user.id
+        return reverse('view-profile', args[self.user.id])
     
     def __str__(self):
         return self.user.username
