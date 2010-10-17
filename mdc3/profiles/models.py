@@ -38,7 +38,7 @@ class Profile(models.Model):
     
     
     def get_absolute_url(self):
-        return reverse('view-profile', args[self.user.id])
+        return reverse('view-profile', kwargs={'user_id' : self.user.id})
     
     def __str__(self):
         return self.user.username
