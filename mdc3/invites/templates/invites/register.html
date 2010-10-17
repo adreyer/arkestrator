@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% block header %}
+<h1>{{ site_name }}</h1>
+<div id="submenu"></div>
 {% endblock %}
 {% block content %}
     <form method="post" action="{% url register code %}">

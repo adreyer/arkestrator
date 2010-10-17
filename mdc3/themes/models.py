@@ -22,10 +22,10 @@ class Theme(models.Model):
     name = models.CharField(max_length=32, blank=True)
 
     background = models.CharField(max_length=6, default="eeeeee")
-    row1 = models.CharField(max_length=6, default="e0e4e8")
-    row2 = models.CharField(max_length=6, default="d0d4d8")
+    row1 = models.CharField(max_length=6, default="dae1e8")
+    row2 = models.CharField(max_length=6, default="c9d0d8")
     form_background = models.CharField(max_length=6, default="ffffff")
-    my_posts = models.CharField(max_length=6, default="e8e4e0")
+    my_posts = models.CharField(max_length=6, default="e8e1da")
     font_face = models.CharField(max_length=64, default="sans-serif")
     font_size = models.IntegerField(default=95)
 

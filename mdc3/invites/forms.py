@@ -26,28 +26,23 @@ class UserRegistrationForm(forms.ModelForm):
         fields = ('username', 'email')
     
     pass1 = forms.CharField(required=True,
-            label="password",
+            label="Password",
             widget=forms.PasswordInput)
     pass2 = forms.CharField(required=True,
-            label="retype password",
+            label="Password (confirm)",
             widget=forms.PasswordInput)
 
     #don't allow whitespace in usernames
     def clean_username(self):
         if re.search(r'\s', self.cleaned_data['username']):
             raise forms.ValidationError(
-                    "no whitespace if usernames, perhaps you'd like to use an _")
+                    "No whitespace is allowed in usernames. Perhaps you'd like to use an _")
         return self.cleaned_data['username']
 
     def clean(self):
         if self.cleaned_data["pass1"] != self.cleaned_data["pass2"]:
-            raise forms.ValidationError("passwords don't match")
+            raise forms.ValidationError("Passwords don't match.")
         return self.cleaned_data
-        
-        
-            
-            
-        
 
 class ProfileRegistrationForm(forms.ModelForm):
     class Meta:
