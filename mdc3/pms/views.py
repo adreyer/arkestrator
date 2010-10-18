@@ -221,13 +221,16 @@ def pm_thread(request, pm_id):
     
         
 def del_pm(request, pm_id):
-##    pm = get_object_or_404(PM,pk=pm_id)
-##    if pm.sender == request.user:
-##        pm.deleted = True
-##        pm.save()
-##    rec_list = Recipient.objects.filter(message=pm)
-##    rec_list.filter(recipient=request.user).update(deleted=True)
-##    if pm.deleted and not rec_list.filter(deleted=False):
+    pm = get_object_or_404(PM,pk=pm_id)
+    if pm.sender == request.user:
+        pm.deleted = True
+        pm.save()
+    rec_list = Recipient.objects.filter(message=pm)
+    rec_list.filter(recipient=request.user).update(deleted=True)
+    if pm.deleted and not rec_list.filter(deleted=False):
+        pm.body = ''
+        pm.subject = 'deleted'
+        pm.save()
 ##        pm.delete()
 ##        rec_list.delete()
     return HttpResponseRedirect("/pms/inbox")
