@@ -19,19 +19,17 @@ class RandomWordFilter(SelfClosingTagNode):
             return self.orig
 
 
-class Hour(RandomWordFilter):
+class Hour(WordFilter):
     open_pattern = re.compile('hour',re.IGNORECASE)
     word='dopesmoker'
-    orig='hour'
-    prob=.25
 
-class Upgrade(RandomWordFilter):
+class Upgrade(WordFilter):
     open_pattern = re.compile('upgrade',re.IGNORECASE)
     word='UPGRAYEDD'
-    orig='upgrade'
-    prob=.25
-    
+
+
 register(Upgrade)
 register(Hour)
+
 
 
