@@ -110,6 +110,7 @@ INSTALLED_APPS = (
     'mdc3.invites',
     'mdc3.pms',
     'mdc3.util',
+    'mdc3.shenanigans',
     'bbcode',
 )
 
