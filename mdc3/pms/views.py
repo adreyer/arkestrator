@@ -233,7 +233,7 @@ def del_pm(request, pm_id):
         pm.save()
 ##        pm.delete()
 ##        rec_list.delete()
-    return HttpResponseRedirect("/pms/inbox")
+    return HttpResponseRedirect(reverse('inbox'))
 
 @login_required
 def get_quote(request, id):
