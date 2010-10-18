@@ -141,7 +141,7 @@ def view_pm(request, pm_id):
     parent = pm.parent
     parent_rec_str = ''
     if parent:
-        if parent.check_privacy(request.user):
+        if parent.check_privacy(request.user) and parent.not_deleted(request.user):
             parent_rec_str = parent.get_rec_str()
         else:
             parent=None
