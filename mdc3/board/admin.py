@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from models import Thread, Post
+from models import Thread, Post, LastRead
 
 class PostInline(admin.StackedInline):
     model = Post
@@ -14,7 +14,10 @@ class ThreadAdmin(admin.ModelAdmin):
         (None, {'fields': ['subject','creator','site','stuck']}),
     ]
 
+class LastReadAdmin(admin.ModelAdmin):  
+    list_display = ('user','thread','timestamp')
 
 admin.site.register(Thread,ThreadAdmin)
 admin.site.register(Post,PostAdmin)
+admin.site.register(LastRead,LastReadAdmin)
 
