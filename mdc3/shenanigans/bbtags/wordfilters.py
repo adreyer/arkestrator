@@ -31,18 +31,7 @@ class Upgrade(RandomWordFilter):
     orig='upgrade'
     prob=.25
     
-class Fuck(WordFilter):
-    open_pattern = re.compile('fuck',re.IGNORECASE)
-    word='fudge'
-
-class Shit(WordFilter):
-    open_pattern = re.compile('shit',re.IGNORECASE)
-    word = 'shoot'
-
-
 register(Upgrade)
 register(Hour)
-register(Shit)
-register(Fuck)
 
 
