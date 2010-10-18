@@ -116,3 +116,4 @@ INSTALLED_APPS = (
 BBCODE_DEFAULT_NAMESPACES = ('no-smilies','no-colors')
 
 AUTH_PROFILE_MODULE = 'profiles.Profile'
+LOGIN_REDIRECT_URL = '/'
