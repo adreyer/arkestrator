@@ -45,6 +45,11 @@ def graceful_servers():
     sudo("/etc/init.d/julep graceful",shell=False)
     sudo("/etc/init.d/apache2 reload",shell=False)
 
+def set_permissions():
+    "Set permissions on the installation directory."
+    run("/bin/chgrp -R www-data %(current_symlink)s/"%env,shell=False)
+    run("/usr/bin/find %(current_symlink)s/ -type d -exec chmod g+w {} \;"%env)
+
 def deploy():
     "Deploy the code and gracefully restart the web servers"
 
@@ -62,6 +67,7 @@ def deploy():
     run("ln -fsT %(release_dir)s %(current_symlink)s"%env)
 
     cleanup()
+    set_permissions()
     graceful_servers()
 
 def rollback():
