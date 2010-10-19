@@ -52,6 +52,17 @@ class PM(models.Model):
             return True
         return False
 
+    def not_deleted(self, user):
+        if self.sender == user:
+            if self.deleted:
+                return False
+            else:
+                return True
+        if Recipient.objects.filter(message=self,
+            recipient=user,deleted=False):
+            return True
+        return False
+
     
 class Recipient(models.Model):
     recipient = models.ForeignKey(User)

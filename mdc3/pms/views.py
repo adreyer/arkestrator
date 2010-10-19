@@ -49,7 +49,7 @@ def outbox(request):
     queryset = PM.objects.filter(sender=request.user,
                 deleted=False).order_by('-created_at')
 
-    paginator = Paginator(queryset, 25, allow_empty_first_page=True)
+    paginator = Paginator(queryset, 50, allow_empty_first_page=True)
     page_obj = paginator.page(page)
 
     pm_list = page_obj.object_list
@@ -82,7 +82,7 @@ def inbox(request):
         deleted=False).order_by("-message__created_at").select_related(
         'message', 'message__sender')
 
-    paginator = Paginator(queryset, 25, allow_empty_first_page=True)
+    paginator = Paginator(queryset, 50, allow_empty_first_page=True)
     page_obj = paginator.page(page)
 
     pm_list = page_obj.object_list
@@ -141,7 +141,7 @@ def view_pm(request, pm_id):
     parent = pm.parent
     parent_rec_str = ''
     if parent:
-        if parent.check_privacy(request.user):
+        if parent.check_privacy(request.user) and parent.not_deleted(request.user):
             parent_rec_str = parent.get_rec_str()
         else:
             parent=None
@@ -228,9 +228,12 @@ def del_pm(request, pm_id):
     rec_list = Recipient.objects.filter(message=pm)
     rec_list.filter(recipient=request.user).update(deleted=True)
     if pm.deleted and not rec_list.filter(deleted=False):
-        pm.delete()
-        rec_list.delete()
-    return HttpResponseRedirect("/pms/inbox")
+        pm.body = ''
+        pm.subject = 'deleted'
+        pm.save()
+##        pm.delete()
+##        rec_list.delete()
+    return HttpResponseRedirect(reverse('inbox'))
 
 @login_required
 def get_quote(request, id):

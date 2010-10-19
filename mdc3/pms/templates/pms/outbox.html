@@ -30,16 +30,8 @@
 
 {% block bottombezel %}
 <div id="bottombezel">
-    <ul>
-            <li class="submenulegend">Page:</li>
-    {% for p in page_obj.paginator.page_range %}
-        {% if p == page_obj.number %}
-            <li class="submenuitem"><strong>{{ p }}</strong></li>
-        {% else %}
-            <li class="submenuitem"><a href="?page={{ p }}">{{ p }}</a></li>
-        {% endif %}
-    {% endfor %}
-    </ul>
+    {% load pagemenu %}
+    {% pagemenu page_obj %} 
 </div>
 {% endblock %}
 
