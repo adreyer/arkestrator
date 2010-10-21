@@ -27,9 +27,13 @@ class Upgrade(WordFilter):
     open_pattern = re.compile('upgrade',re.IGNORECASE)
     word='UPGRAYEDD'
 
+class Mee(WordFilter):
+    open_pattern = re.compile(' mee ',re.IGNORECASE)
+    word=' me '
 
 register(Upgrade)
 register(Hour)
+register(Mee)
 
 
 
