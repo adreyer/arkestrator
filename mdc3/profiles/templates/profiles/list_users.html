@@ -16,6 +16,7 @@
             <td>joined {{ user.date_joined|date:"d-M-y" }}</td>
             <td><a href="{% url threads-by user.id %}">{{ user.get_profile.total_threads }} threads</a></td>
             <td><a href="{% url posts-by user.id %}">{{ user.get_profile.total_posts }} posts</a></td>
+            <td>{% if user.theme %}<a href="{% url edit-existing-theme user.theme.id %}">theme</a></td>{% endif %}
 
         </tr>
     {% endfor %}
