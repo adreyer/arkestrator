@@ -28,7 +28,7 @@ class Upgrade(WordFilter):
     word='UPGRAYEDD'
 
 class Mee(WordFilter):
-    open_pattern = re.compile(' mee ',re.IGNORECASE)
+    open_pattern = re.compile('(^|\s)mee+(\s|$)',re.IGNORECASE)
     word=' me '
 
 register(Upgrade)
