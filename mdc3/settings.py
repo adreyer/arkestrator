@@ -114,7 +114,7 @@ INSTALLED_APPS = (
     'bbcode',
 )
 
-BBCODE_DEFAULT_NAMESPACES = ('no-smilies','no-colors','no-brainfuck')
+BBCODE_DEFAULT_NAMESPACES = ('no-smilies','no-colors')
 
 AUTH_PROFILE_MODULE = 'profiles.Profile'
 LOGIN_REDIRECT_URL = '/'

@@ -97,6 +97,22 @@
         <input class="button" type="submit" id="postbutton" value="Say it" />
         </p>
     </form>
+
+    <p><input type="button" onclick="toggle('bbcode_cheat');" value="BBCode Cheat" /></p>
+    <div style="display:none" id="bbcode_cheat"><p>
+    [url]http://www.google.com/[/url]<br />
+    [url=http://www.google.com/]with my own link text[/url]<br />
+    [img]http://www.google.com/intl/en_ALL/images/logo.gif[/img]<br />
+    [u]underline[/u]<br />
+    [strong]bold[/strong]<br />
+    [b]bold[/b]<br />
+    [i]italic[/i]<br />
+    [strike]strikethrough[/strike]<br />
+    [code]like pre[/code]<br />
+    [youtube]http://www.youtube.com/watch?v=WAwLYJYsa0A[/youtube]<br />
+    [quote]quote[/quote]<br />
+    [hidden]hidden stuff[/hidden]<br /></p>
+    </div>
 {% else %}
 {% block locknotice %}
     <div class="notice">This thread is locked. No more replies may be added.</div>
