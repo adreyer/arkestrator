@@ -56,8 +56,14 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
             if start:
                 queryset = queryset.filter(pk__gte=start)
             else:
-                tstart = queryset.filter(
-                    created_at__lte=lastread.timestamp).reverse()[3].id
+                tset = queryset.filter(
+                    created_at__lte=lastread.timestamp).reverse()
+                count=tset.count()
+                if count>5:
+                    count=4
+                else:
+                    count -= count
+                tstart = tset[count].id
                 queryset = queryset.filter(pk__gte=tstart)
     except LastRead.DoesNotExist:
         lastread = LastRead(user = request.user,
