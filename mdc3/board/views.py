@@ -53,18 +53,17 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
             thread = thread
         )
         if not expand:
+            coll_size = request.user.get_profile().collapse_size
             if start:
-                queryset = queryset.filter(pk__gte=start)
+                tset = queryset.filter(pk__lte=start).reverse()
             else:
                 tset = queryset.filter(
                     created_at__lte=lastread.timestamp).reverse()
-                count=tset.count()
-                if count>5:
-                    count=4
-                else:
-                    count -= count
-                tstart = tset[count].id
+            if tset.count() >coll_size:
+                tstart = tset[coll_size].id
                 queryset = queryset.filter(pk__gte=tstart)
+            else:
+                expand = True
     except LastRead.DoesNotExist:
         lastread = LastRead(user = request.user,
             thread = thread,
