@@ -18,7 +18,7 @@
     {% for post in object_list %}
         <div class="post">
         <div class="row2">
-            <strong>Subject: </strong><a href="{% url view-thread post.thread.id %}#info_{{ post.id }}">{{ post.thread.subject }}</a><br/>
+            <strong>Subject: </strong><a href="{% url view-post post.id %}#{{ post.id }}">{{ post.thread.subject }}</a><br/>
             <strong>Posted:</strong>
                 {{ post.created_at|date:"D, d-M-Y \a\t h:m a"}}
             </div>
