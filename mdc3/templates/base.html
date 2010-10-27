@@ -59,7 +59,7 @@
                  {% else %}Invite{% endif %}</a></li>
              
             {% if user.is_staff %}
-            <li class="menuitem"><a href="/admin/">Admin</a></li>
+            <li class="menuitem"><a href="{% url admin:index %}">Admin</a></li>
             {% endif %}
             <li class="menuitem"><strong><a href="http://trac.mdc2.org/mdc3/">Report bugs</a></strong></li>
         </ul>
