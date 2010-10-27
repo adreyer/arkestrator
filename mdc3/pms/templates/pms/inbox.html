@@ -12,7 +12,7 @@
     <table class="thread_list"> 
     {% for pm in pm_list %}
             <tr class="{% cycle "row1" "row2" %}">
-            <td> {{ pm.message.sender.username }}</td>
+            <td><a href="{% url view-profile pm.message.sender.id %}">{{ pm.message.sender.username }}</a></td>
             <td>
                 <a href="{% url view-pm pm.message.pk %}">{% spaceless %}
                 {% if pm.read %}

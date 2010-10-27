@@ -15,11 +15,13 @@
         <tr class="{% cycle "row1" "row2" %}">
             <td class="pmrecipients"><div class="recipientlist">
                 {% for rec in pm_rec.rec_list %}
+                    <a href="{% url view-profile rec.recipient.id %}">
                     {% if rec.read %}
                         {{ rec.recipient.username }}
                     {% else %}
                         <strong>{{ rec.recipient.username }}</strong>
                     {% endif %}
+                    </a>
                 {% endfor %}</div></td>
             <td><a href="{% url view-pm pm_rec.pk %}">{{ pm_rec.reply }}{{ pm_rec.subject }}</a></td>
             <td nowrap="nowrap"> {{ pm_rec.created_at|date:"h:i a d-M-y" }}</td>
