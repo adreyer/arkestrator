@@ -47,8 +47,8 @@ def graceful_servers():
 
 def set_permissions():
     "Set permissions on the installation directory."
-    sudo("/bin/chgrp -R www-data %(current_symlink)s/"%env,shell=False)
-    sudo("/usr/bin/find %(current_symlink)s/ -type d -exec chmod g+w {} \;"%env)
+    run("sudo /bin/chgrp -R www-data %(current_symlink)s/"%env,shell=False)
+    run("sudo /usr/bin/find %(current_symlink)s/ -type d -exec chmod g+w {} \;"%env)
 
 def deploy():
     "Deploy the code and gracefully restart the web servers"
