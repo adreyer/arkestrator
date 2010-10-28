@@ -111,6 +111,7 @@ INSTALLED_APPS = (
     'mdc3.pms',
     'mdc3.util',
     'mdc3.shenanigans',
+    'mdc3.events',
     'bbcode',
 )
 

@@ -20,6 +20,7 @@ from django.core.paginator import Paginator, InvalidPage
 from django.contrib.auth.models import User
 
 from mdc3.profiles.models import Profile
+from mdc3.events.models import Event
 from models import Thread, Post, LastRead
 import forms
 
@@ -101,6 +102,22 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
     if not start and post_list:
         start = post_list[0].id
 
+
+    try:
+        event = Event.objects.get(thread=thread)
+        return render_to_response("events/view_event.html", {
+        'object_list' : post_list,
+        'thread' : thread,
+        'form' : form,
+        'expand': expand,
+        'hide': hide,
+        'start': start,
+        'event' : event,
+        },
+        context_instance = RequestContext(request))
+    except Event.DoesNotExist:
+        pass
+    
     return render_to_response("board/post_list.html", {
         'object_list' : post_list,
         'thread' : thread,

@@ -1,0 +1,22 @@
+{% extends "board/post_list.html" %}
+
+{% block extrapostmenu %}
+    <li class="submenuitem"> <a href="nowhere">rsvp</a></li>
+{% endblock %}
+
+{% block prepostcontent %}
+<div class="row1">
+<table class="thread_list">
+    <tr>
+        <td align="left" valign="top" >
+            <strong>{{ event.title }}</strong><br />
+            <strong>When: </strong> {{ event.time|date:"D, d-M-Y \a\t h:i:s a"}}<br />
+            <strong>Where: </strong> {{ event.location }}<br />
+            <strong>What: </strong> {{ event.description }}<br />
+            <strong>Who posted this: </strong> {{ event.creator }}
+        </td>
+    </tr>
+</table>
+</div>
+ 
+{% endblock %}
