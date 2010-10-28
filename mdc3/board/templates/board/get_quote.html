@@ -1,2 +1,2 @@
-{% autoescape off %}[quote={{ user.username }} posted this on {{ post.created_at|date:"D, d-M-Y \a\t h:m:s a" }}] [url=#{{ post.id}}]#{{ post.id }}[/url]
+{% autoescape off %}[quote={{ user.username }} posted this on {{ post.created_at|date:"D, d-M-Y \a\t h:i:s a" }}] [url=#{{ post.id}}]#{{ post.id }}[/url]
 {{ post.body }}[/quote]{% endautoescape %}
