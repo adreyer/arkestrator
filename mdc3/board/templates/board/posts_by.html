@@ -34,7 +34,7 @@
             <li class="submenulegend">Page:</li>
             {% for p in page_obj.paginator.page_range %}
                 {% if p == page_obj.number %}
-                    <li class="submenuitem"><strong>{{ p }}</strong></li>
+                    <li class="submenuitem"><strong><a href="?page={{ p }}">{{ p }}</a></strong></li>
                 {% else %}
                     <li class="submenuitem"><a href="?page={{ p }}">{{ p }}</a></li>
                 {% endif %}
