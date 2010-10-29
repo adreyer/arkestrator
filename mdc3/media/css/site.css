@@ -285,3 +285,7 @@ div#submenu ul li, div#bottombezel ul li {
 .submenuitem li a {
     padding: 0.25em;
 }
+
+li a {
+    font-size: 100%;
+}
