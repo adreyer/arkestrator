@@ -13,7 +13,7 @@ class PageNode(Node):
         page_menu="<ul>\n <li class=\"submenulegend\">Page:</li>\n"
         for p in page_obj.paginator.page_range:
             if p == page_obj.number:
-                page_menu+="<li class=\"submenuitem\"><strong>%d</strong></li>\n"%(p)
+                page_menu+="<li class=\"submenuitem\"><a href=\"?page=%d\"><strong>%d</strong></a></li>\n"%(p,p)
             else:
                 page_menu+="<li class=\"submenuitem\"><a href=\"?page=%d\">%d</a></li>\n"%(p,p)
         page_menu+="</ul>"
