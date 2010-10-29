@@ -161,6 +161,7 @@ textarea, input {
     padding-right: 0.5em;
     border-radius: 0.5em;
     -moz-border-radius: 0.5em;
+    font-size: 100%;
 }
 
 div#ra {
