@@ -256,8 +256,9 @@ div#menu ul {
     margin-top: 0.5em;
 }
 
-div#submenu {
+div#submenu, div#bottombezel {
     clear: both;
+    min-height: 0.33em;
 }
 
 div#bottombezel {
