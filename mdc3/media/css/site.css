@@ -163,6 +163,7 @@ textarea, input {
 }
 
 div#ra {
+    clear: both;
     float: right;
     margin: 0.25em;
     margin-top: 0.5em;
