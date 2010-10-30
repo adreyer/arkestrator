@@ -51,6 +51,7 @@
                 {% if new_pms %}
                     <span class="urgent">Messages ({{ new_pms }})</span>
                 {% else %}Messages{% endif %}</a></li>
+            <li class="menuitem"><a href="{% url list-events %}">Events</a></li>
             <li class="menuitem"><a href="{% url list-users %}">User list</a></li>
             <li class="menuitem"><a href="http://wiki.mdc2.org/index.php/Main_Page">Wiki</a></li>
             <li class="menuitem"><a href="{% url invite-list %}">

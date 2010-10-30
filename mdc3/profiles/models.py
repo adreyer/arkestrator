@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from mdc3.invites.models import Invite
+from mdc3.events.models import Market
 
 
 
@@ -34,6 +35,7 @@ class Profile(models.Model):
     #preferences
     show_images = models.BooleanField(default=True)
     collapse_size = models.IntegerField(default=10)
+    market = models.ForeignKey(Market,null=True)
     #fuck hidden
     
     

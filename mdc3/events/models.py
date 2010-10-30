@@ -1,7 +1,6 @@
 import datetime
 from django.db import models
 from django.contrib.auth.models import User
-from mdc3.board.models import Thread
 
 class Market(models.Model):
     name=models.CharField(max_length=20)
@@ -12,6 +11,7 @@ class Market(models.Model):
         return self.name
     
 class Event(models.Model):
+    from mdc3.board.models import Thread
     thread = models.OneToOneField(Thread,null=False)
     creator = models.ForeignKey(User,null=False)
     title = models.CharField(max_length=160,blank=False)
@@ -24,5 +24,6 @@ class Event(models.Model):
 
     def __str__(self):
         return self.title
+
 
 

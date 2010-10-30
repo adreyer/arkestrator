@@ -30,4 +30,4 @@ class InfoProfileForm(forms.ModelForm):
 class PrefsForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ('show_images','collapse_size')
+        fields = ('show_images','collapse_size', 'market')
