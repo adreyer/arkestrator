@@ -15,7 +15,7 @@ from django.contrib.auth.models import User
 from mdc3.board.views import view_thread
 
 from models import Event, Market
-from forms import NewEventForm
+import forms
 
 
 @login_required
@@ -47,21 +47,52 @@ def list_events(request, upcoming=True, local=True):
             'local' : local,
             }
         )
-    
 
-    
-    
+
 @login_required
 def new_event(request):
     if request.method =='POST':
-        form = NewEventForm(request.POST)
+        form = forms.NewEventForm(request.POST)
         if form.is_valid():
             form.save(request.user)
-            return HttpResponseRedirect('/')
+            return reverse('list-threads')
     else:
-        form = NewEventForm()
+        form = forms.NewEventForm()
     return render_to_response('events/new_event.html',
         {
             'form': form,
         },
         context_instance = RequestContext(request))
+
+@login_required
+def edit_event(request, ev_id):
+    event = get_object_or_404(Event,pk=ev_id)
+    if not request.user.has_perm('events.can_edit'):
+        if not event.creator == request.user:
+            return Http404
+    if request.method =='POST':
+        form = forms.EditEventForm(request.POST,
+                    instance = event)
+        if form.is_valid():
+            form.save()
+        return HttpResponseRedirect(reverse('view-thread',
+                        args=[event.thread.id]))
+    else:
+        form = forms.EditEventForm(instance = event)
+    return render_to_response('events/edit_event.html',
+                { 'form' : form ,
+                  'event' : event},
+                context_instance = RequestContext(request))                      
+    
+@login_required
+def update_rsvp(request, ev_id):
+    event = get_object_or_404(Event,pk=ev_id)
+    if request.method == 'POST':
+        form = forms.RSVPForm(request.POST)
+        if form.is_valid():
+            form.save(request.user,event)
+            return HttpResponseRedirect(reverse('view-thread',
+                        args=[event.thread.id]))
+    return view_thread(request, event.thread.id)
+                
+                

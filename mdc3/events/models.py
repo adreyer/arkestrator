@@ -11,6 +11,9 @@ class Market(models.Model):
         return self.name
     
 class Event(models.Model):
+    class Meta:
+        permissions=(('can_edit', 'Can Edit Events'),)
+    
     from mdc3.board.models import Thread
     thread = models.OneToOneField(Thread,null=False)
     creator = models.ForeignKey(User,null=False)
@@ -20,10 +23,18 @@ class Event(models.Model):
     location = models.TextField(null=True)
     market = models.ForeignKey(Market,null=False)
     created_at = models.DateTimeField(default=datetime.datetime.now)
+    rsvps = models.ManyToManyField(User, through='RSVP',
+                related_name='rsvps')
 
 
     def __str__(self):
         return self.title
+
+class RSVP(models.Model):
+    event = models.ForeignKey(Event)
+    user = models.ForeignKey(User)
+    status = models.IntegerField()
+    
 
 
 

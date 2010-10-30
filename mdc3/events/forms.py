@@ -2,7 +2,13 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from mdc3.board.models import Thread, Post
-from models import Event
+from models import Event, RSVP
+
+
+class EditEventForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = ('title','description','location','time','market')
 
 class NewEventForm(forms.ModelForm):
     post = forms.CharField(required=True,
@@ -38,3 +44,25 @@ class NewEventForm(forms.ModelForm):
             )
         event.save()
         return event
+
+
+class RSVPForm(forms.Form):
+    RSVP_CHOICES = (
+        ( 1 , 'Yes'),
+        ( 0 , 'Maybe'),
+        ( -1 , 'No'),
+        )
+    choice = forms.ChoiceField(RSVP_CHOICES, label="Will you Attend?")
+
+    def save(self, user, event):
+        try:
+            rsvp = RSVP.objects.get(event=event,user=user)
+            if rsvp.status != self.cleaned_data['choice']:
+                rsvp.status = self.cleaned_data['choice']
+                rsvp.save()
+        except RSVP.DoesNotExist:
+            rsvp = RSVP(event=event, user=user,
+                    status=self.cleaned_data['choice'])
+            rsvp.save()
+        return rsvp
+    

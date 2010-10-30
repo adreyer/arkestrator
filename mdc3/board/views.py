@@ -21,6 +21,7 @@ from django.contrib.auth.models import User
 
 from mdc3.profiles.models import Profile
 from mdc3.events.models import Event
+from mdc3.events.forms import RSVPForm
 from models import Thread, Post, LastRead
 import forms
 
@@ -105,6 +106,7 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
 
     try:
         event = Event.objects.get(thread=thread)
+        rsvp_form = RSVPForm()
         return render_to_response("events/view_event.html", {
         'object_list' : post_list,
         'thread' : thread,
@@ -113,6 +115,7 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
         'hide': hide,
         'start': start,
         'event' : event,
+        'rsvp' : rsvp_form,
         },
         context_instance = RequestContext(request))
     except Event.DoesNotExist:
