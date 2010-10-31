@@ -93,6 +93,6 @@ def update_rsvp(request, ev_id):
             form.save(request.user,event)
             return HttpResponseRedirect(reverse('view-thread',
                         args=[event.thread.id]))
-    return view_thread(request, event.thread.id)
+    return view_thread(request, event.thread.id, rsvp_form=form)
                 
                 

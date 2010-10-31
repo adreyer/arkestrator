@@ -20,7 +20,7 @@
     <form action="{% url update-rsvp event.id %}" method="post">
         {% csrf_token %}
         <p>
-        {{rsvp.choice.label }} {{ rsvp.choice }}
+        {{rsvp.attend.label }} {{ rsvp.attend }}
         <input class="button" type="submit" id="postbutton" value="Submit" />
         </p>
     </form>

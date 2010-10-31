@@ -30,10 +30,16 @@ class Event(models.Model):
     def __str__(self):
         return self.title
 
+RSVP_CHOICES = (
+        ( 'Yes' , 'Yes'),
+        ( 'Maybe' , 'Maybe'),
+        ( 'No' , 'No'),
+        )
 class RSVP(models.Model):
     event = models.ForeignKey(Event)
     user = models.ForeignKey(User)
-    status = models.IntegerField()
+    attending = models.CharField(max_length=5, choices=RSVP_CHOICES,
+                default='Yes')
     
 
 

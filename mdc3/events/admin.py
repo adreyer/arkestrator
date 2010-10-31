@@ -5,7 +5,7 @@ class EventAdmin(admin.ModelAdmin):
     list_display=('title','time','description','creator')
 
 class RSVPAdmin(admin.ModelAdmin):
-    list_display=('event','user','status')
+    list_display=('event','user','attending')
 
 admin.site.register(Market)
 admin.site.register(Event,EventAdmin)
