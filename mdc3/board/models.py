@@ -63,7 +63,7 @@ class Post(models.Model):
     thread = models.ForeignKey(Thread, null=False)
     creator = models.ForeignKey(User,null=False)
     body = models.TextField(blank=False)
-    bbhash = models.CharField(blank=True, max_length=20)
+    bbhash = models.CharField(blank=True, max_length=40)
     created_at = models.DateTimeField('Created at',
         default = datetime.datetime.now, 
         db_index = True)
