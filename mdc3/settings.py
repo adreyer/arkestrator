@@ -102,7 +102,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
-	'django.contrib.admin',
+    'django.contrib.admin',
     'south',
     'mdc3.board',
     'mdc3.themes',
