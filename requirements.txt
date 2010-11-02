@@ -1,4 +1,4 @@
 Django>=1.2
 South>=0.7.2
 python-memcached
--e hg+https://ssl.mdc2.org/hg/bbking
+-e hg+https://ssl.mdc2.org/hg/bbking#egg=bbking
