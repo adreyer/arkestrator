@@ -9,7 +9,7 @@
     <h1>{{ thread.subject }} </h1>
 {% endblock %}
 
-{% load bbcode %}
+{% load bbking %}
 {% block content %}
     {% for pm in pm_list %}
     <a name="PM{{ pm.id }}"></a>
@@ -24,7 +24,7 @@
                 </div>
 
             <div class="body" id="post_{{ pm.id }}">
-                <p>{% bbcode pm.body %}</p>
+                <p>{% bbcode pm.bbcode %}</p>
             </div>
     </div>
     {% endfor %}

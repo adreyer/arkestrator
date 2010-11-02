@@ -4,13 +4,13 @@ from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.contrib.sites.managers import CurrentSiteManager
-from bbcode.fields import BBCodeTextField
 import datetime
 
+from bbking.fields import BBCodeField
 
 class PM(models.Model):
     subject = models.CharField(max_length=100, blank=False)
-    body = BBCodeTextField(default='')
+    body = models.TextField(default='')
     sender = models.ForeignKey(User, related_name='sent_pms',
                                default="(no subject)")
     recipients = models.ManyToManyField(User,
@@ -22,6 +22,8 @@ class PM(models.Model):
     root_parent = models.ForeignKey('self',null=True,
         related_name ='root_parent_of')
     deleted = models.BooleanField(default=False)
+
+    bbcode = BBCodeField('body')
 
     def __str__(self):
         return self.subject

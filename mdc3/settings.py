@@ -111,7 +111,7 @@ INSTALLED_APPS = (
     'mdc3.pms',
     'mdc3.util',
     'mdc3.shenanigans',
-    'bbcode',
+    'bbking',
 )
 
 BBCODE_DEFAULT_NAMESPACES = ('no-smilies','no-colors')
