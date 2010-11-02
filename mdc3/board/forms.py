@@ -2,7 +2,6 @@ from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django import forms
 from django.db.models import Q
-from bbcode.fields import BBCodeFormField
 from mdc3.board.models import Thread, Post, LastRead
 
 
