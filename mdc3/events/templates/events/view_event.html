@@ -15,12 +15,17 @@
     <strong>Where: </strong> {{ event.location }}<br />
     <strong>What: </strong> {{ event.description }}<br />
     <strong>Who posted this: </strong> {{ event.creator }}<br />
-    <strong>Attendees:</strong> <br />
+    <strong>Attendees: </strong>{% spaceless %}
+    {% for rsvp in rsvp_list %}
+        {% if rsvp.attending == 'Yes' %} {{ rsvp.user.username }}{% else %}
+        {% if rsvp.attending == 'Maybe' %}<em> {{ rsvp.user.username }}</em>{% endif %}{% endif %}
+    {% endfor %}
+    <br />{% endspaceless %}
     </p>
     <form action="{% url update-rsvp event.id %}" method="post">
         {% csrf_token %}
         <p>
-        {{rsvp.attend.label }} {{ rsvp.attend }}
+        {{rsvp_form.attend.label }} {{ rsvp_form.attend }}
         <input class="button" type="submit" id="postbutton" value="Submit" />
         </p>
     </form>

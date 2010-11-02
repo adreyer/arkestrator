@@ -22,11 +22,15 @@ class Event(models.Model):
     time = models.DateTimeField(null=False)
     location = models.TextField(null=True)
     market = models.ForeignKey(Market,null=False)
+    all_markets = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=datetime.datetime.now)
     rsvps = models.ManyToManyField(User, through='RSVP',
                 related_name='rsvps')
 
-
+    #this should be cached
+    def rsvp_list(self):
+        return RSVP.objects.order_by('user__username')
+        
     def __str__(self):
         return self.title
 

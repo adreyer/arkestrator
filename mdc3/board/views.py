@@ -106,7 +106,6 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
 
     try:
         event = Event.objects.get(thread=thread)
-        rsvp_form = RSVPForm()
         return render_to_response("events/view_event.html", {
         'object_list' : post_list,
         'thread' : thread,
@@ -115,7 +114,8 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
         'hide': hide,
         'start': start,
         'event' : event,
-        'rsvp' : rsvp_form,
+        'rsvp_form' : RSVPForm(),
+        'rsvp_list' : event.rsvp_list(),
         },
         context_instance = RequestContext(request))
     except Event.DoesNotExist:

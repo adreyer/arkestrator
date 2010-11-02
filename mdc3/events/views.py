@@ -35,7 +35,7 @@ def list_events(request, upcoming=True, local=True):
             local = False
         if local:
             queryset = queryset.filter(Q(
-                Q(market=usr_mrk) | Q(market__id=1)))
+                Q(market=usr_mrk) | Q(all_markets=True)))
     queryset = queryset.order_by('time')
 
     return list_detail.object_list(
@@ -55,7 +55,8 @@ def new_event(request):
         form = forms.NewEventForm(request.POST)
         if form.is_valid():
             form.save(request.user)
-            return reverse('list-threads')
+            print 'about to reverse'
+            return HttpResponseRedirect(reverse('list-threads'))
     else:
         form = forms.NewEventForm()
     return render_to_response('events/new_event.html',
@@ -75,6 +76,9 @@ def edit_event(request, ev_id):
                     instance = event)
         if form.is_valid():
             form.save()
+            if event.thread.subject != event.title:
+                event.thread.subject = event.title
+                event.thread.save()
         return HttpResponseRedirect(reverse('view-thread',
                         args=[event.thread.id]))
     else:

@@ -1,0 +1,40 @@
+{% extends "events/event_base.html" %}
+
+{% block extrasubmenu %}
+{% if local %}
+    {% if upcoming %}
+        <li class="submenuitem"><a href="{% url list-ew-events %}">Show all cities</a> </li>
+    {% else %}
+        <li class="submenuitem"><a href="{% url list-past-ew-events %}">Show all cities</a> </li>
+    {% endif %}
+{% endif %}
+{% if upcoming %}
+    {% if local %}
+        <li class="submenuitem"><a href="{% url list-past-events %}">Show past events</a> </li>
+    {% else %}
+        <li class="submenuitem"><a href="{% url list-past-ew-events %}">Show past events</a> </li>
+    {% endif %}
+{% endif %}
+{% endblock extrasubmenu %}
+
+
+
+{% load util %}
+{% block content %}
+   <table class="thread_list">
+    {% withcycle "row1" "row2" as row_color %}
+        {% for event in object_list %}
+            {% if event.creator == user %}
+                <tr class="my_post">
+            {% else %}
+                <tr class="{{ row_color }}">
+            {% endif %}
+            <td nowrap="nowrap"><a href="{% url view-profile event.creator.id %}">{{ event.creator.username }}</a></td>
+            <td><a href="{% url view-event event.id %}">{{ event.title }}</a></td>
+            <td nowrap="nowrap">{{ event.time|date:"h:i a d-M-y"}}</td>
+            </tr>
+            {% nextcycle row_color %}
+        {% endfor %}
+    {% endwithcycle %}
+    </table> 
+{% endblock content %}

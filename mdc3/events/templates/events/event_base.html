@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block extramenu %}
+    <div id="submenu">
+        <ul>
+            <li class="submenuitem"><a href="{% url new-event %}">New event</a></li>
+            {% block extrasubmenu %}
+            {% endblock %}
+        </ul>
+    </div>
+{% endblock extramenu %}
