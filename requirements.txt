@@ -1,5 +1,5 @@
 Django>=1.2
 South>=0.7.2
 python-memcached
-ply=3.3
+ply==3.3
 -e hg+http://hg.mdc2.org/bbking#egg=bbking
