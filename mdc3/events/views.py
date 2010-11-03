@@ -2,6 +2,7 @@ import datetime
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.sites.models import Site
+from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.db.models import Q
@@ -38,6 +39,9 @@ def list_events(request, upcoming=True, local=True):
                 Q(market=usr_mrk) | Q(all_markets=True)))
     queryset = queryset.order_by('time')
 
+    request.user.get_profile().last_events_view = datetime.datetime.now()
+    request.user.get_profile().save()
+    cache.delete('event-count:%d'%(request.user.id))
     return list_detail.object_list(
         request,
         queryset = queryset,
@@ -54,8 +58,7 @@ def new_event(request):
     if request.method =='POST':
         form = forms.NewEventForm(request.POST)
         if form.is_valid():
-            form.save(request.user)
-            print 'about to reverse'
+            event = form.save(request.user)
             return HttpResponseRedirect(reverse('list-threads'))
     else:
         form = forms.NewEventForm()

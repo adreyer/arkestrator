@@ -31,6 +31,12 @@ from mdc3.decorators import super_no_cache
 @login_required
 def view_thread(request,id=None,start=False,expand=False,hide=None):
     thread = get_object_or_404(Thread,pk=id)
+    try:
+        event = Event.objects.get(thread=thread)
+    except Event.DoesNotExist:
+        event = None
+                                  
+    
     if request.method == 'POST':
         if thread.locked:
             return HttpResponseRedirect(reverse('list-threads'))
@@ -71,6 +77,8 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
             thread = thread,
             read_count = 0,
         )
+        if event:
+            cache.delete('event-count:%d'%(request.user.id))
 
     if not expand and not start and queryset.count() < 10:
         queryset = thread.default_post_list
@@ -104,7 +112,7 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
         start = post_list[0].id
 
 
-    try:
+    if event:
         event = Event.objects.get(thread=thread)
         return render_to_response("events/view_event.html", {
         'object_list' : post_list,
@@ -118,8 +126,7 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
         'rsvp_list' : event.rsvp_list(),
         },
         context_instance = RequestContext(request))
-    except Event.DoesNotExist:
-        pass
+
     
     return render_to_response("board/post_list.html", {
         'object_list' : post_list,

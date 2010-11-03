@@ -88,6 +88,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "mdc3.board.context_processors.thread_count",
     "mdc3.board.context_processors.posting_users",
     "mdc3.invites.context_processors.new_invites",
+    "mdc3.events.context_processors.new_events",
 )
 
 ROOT_URLCONF = 'mdc3.urls'

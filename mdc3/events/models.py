@@ -29,7 +29,7 @@ class Event(models.Model):
 
     #this should be cached
     def rsvp_list(self):
-        return RSVP.objects.order_by('user__username')
+        return RSVP.objects.filter(event=self).order_by('user__username')
         
     def __str__(self):
         return self.title
