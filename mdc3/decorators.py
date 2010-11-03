@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import user_passes_test
 from mdc3.profiles.models import Profile
 
+
 class BetterCacher(object):
     def __init__(self, urlname, duration, fn):
         self.urlname = urlname
