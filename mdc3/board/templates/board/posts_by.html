@@ -6,7 +6,7 @@
     <h1>Posts by {{poster}}</h1>
 {% endblock %}
 
-{% load bbcode %}
+{% load bbking %}
 {% block extramenu %}
     <div id="submenu">
         <ul>
@@ -23,7 +23,7 @@
                 {{ post.created_at|date:"D, d-M-Y \a\t h:m a"}}
             </div>
             <div class="body">
-                <p>{% bbcode post.body %}</p>
+                <p>{% bbcode post.bbcode %}</p>
             </div>
         </div>
     {% endfor %}
@@ -34,7 +34,7 @@
             <li class="submenulegend">Page:</li>
             {% for p in page_obj.paginator.page_range %}
                 {% if p == page_obj.number %}
-                    <li class="submenuitem"><strong>{{ p }}</strong></li>
+                    <li class="submenuitem"><strong><a href="?page={{ p }}">{{ p }}</a></strong></li>
                 {% else %}
                     <li class="submenuitem"><a href="?page={{ p }}">{{ p }}</a></li>
                 {% endif %}

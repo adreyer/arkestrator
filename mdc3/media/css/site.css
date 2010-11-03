@@ -11,6 +11,18 @@ p {
     margin-bottom: 0.5em;
 }
 
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+a.unread {
+    font-weight: bold;
+}
+
 blockquote.quote {
     margin: 0.5em 0.33em 0.33em 0.33em; 
     padding: 0.5em; 
@@ -51,8 +63,6 @@ div.wwwwwwww {
 td.icons {
     text-align: right;
     width: 0;
-    opacity: 0.5;
-    -moz-opacity: 0.5;
 }
 
 div.pmbody {
@@ -61,23 +71,7 @@ div.pmbody {
 }
 
 .smallfont {
-    font-size: 83%;
-}
-
-a {
-    text-decoration: none;
-}
-
-a:hover { 
-    text-decoration: underline; 
-}
-
-a.unread {
-    font-weight: bold;
-}
-
-div#status {
-    margin-bottom: 1em;
+    font-size: small;
 }
 
 div#header {
@@ -85,74 +79,11 @@ div#header {
     margin: 0 auto;
 }
 
-div#user {
-    float: right;
-    width: auto;
-    padding-right: 0.5em;
-}
-
-div#menu {
-    float: left;
-    width: auto;
-    margin-bottom: 1px;
-    border-bottom: none;
-    padding-left: 0.5em;
-}
-
-div#submenu {
-    width: 100%;
-    clear: both;
-    min-height: 0.33em;
-    border-top-left-radius: 0.5em;
-    border-top-right-radius: 0.5em;
-    -moz-border-radius-topleft: 0.5em;
-    -moz-border-radius-topright: 0.5em;
-}
-
-div#user ul, div#menu ul, div#submenu ul, div#bottombezel ul, ul.errorlist {
-    padding-left: 0.2em;
-    padding-right: 0.2em;
-    margin: 0px;
-    list-style-type: none;
-}
-
 ul.errorlist, ul.errorlist li {
     display: inline;
     font-weight: bold;
     background: #ffffff;
     color: #ff0000;
-}
-
-.menuitem {
-    display: inline-block;
-    margin-left: 1pt;
-    margin-right: 1pt;
-    padding: 0.33em 0.5em 0.25em 0.5em;
-    padding-right: 0.5em;
-    padding-left: 0.5em;
-    border-top-left-radius: 0.5em;
-    border-top-right-radius: 0.5em;
-    -moz-border-radius-topleft: 0.5em;
-    -moz-border-radius-topright: 0.5em;
-    font-size: 100%;
-    list-style-type: none;
-    margin-bottom: -1px;
-}
-
-
-.submenuitem {
-    display: inline-block;
-    margin-top: 0.25em;
-    margin-bottom: 0.25em;
-    margin-left: 1pt;
-    margin-right: 1pt;
-    padding: 2pt;
-    padding-right: 0.33em;
-    padding-left: 0.33em;
-    font-size: 93%;
-    border-radius: 0.5em;
-    -moz-border-radius: 0.5em;
-    list-style-type: none;
 }
 
 .floatright {
@@ -173,20 +104,6 @@ li {
 
 
 
-.submenulegend {
-    margin-left: 0.5em;
-    display: inline-block;
-    font-weight: bold;
-    list-style-type: none;
-}
-
-.menuitem a, .submenuitem a {
-    display: block;
-}
-
-.menuitem a:hover, .submenuitem a:hover {
-    text-decoration: none;
-}
 
 .thread_list {
     width: 100%;
@@ -245,16 +162,8 @@ textarea, input {
     font-size: 100%;
 }
 
-div#bottombezel {
-    clear: both;
-    min-height: 0.33em;
-    border-bottom-left-radius: 0.5em;
-    border-bottom-right-radius: 0.5em;
-    -moz-border-radius-bottomleft: 0.5em;
-    -moz-border-radius-bottomright: 0.5em;
-}
-
 div#ra {
+    clear: both;
     float: right;
     margin: 0.25em;
     margin-top: 0.5em;
@@ -305,4 +214,76 @@ div.notice {
 
 .tiny {
     font-size: xx-small;
+}
+
+
+/* nav rewrite */
+
+div #user ul, div#menu ul, div#submenu ul, div#bottombezel ul {
+    list-style-type: none;
+    overflow: auto;
+    padding: 0;
+    margin: 0;
+}
+
+
+div#user ul li, div#menu ul li, div#submenu ul li, div#bottombezel ul li {
+    display: inline-block;
+}
+
+div#user ul li a, div#menu ul li a {
+    display: block;
+    padding: 0.33em 0.67em 0.33em 0.67em;
+    text-decoration: none;
+}
+
+div#submenu ul li a, div#bottombezel ul li a {
+    display: block;
+    padding: 0.25em;
+    text-decoration: none;
+}
+
+div#user ul {
+    float: right;
+    margin-right: 0.33em;
+}
+
+div#menu ul {
+    float: left;
+    margin-left: 0.33em;
+}
+
+div#submenu, div#bottombezel {
+    clear: both;
+    min-height: 0.33em;
+}
+
+div#bottombezel {
+    border-bottom-right-radius: 0.5em;
+    border-bottom-left-radius: 0.5em;
+    -moz-border-radius-bottomright: 0.5em;
+    -moz-border-radius-bottomleft: 0.5em;
+}
+
+div#menu ul li, div#user ul li, div#submenu {
+    border-top-left-radius: 0.5em;
+    border-top-right-radius: 0.5em;
+    -moz-border-radius-topright: 0.5em;
+    -moz-border-radius-topleft: 0.5em;
+    padding: 0px;
+}
+
+div#submenu ul li, div#bottombezel ul li {
+    border-radius: 0.5em;
+    -moz-border-radius: 0.5em;
+    margin: 0.25em;
+    padding: 0px;
+}
+
+.submenuitem li a {
+    padding: 0.25em;
+}
+
+div#status {
+    margin-bottom: 1.25em;
 }

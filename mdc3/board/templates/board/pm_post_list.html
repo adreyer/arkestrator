@@ -23,7 +23,7 @@
     </div>
 {% endblock %}
 
-{% load bbcode %}
+{% load bbking %}
 {% block content %}
     {% for post in object_list %}
         <div class="post">
@@ -38,7 +38,7 @@
                 <span class="button"><a href="{% url delete-post post.id %}">Delete</a></span>
             </div>
             <div class="body" id="post_{{ post.id }}">
-                <p>{% bbcode post.body %}</p>
+                <p>{% bbcode post.bbcode %}</p>
             </div>
         </div>
     {% endfor %}

@@ -6,8 +6,8 @@ from django.contrib.sites.models import Site
 from django.contrib.sites.managers import CurrentSiteManager
 from django.core.cache import cache
 
-from bbcode.fields import BBCodeTextField
 from mdc3.decorators import instance_memcache
+from bbking.fields import BBCodeField
 
 import datetime
 
@@ -62,10 +62,13 @@ class Thread(models.Model):
 class Post(models.Model):
     thread = models.ForeignKey(Thread, null=False)
     creator = models.ForeignKey(User,null=False)
-    body = BBCodeTextField(blank=False)
+    body = models.TextField(blank=False)
+    bbhash = models.CharField(blank=True, max_length=40)
     created_at = models.DateTimeField('Created at',
         default = datetime.datetime.now, 
         db_index = True)
+
+    bbcode = BBCodeField('body', 'bbhash')
 
     def __unicode__(self):
         return "%s: %s"%(unicode(self.thread),self.body[:20])

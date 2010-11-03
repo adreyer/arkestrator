@@ -9,7 +9,7 @@
     <h1>{{ thread.subject }} </h1>
 {% endblock %}
 
-{% load bbcode %}
+{% load bbking %}
 {% block extramenu %}
     <div id="submenu">
         <ul>
@@ -77,7 +77,7 @@
                 <strong><a href="javascript:;" onclick="quote('{% url get-quote post.id %}')">#{{ post.id }}</a></strong>
             </div>
             <div class="body" id="post_{{ post.id }}">
-                <p>{% bbcode post.body %}</p>
+                <p>{% bbcode post.bbcode %}</p>
             </div>
         </div>
     {% endfor %}
@@ -95,26 +95,28 @@
 <a name="post"></a>
     <form method="post" action="{% url view-thread thread.id %}#post" onSubmit="document.getElementById('postbutton').style.display='none';">
     {% csrf_token %}
-    <p class="replyform">
+    <div class="replyform" style="float: left;">
         {{ form.body.errors }}<br />{{ form.body }}<br />
         {{ form.form_lock }}
         <input class="button" type="submit" id="postbutton" value="Say it" />
-        </p>
+        <input type="button" class="button" onClick="toggle('bbcode_cheat')" value="BBCode help" style="float: right;"/>
+    </div>
     </form>
 
-    <p><input type="button" onclick="toggle('bbcode_cheat');" value="BBCode Cheat" /></p>
-    <div style="display:none" id="bbcode_cheat"><p>
-    [url]http://www.google.com/[/url]<br />
-    [url=http://www.google.com/]with my own link text[/url]<br />
-    [img]http://www.google.com/intl/en_ALL/images/logo.gif[/img]<br />
-    [u]underline[/u]<br />
-    [b]bold[/b]<br />
-    [i]italic[/i]<br />
-    [strike]strikethrough[/strike]<br />
-    [code]like pre[/code]<br />
-    [youtube]http://www.youtube.com/watch?v=WAwLYJYsa0A[/youtube]<br />
-    [quote]quote[/quote]<br />
-    [hidden]hidden stuff[/hidden]<br /></p>
+    <div style="position: relative; margin-top: 2em;">
+    <div style="display: none;" id="bbcode_cheat">
+    <pre>[url]http://www.example.com/[/url]
+[url=http://www.example.com/]Example link text[/url]
+[img]http://www.example.com/picture.jpg[/img]
+[u]underline[/u]
+[b]bold[/b]
+[i]italic[/i]
+[strike]strikethrough[/strike]
+[code]monospace or preformatted text[/code]
+[youtube]http://www.youtube.com/watch?v=WAwLYJYsa0A[/youtube]
+[quote]quoted text[/quote]
+[hidden]hidden spoilers etc.[/hidden]</pre>
+    </div>
     </div>
 {% else %}
 {% block locknotice %}
