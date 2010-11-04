@@ -21,6 +21,8 @@ class NewInviteForm(forms.Form):
         return invite
 
 class UserRegistrationForm(forms.ModelForm):
+    username = forms.CharField(max_length = 20,
+            help_text = 'Required. 20 characters or fewer. Letters, numbers and @/./+/-/_ characters')
     class Meta:
         model = User
         fields = ('username', 'email')

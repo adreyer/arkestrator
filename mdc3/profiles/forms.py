@@ -36,7 +36,7 @@ class PrefsForm(forms.ModelForm):
         fields = ('show_images','collapse_size','favs_first', 'market')
 
 class PrivEmailForm(forms.ModelForm):
-    email = forms.CharField(label='Public email', widget=forms.TextInput(attrs={'size': 70, 'maxlength': 160}), required=False)
+    email = forms.CharField(label='Private email', widget=forms.TextInput(attrs={'size': 70, 'maxlength': 160}), required=False)
     class Meta:
         model = User
         fields = ('email')
