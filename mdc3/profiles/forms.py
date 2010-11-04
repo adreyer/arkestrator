@@ -3,10 +3,7 @@ from django.contrib.auth.models import User
 from models import Profile
 
 
-class InfoUserForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ('email')
+
 
 class InfoProfileForm(forms.ModelForm):
     email_public = forms.CharField(label='Public email', widget=forms.TextInput(attrs={'size': 70, 'maxlength': 160}), required=False)
@@ -30,4 +27,9 @@ class InfoProfileForm(forms.ModelForm):
 class PrefsForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ('show_images','collapse_size', 'market')
+        fields = ('show_images','collapse_size','favs_first', 'market')
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('email')

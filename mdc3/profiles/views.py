@@ -58,14 +58,17 @@ def edit_prefs(request):
     if request.method == 'POST':
         prefs_form = forms.PrefsForm(request.POST,
                 instance=prof)
+        user_form = forms.UserForm(request.POST,
+                instance=request.user)
         if prefs_form.is_valid(): 
             prefs_form.save()
             return HttpResponseRedirect(prof.get_absolute_url())
     else:
-        prefs_form = forms.PrefsForm(
-                    instance=prof)
+        prefs_form = forms.PrefsForm(instance=prof)
+        user_form = forms.UserForm(instance=request.user)
         
     return render_to_response("profiles/edit_prefs.html",
-                { 'prefs_form' : prefs_form },
-                context_instance = RequestContext(request))
+                {   'user_form' : user_form ,
+                    'prefs_form' : prefs_form },
+            context_instance = RequestContext(request))
     

@@ -91,6 +91,11 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
     try:
         if (not hide is False) and (hide or not request.user.get_profile().show_images):
             hide = True
+            for post in post_list:
+                img_start = re.compile('\[img', re.IGNORECASE)
+                img_end = re.compile('\[/img\]', re.IGNORECASE)
+                post.body = img_start.sub('(img)[url',post.body)
+                post.body = img_end.sub('[/url]',post.body)
     except ObjectDoesNotExist:
         pass
 
@@ -191,7 +196,7 @@ def list_threads(request):
         page_obj = paginator.page(page)
         cache.set(cache_key, page_obj)
 
-    thread_list = page_obj.object_list
+    thread_list = list(page_obj.object_list)
 
     last_read = LastRead.objects.filter(
         thread__in=[t.id for t in thread_list],
@@ -205,11 +210,28 @@ def list_threads(request):
         else:
             t.unread = True
 
-    for t in thread_list:
-        if t.favorite.filter(id = request.user.id):
-            t.fav = True
-        else:
-            t.fav = False
+    if request.user.get_profile().favs_first:
+        fav_indexes = []
+        for i, t in zip(range(len(thread_list)), thread_list):
+            if t.favorite.filter(id = request.user.id):
+                t.fav = True
+                if t.unread:
+                    fav_indexes.append(i) 
+            else:
+                t.fav = False
+        favs = []
+        for i in fav_indexes:
+            favs.append(thread_list.pop(i))
+        favs.extend(thread_list)
+        thread_list = favs
+        
+            
+    else:
+        for t in thread_list:
+            if t.favorite.filter(id = request.user.id):
+                t.fav = True
+            else:
+                t.fav = False
 
     return render_to_response("board/thread_list.html", {
         'thread_list' : thread_list,

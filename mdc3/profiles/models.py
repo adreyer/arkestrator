@@ -36,6 +36,7 @@ class Profile(models.Model):
     show_images = models.BooleanField(default=True)
     collapse_size = models.IntegerField(default=10)
     market = models.ForeignKey(Market,null=True)
+    favs_first = models.BooleanField(default=False)
     #fuck hidden
     
     
