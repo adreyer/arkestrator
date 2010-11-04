@@ -6,7 +6,8 @@
     <div id="submenu">
         <ul>
             <li class="submenuitem"><a href="{% url new-thread %}">New thread</a></li>
-            <li class="submenuitem"><a href="{% url  mark-threads-read %}">Mark all read</a></li>
+            <li class="submenuitem"><a href="{% url mark-threads-read %}">Mark all read</a></li>
+            <li class="submenuitem"><a href="{% url favorite-list%}">Favorites</a></li>
         </ul>
     </div>
 {% endblock extramenu %}
@@ -21,7 +22,16 @@
                 <tr class="{{ row_color }}">
             {% endif %}
             <td nowrap="nowrap"><a href="{% url view-profile thread.creator.id %}">{{ thread.creator.username }}</a></td>
-            <td nowrap="nowrap" class="icons">{% if thread.locked %}<a href="{% url unlock-thread thread.id %}">&#10005;</a>{% endif %}{% if thread.stuck %}<a href="{% url unsticky thread.id %}">&#9733;</a>{% endif %}</td>
+            {% spaceless %}<td nowrap="nowrap" class="icons">
+            {% if thread.locked %}
+                <a href="{% url unlock-thread thread.id %}">&#10005;</a>
+            {% endif %}
+            {% if thread.stuck %}
+                <a href="{% url unsticky thread.id %}">&#9733;</a>
+            {% endif %}
+            {% if thread.fav %}
+                <a href="{% url unfavorite thread.id %}"><strong>!</strong></a>
+            {% endif %} </td>{% endspaceless %}
             <td class="wwwwwwww"><div class="wwwwwwww">{% if thread.unread %}
                     <a class="unread" href="{% url view-thread thread.id %}{% spaceless %}
                         {% if thread.last_post_read %}

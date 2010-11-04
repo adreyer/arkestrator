@@ -29,7 +29,7 @@ class Thread(models.Model):
     last_read = models.ManyToManyField(User,
         through = 'LastRead',
         related_name='last_read')
-
+    favorite = models.ManyToManyField(User, related_name='favorites')
     objects = CurrentSiteManager()
 
     def __unicode__(self):
@@ -80,6 +80,8 @@ class LastRead(models.Model):
     timestamp = models.DateTimeField(default = datetime.datetime.now,
         db_index = True)
     read_count = models.IntegerField(default=0)
+
+
 
 def update_thread(sender, instance, signal, *args, **kwargs):
     if instance.id > instance.thread.last_post_id:

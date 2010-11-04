@@ -105,6 +105,10 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
     lastread.save()
     del thread.total_views
 
+    fav = False
+    if thread.favorite.filter(id=request.user.id):
+        fav = True
+    
     if len(post_list)< 10:
         expand = True
 
@@ -121,6 +125,7 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
         'expand': expand,
         'hide': hide,
         'start': start,
+        'fav' : fav,
         'event' : event,
         'rsvp_form' : RSVPForm(),
         'rsvp_list' : event.rsvp_list(),
@@ -134,7 +139,8 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
         'form' : form,
         'expand': expand,
         'hide': hide,
-        'start': start
+        'start': start,
+        'fav' : fav,
         },
         context_instance = RequestContext(request))
 
@@ -204,6 +210,44 @@ def list_threads(request):
         else:
             t.unread = True
 
+    for t in thread_list:
+        if t.favorite.filter(id = request.user.id):
+            t.fav = True
+        else:
+            t.fav = False
+
+    return render_to_response("board/thread_list.html", {
+        'thread_list' : thread_list,
+        'page_obj' : page_obj,
+    }, context_instance = RequestContext(request))
+
+@login_required
+def favorite_list(request):
+    try:
+        page = int(request.GET.get('page', 1))
+    except ValueError:
+        raise Http404
+    
+    queryset = request.user.favorites.all().order_by(
+        '-last_post__id').select_related(
+        "creator","last_post","last_post__creator")
+    
+    paginator = Paginator(queryset, 50, allow_empty_first_page=True)
+    page_obj = paginator.page(page)
+
+    thread_list = page_obj.object_list
+
+    last_read = LastRead.objects.filter(
+        thread__in=[t.id for t in thread_list],
+        user = request.user,
+    ).values('thread__id', 'post__id')
+    last_viewed = dict((lr['thread__id'], lr) for lr in last_read)
+    for t in thread_list:
+        if t.id in last_viewed:
+            t.unread = last_viewed[t.id]['post__id'] < t.last_post_id
+            t.last_post_read = last_viewed[t.id]['post__id']
+        else:
+            t.unread = True
     return render_to_response("board/thread_list.html", {
         'thread_list' : thread_list,
         'page_obj' : page_obj,
@@ -319,3 +363,14 @@ def unlock_thread(request, id):
     thread.save()
     return HttpResponseRedirect(reverse('list-threads'))
     
+@login_required
+def favorite_thread(request, id):
+    thread = get_object_or_404(Thread,pk=id)
+    thread.favorite.add(request.user)
+    return HttpResponseRedirect(reverse('list-threads'))
+
+@login_required
+def unfavorite_thread(request,id):
+    thread = get_object_or_404(Thread,pk=id)
+    thread.favorite.remove(request.user)
+    return HttpResponseRedirect(reverse('list-threads'))
