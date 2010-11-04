@@ -18,7 +18,7 @@ class Profile(models.Model):
     last_profile_update = models.DateTimeField(default=datetime.datetime.now)
     profile_views = models.IntegerField(default=0)
     last_events_view = models.DateTimeField(default=datetime.datetime.now)
-    invite_used = models.ForeignKey(Invite, null=True)
+    invite_used = models.ForeignKey(Invite, null=True, blank=True)
     
     
     #info
@@ -35,7 +35,7 @@ class Profile(models.Model):
     #preferences
     show_images = models.BooleanField(default=True)
     collapse_size = models.IntegerField(default=10)
-    market = models.ForeignKey(Market,null=True)
+    market = models.ForeignKey(Market,null=True,blank=True)
     favs_first = models.BooleanField(default=False)
     #fuck hidden
     
