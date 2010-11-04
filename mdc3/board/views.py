@@ -210,8 +210,10 @@ def list_threads(request):
         else:
             t.unread = True
 
+    #pull unread favorites to the top if favs_first
     if request.user.get_profile().favs_first:
         fav_indexes = []
+        stickies = -1
         for i, t in zip(range(len(thread_list)), thread_list):
             if t.favorite.filter(id = request.user.id):
                 t.fav = True
@@ -219,13 +221,18 @@ def list_threads(request):
                     fav_indexes.append(i) 
             else:
                 t.fav = False
+            if t.stuck:
+                stickies=i
+            
         favs = []
         for i in fav_indexes:
             favs.append(thread_list.pop(i))
-        favs.extend(thread_list)
-        thread_list = favs
+        if stickies != -1:
+            thread_list = thread_list[0:stickies+1] + favs + thread_list[stickies+1:]
+        else:
+            thread_list = favs + thread_list
         
-            
+    #otherwise just figure out what's favorited
     else:
         for t in thread_list:
             if t.favorite.filter(id = request.user.id):
