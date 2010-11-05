@@ -6,7 +6,7 @@ from django import forms
 from django.utils import simplejson
 
 from mdc3.gallery.models import Image
-from mdc3.gallery.utils import key
+from mdc3.gallery.key_file import key
 
 class IMGForm(forms.Form):
     img_file=forms.FileField(label='image')
