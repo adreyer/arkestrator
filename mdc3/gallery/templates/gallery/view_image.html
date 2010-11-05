@@ -1,0 +1,9 @@
+{% extends "gallery/gallery_base.html" %}
+
+{% block content %}
+    <h2>{{ image.title }}</h2>
+    <img src="{{ image.url }}"><br />
+    <p>[img]{{ image.url }}[/img]<br />
+    {{  image.description }}</p>
+
+{% endblock %}
