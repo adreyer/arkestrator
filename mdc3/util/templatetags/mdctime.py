@@ -7,8 +7,11 @@ register = Library()
 time_fmt = { 'short':'%H:%M %p %d-%m-%y',
              'long':'%a, %d-%b-%Y at %H:%M:%S %p',
              'date'  : '%d-%b-%Y',}
+
+default_tz = 'US/Eastern'
+
 class MDCTNode(Node):
-    def __init__(self,var_name,fmt_name='long'):
+    def __init__(self,var_name,fmt_name='long',):
         self.var_name = Variable(var_name)
         self.fmt_name = fmt_name
 
@@ -24,4 +27,6 @@ def mdctime(parser, token):
     if not (len(args) == 1 or len(args) == 2):
         raise TemplateSyntaxError(
             "Usage: {% mdctime datetime [format_name] %}")
+    if  len(args) == 1:
+        return MDCTNode(args[0])
     return MDCTNode(args[0], args[1])
