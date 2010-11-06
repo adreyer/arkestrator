@@ -4,8 +4,8 @@ register = Library()
 
 
 
-time_fmt = { 'short':'%H:%M %p %d-%m-%y',
-             'long':'%a, %d-%b-%Y at %H:%M:%S %p',
+time_fmt = { 'short':'%I:%M %p %d-%m-%y',
+             'long':'%a, %d-%b-%Y at %I:%M:%S %p',
              'date'  : '%d-%b-%Y',}
 
 default_tz = 'US/Eastern'
