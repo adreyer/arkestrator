@@ -19,7 +19,7 @@
 
 
 
-{% load util %}
+{% load util mdctime %}
 {% block content %}
    <table class="thread_list">
     {% withcycle "row1" "row2" as row_color %}
@@ -31,7 +31,7 @@
             {% endif %}
             <td nowrap="nowrap"><a href="{% url view-profile event.creator.id %}">{{ event.creator.username }}</a></td>
             <td><a href="{% url view-event event.id %}">{{ event.title }}</a></td>
-            <td nowrap="nowrap">{{ event.time|date:"h:i a d-M-y"}}</td>
+            <td nowrap="nowrap">{% mdctime event.time short %}</td>
             </tr>
             {% nextcycle row_color %}
         {% endfor %}

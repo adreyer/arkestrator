@@ -1,15 +1,15 @@
 import itertools
 
-from django.template import Node, Library, TemplateSyntaxError
+from django.template import Node, Library, TemplateSyntaxError, Variable
 
 register = Library()
 
 class PageNode(Node):
     def __init__(self, var_name):
-        self.var_name=var_name
+        self.var= Variable(var_name)
 
     def render(self, context):
-        page_obj = context[self.var_name]
+        page_obj = self.var.resolve(context)
         page_menu="<ul>\n <li class=\"submenulegend\">Page:</li>\n"
         for p in page_obj.paginator.page_range:
             if p == page_obj.number:
@@ -26,3 +26,6 @@ def pagemenu(parser, token):
     if len(args) != 1:
         raise TemplateSyntaxError("Usage: {% pages page_obj %}")
     return PageNode(args[0])
+
+
+

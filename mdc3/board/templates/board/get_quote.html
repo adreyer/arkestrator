@@ -1,2 +1,3 @@
-{% autoescape off %}[quote={{ user.username }} posted this on {{ post.created_at|date:"D, d-M-Y \a\t h:i:s a" }}] [url=#{{ post.id}}]#{{ post.id }}[/url]
+{% load mdctime %}
+{% autoescape off %}[quote={{ user.username }} posted this on {% mdctime post.created_at long %}] [url=#{{ post.id}}]#{{ post.id }}[/url]
 {{ post.body }}[/quote]{% endautoescape %}

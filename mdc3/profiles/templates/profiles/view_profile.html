@@ -28,7 +28,7 @@
 {% endblock extramenu %}
 
 
-
+{% load mdctime %}
 {% block content %}
 <div class="row2">
 <table class="thread_list">
@@ -60,7 +60,7 @@
                 <p>{{ view_profile.info|linebreaks }}</p> <br/>
             {% endif %}
             <strong>Profile views:</strong> {{ view_profile.profile_views }}<br />
-            <strong>Last seen:</strong> {{ view_profile.last_seen|date:"D, d-M-Y \a\t h:i:s a" }}<br /> 
+            <strong>Last seen:</strong> {% mdctime view_profile.last_seen long %}<br /> 
         </td>
         {% if view_profile.photo_url %}
             <td align="right" valign="top">    

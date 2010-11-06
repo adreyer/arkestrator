@@ -6,7 +6,7 @@
 <h1>History for "{{ thread.subject }}"</h1>
 {% endblock %}
 
-{% load util %}
+{% load util mdctime %}
 {% block content %}
     <table class="thread_list">
     <tr>
@@ -18,7 +18,7 @@
         {% for last_read in read_list %}
         <tr class="{{ row_color }}">
             <td>{{ last_read.user.username }}</td>
-            <td>{{ last_read.timestamp|date:"P d-M-Y" }}</td>
+            <td>{% mdctime last_read.timestamp short %}</td>
             <td>{{ last_read.read_count }}</td>
         </tr>
         {% nextcycle row_color %}

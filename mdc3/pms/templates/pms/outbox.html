@@ -8,7 +8,7 @@
 <h1>Outbox for {{ user.username }}</h1>
 {% endblock %}
 
-
+{% load mdctime %}
 {% block content %}
     <table class="thread_list"> 
     {% for pm_rec in pm_rec_list %}
@@ -24,7 +24,7 @@
                     </a>
                 {% endfor %}</div></td>
             <td><a href="{% url view-pm pm_rec.pk %}">{{ pm_rec.reply }}{{ pm_rec.subject }}</a></td>
-            <td nowrap="nowrap"> {{ pm_rec.created_at|date:"h:i a d-M-y" }}</td>
+            <td nowrap="nowrap"> {% mdctime pm_rec.created_at short %}</td>
         </tr>
     {% endfor %}
     </table>

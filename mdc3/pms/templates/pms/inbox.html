@@ -8,6 +8,7 @@
 <h1>Inbox for {{ user.username }}</h1>
 {% endblock %}
 
+{% load mdctime %}
 {% block content %}
     <table class="thread_list"> 
     {% for pm in pm_list %}
@@ -21,7 +22,7 @@
                     <strong>{{ pm.reply }}{{ pm.message.subject }}</strong>
                 {% endif %}
                 {% endspaceless %}</a></td>
-            <td> {{ pm.message.created_at|date:"h:i a d-M-y" }}</td>
+            <td> {% mdctime pm.message.created_at short %}</td>
         </tr>
         {% endfor %}
     </table>

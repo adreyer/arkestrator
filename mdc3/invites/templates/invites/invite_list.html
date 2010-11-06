@@ -6,7 +6,7 @@
     <h1>Invites {{poster}}</h1>
 {% endblock %}
 
-{% load bbcode %}
+{% load bbking mdctime %}
 
 
 {% block content %}
@@ -16,12 +16,12 @@
         <div class="row2">
             <a href="{% url view-profile invite.inviter.id %}">
                 {{ invite.inviter.username }}</a> invited {{ invite.invitee }} 
-                on {{ invite.created_on|date:"D, d-M-Y \a\t h:m a"}}
+                on {% mdctime invite.created_on short %}
                 {% if invite.approved %}
                     <br />
                     {{ invite.approved_by.username }}
                     approved this on 
-                    {{ invite.approved_on|date:"D, d-M-Y \a\t h:m a"}}
+                    {% mdctime invite.approved_on short %}
                 {% else %}
                     {% if not invite.rejected %}
                         <span class="submenuitem">
@@ -31,7 +31,7 @@
                         <br />
                         {{ invite.approved_by.username }}
                         rejected this on 
-                        {{ invite.approved_on|date:"D, d-M-Y \a\t h:m a"}}
+                        {% mdctime invite.approved_on short%}
                     {% endif %}
                     <span class="submenuitem">
                         <a href="{% url approve-invite invite.id %}">

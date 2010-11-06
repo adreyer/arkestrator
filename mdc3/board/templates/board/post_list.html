@@ -10,6 +10,7 @@
 {% endblock %}
 
 {% load bbking %}
+{% load mdctime %}
 {% block extramenu %}
     <div id="submenu">
         <ul>
@@ -78,7 +79,7 @@
             {% else %}
                 <div class="row2">
             {% endif %}
-                <strong><a href="{% url view-profile post.creator.id %}">{{ post.creator.username }}</a></strong> posted this on {{ post.created_at|date:"D, d-M-Y \a\t h:i:s a"}}
+                <strong><a href="{% url view-profile post.creator.id %}">{{ post.creator.username }}</a></strong> posted this on {% mdctime post.created_at long %}
                 <strong><a href="javascript:;" onclick="quote('{% url get-quote post.id %}')">#{{ post.id }}</a></strong>
             </div>
             <div class="body" id="post_{{ post.id }}">

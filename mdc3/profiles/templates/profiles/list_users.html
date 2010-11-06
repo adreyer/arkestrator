@@ -7,13 +7,14 @@
 <h1>User list</h1>
 {% endblock %}
 
+{% load mdctime %}
 {% block content %}
     <table class="thread_list">
     {% for user in user_list %}
             <tr class="{% cycle "row1" "row2" %}">
             <td> {{ forloop.counter }} </td>
             <td><a href="{% url view-profile user.id %}">{{ user.username }}</a></td>
-            <td>joined {{ user.date_joined|date:"d-M-y" }}</td>
+            <td>joined {% mdctime user.date_joined date %}</td>
             <td><a href="{% url threads-by user.id %}">{{ user.get_profile.total_threads }} threads</a></td>
             <td><a href="{% url posts-by user.id %}">{{ user.get_profile.total_posts }} posts</a></td>
             <td>{% if user.theme %}<a href="{% url edit-existing-theme user.theme.id %}">theme</a></td>{% endif %}
