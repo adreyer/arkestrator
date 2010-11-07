@@ -53,7 +53,7 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
         form = forms.PostForm()
 
     queryset=thread.post_set.order_by(
-        "created_at").select_related('creator')
+        "id").select_related('creator')
 
     try:
         lastread = LastRead.objects.get(
