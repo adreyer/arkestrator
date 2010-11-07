@@ -9,7 +9,7 @@ time_fmt = { 'short':'%I:%M %p %d-%b-%y',
              'long':'%a, %d-%b-%Y at %I:%M:%S %p',
              'date'  : '%d-%b-%Y',}
 
-default_tz = 'US/Eastern'
+default_tz = 'America/New_York'
 
 class MDCTNode(Node):
     def __init__(self,var_name,fmt_name='long',):
