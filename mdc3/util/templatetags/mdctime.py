@@ -1,10 +1,11 @@
+import pytz
 from django.template import Library, Node, Variable, TemplateSyntaxError
 
 register = Library()
 
 
 
-time_fmt = { 'short':'%I:%M %p %d-%m-%y',
+time_fmt = { 'short':'%I:%M %p %d-%b-%y',
              'long':'%a, %d-%b-%Y at %I:%M:%S %p',
              'date'  : '%d-%b-%Y',}
 
@@ -18,6 +19,10 @@ class MDCTNode(Node):
     def render(self, context):
         dt = self.var_name.resolve(context)
         fmt = time_fmt[self.fmt_name]
+        utc = pytz.timezone('UTC')
+        tz = pytz.timezone('America/New_York')
+        dt = utc.localize(dt)
+        dt = dt.astimezone(tz)
         tstring = dt.strftime(fmt)
         return tstring
 
