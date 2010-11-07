@@ -113,7 +113,6 @@ INSTALLED_APPS = (
     'mdc3.util',
     'mdc3.shenanigans',
     'mdc3.events',
-    'mdc3.gallery',
     'bbking',
 )
 
