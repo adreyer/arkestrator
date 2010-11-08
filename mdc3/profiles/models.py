@@ -1,11 +1,11 @@
 import datetime
-from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.db import models
+
 from mdc3.invites.models import Invite
 from mdc3.events.models import Market
-
-
 
 
 class Profile(models.Model):
@@ -37,6 +37,9 @@ class Profile(models.Model):
     collapse_size = models.IntegerField(default=10)
     market = models.ForeignKey(Market,null=True,blank=True)
     favs_first = models.BooleanField(default=False)
+    time_zone = models.CharField(default=settings.DEFAULT_TZ,
+                                 max_length = 20,
+                                 choices = settings.TZ_CHOICES)
     #fuck hidden
     
     

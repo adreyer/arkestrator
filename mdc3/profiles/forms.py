@@ -33,7 +33,8 @@ class PrefsForm(forms.ModelForm):
                 empty_label='All Cities')
     class Meta:
         model = Profile
-        fields = ('show_images','collapse_size','favs_first', 'market')
+        fields = ('show_images','collapse_size','favs_first',
+                  'market', 'time_zone')
 
 class PrivEmailForm(forms.ModelForm):
     email = forms.CharField(label='Private email', widget=forms.TextInput(attrs={'size': 70, 'maxlength': 160}), required=False)

@@ -120,3 +120,18 @@ BBCODE_DEFAULT_NAMESPACES = ('no-smilies','no-colors')
 
 AUTH_PROFILE_MODULE = 'profiles.Profile'
 LOGIN_REDIRECT_URL = '/'
+
+##  the choices for profile.time_zone which determines what time zones
+##  are available to users
+TZ_CHOICES = (('America/New_York'    , 'America/New_York'),
+              ('America/Chicago'     , 'America/Chicago'),
+              ('America/Denver'      , 'America/Denver'),
+              ('America/Los_Angeles' , 'America/Los_Angeles'),
+            )
+##  the default timezone when profiles.time_zone isn't set
+DEFAULT_TZ = 'America/New_York'
+
+##  the time format options available for mdc_time
+TIME_FORMATS = { 'short'    : '%I:%M %p %d-%b-%y',
+                 'long'     : '%a, %d-%b-%Y at %I:%M:%S %p',
+                 'date'     : '%d-%b-%Y',}
