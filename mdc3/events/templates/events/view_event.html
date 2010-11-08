@@ -7,11 +7,12 @@
     {% endif %}
 {% endblock %}
 
+{% load mdctime %}
 {% block prepostcontent %}
 <div class="row1">
     <p>
     <strong>{{ event.title }}</strong><br />
-    <strong>When: </strong> {{ event.time|date:"D, d-M-Y \a\t h:i:s a"}}<br />
+    <strong>When: </strong> {% mdctime event.time long event.market.timezone %}<br />
     <strong>Where: </strong> {{ event.location }}<br />
     <strong>What: </strong> {{ event.description }}<br />
     <strong>Who posted this: </strong> {{ event.creator }}<br />

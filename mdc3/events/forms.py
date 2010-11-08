@@ -1,3 +1,4 @@
+import pytz
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
@@ -19,6 +20,10 @@ class NewEventForm(forms.ModelForm):
                   'market','post')
 
     def save(self, user):
+        utc = pytz.timezone('UTC')
+        ltz = pytz.timezone(self.cleaned_data['market'].timezone)
+        local_time = ltz.localize(self.cleaned_data['time'])
+        time = local_time.astimezone(utc)
         thread = Thread(
             creator =   user,
             subject =   self.cleaned_data['title'],
@@ -39,7 +44,7 @@ class NewEventForm(forms.ModelForm):
             title       =   self.cleaned_data['title'],
             description =   self.cleaned_data['description'],
             location    =   self.cleaned_data['location'],
-            time        =   self.cleaned_data['time'],
+            time        =   time,
             market      =   self.cleaned_data['market']
             )
         event.save()

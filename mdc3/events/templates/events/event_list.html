@@ -31,7 +31,7 @@
             {% endif %}
             <td nowrap="nowrap"><a href="{% url view-profile event.creator.id %}">{{ event.creator.username }}</a></td>
             <td><a href="{% url view-event event.id %}">{{ event.title }}</a></td>
-            <td nowrap="nowrap">{% mdctime event.time short %}</td>
+            <td nowrap="nowrap">{% mdctime event.time short event.market.timezone %}</td>
             </tr>
             {% nextcycle row_color %}
         {% endfor %}

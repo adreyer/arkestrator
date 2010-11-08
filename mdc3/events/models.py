@@ -1,11 +1,13 @@
 import datetime
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
 
 class Market(models.Model):
     name=models.CharField(max_length=20)
     timezone=models.CharField(max_length=50,
-                        default='US/Eastern')
+                        default=settings.DEFAULT_TZ,
+                        choices=settings.TZ_CHOICES,)
 
     def __str__(self):
         return self.name
