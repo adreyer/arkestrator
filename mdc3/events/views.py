@@ -102,4 +102,17 @@ def update_rsvp(request, ev_id):
                         args=[event.thread.id]))
     return view_thread(request, event.thread.id, rsvp_form=form)
                 
-                
+def calendar(request, mstring=None, local=False):
+    month = None
+    year = None
+    if mstring is None:
+        month = datetime.date.today()
+    else:
+        try:
+            month, year = date.split('-')
+        except ValueError:
+            return Http404    
+    return Http404
+    
+    
+   
