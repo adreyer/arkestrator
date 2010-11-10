@@ -27,10 +27,13 @@ class InfoProfileForm(forms.ModelForm):
 
 class PrefsForm(forms.ModelForm):
     collapse_size = forms.IntegerField(label='Previously seen posts redisplayed')
-    favs_first = forms.BooleanField(label='Unread favorite threads displayed first')
+    favs_first = forms.BooleanField(
+                    label='Unread favorite threads displayed first', 
+                    required=False)
     market = forms.ModelChoiceField(queryset=Market.objects.all(),
                 label='Which city do you want to see events for',
-                empty_label='All Cities')
+                empty_label='All Cities',
+                required = False)
     class Meta:
         model = Profile
         fields = ('show_images','collapse_size','favs_first',
