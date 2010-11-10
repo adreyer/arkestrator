@@ -1,4 +1,5 @@
 import datetime
+import calendar
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.sites.models import Site
@@ -101,7 +102,9 @@ def update_rsvp(request, ev_id):
             return HttpResponseRedirect(reverse('view-thread',
                         args=[event.thread.id]))
     return view_thread(request, event.thread.id, rsvp_form=form)
-                
+
+    
+    
 def calendar(request, mstring=None, local=False):
     month = None
     year = None
@@ -111,7 +114,9 @@ def calendar(request, mstring=None, local=False):
         try:
             month, year = date.split('-')
         except ValueError:
-            return Http404    
+            return Http404
+    cal = calendar.Calendar()
+    
     return Http404
     
     

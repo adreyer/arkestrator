@@ -135,3 +135,10 @@ DEFAULT_TZ = 'America/New_York'
 TIME_FORMATS = { 'short'    : '%I:%M %p %d-%b-%y',
                  'long'     : '%a, %d-%b-%Y at %I:%M:%S %p',
                  'date'     : '%d-%b-%Y',}
+
+BBKING_TAG_LIBRARIES = (
+                        'bbking.bbtags.text',
+                        'bbking.bbtags.hrefs',
+                        'bbking.bbtags.quote',
+                        'mdc3.bbtags',
+                    )
