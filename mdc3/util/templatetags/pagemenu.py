@@ -4,6 +4,8 @@ from django.template import Node, Library, TemplateSyntaxError, Variable
 
 register = Library()
 
+
+    
 class PageNode(Node):
     def __init__(self, var_name):
         self.var= Variable(var_name)
