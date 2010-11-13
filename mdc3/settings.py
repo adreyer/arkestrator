@@ -140,7 +140,7 @@ BBKING_TAG_LIBRARIES = (
                         'bbking.bbtags.text',
                         'bbking.bbtags.hrefs',
                         'bbking.bbtags.quote',
-                        'bbking.bbtrags.code',
+                        'bbking.bbtags.code',
                         'mdc3.bbtags',
                     )
 
