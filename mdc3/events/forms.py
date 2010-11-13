@@ -7,6 +7,9 @@ from models import Event, RSVP, RSVP_CHOICES
 
 
 class EditEventForm(forms.ModelForm):
+    time = forms.DateTimeField(required = True,
+            label="Date and Time",
+                        help_text="mm/dd/yy hh:mm(24hour)")
     class Meta:
         model = Event
         fields = ('title','description','location','time','market')
