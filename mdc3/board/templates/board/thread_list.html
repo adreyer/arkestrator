@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load cache util mdctime %}
+{% load cache util mdctime wordfilter %}
 
 {% block extramenu %}
     <div id="submenu">
@@ -37,13 +37,13 @@
                         {% if thread.last_post_read %}
                                 #{{ thread.last_post_read }}
                             {% endif %}{% endspaceless %}">
-                        {{ thread.subject }}</a>
+                        {{ thread.subject|wordfilter }}</a>
                 {% else %}
                     <a href="{% url view-thread thread.id %}{% spaceless %}
                         {% if thread.last_post_read %}
                                 #{{ thread.last_post_read }}
                             {% endif %}{% endspaceless %}">
-                        {{ thread.subject }}</a>
+                        {{ thread.subject|wordfilter }}</a>
                 {% endif %}
             </div></td>
             <td nowrap="nowrap">{% mdctime thread.last_post.created_at short %} <a class="smallfont" href="{% url view-profile thread.last_post.creator.id %}">{{ thread.last_post.creator.username }}</a></td>
