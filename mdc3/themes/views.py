@@ -7,6 +7,12 @@ from models import Theme
 
 @login_required
 def edit_theme(request, theme_id=None):
+    """ allows requester to edit their theme
+
+        args:
+        theme_id: The theme to fill the form with 
+
+    """
     if not theme_id:
         try:
             theme = request.user.theme
