@@ -7,6 +7,7 @@ from models import Theme
 _COLOR_REGEX = re.compile("[0-9A-Fa-f]{6}")
 
 def color_cleaner(name):
+    """ true if name is a valid 6 hex color  """
     def _color_cleaner(self):
         if not _COLOR_REGEX.match(self.cleaned_data[name]):
             raise ValidationError("Color must have 6 hexadecimal characters")
@@ -14,6 +15,7 @@ def color_cleaner(name):
     return _color_cleaner
 
 class ThemeForm(forms.ModelForm):
+    """ a form to change a theme """
     class Meta:
         model = Theme
         exclude = ('user','name')

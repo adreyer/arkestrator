@@ -18,7 +18,9 @@ from mdc3.profiles.models import Profile
 import forms
 
 @login_required
-def new_pm(request, rec_id=0):    
+def new_pm(request, rec_id=0): 
+    """ create a new pm """
+
     if request.method == 'POST':
         form =forms.NewPMForm(request.POST)
         if form.is_valid():
@@ -41,6 +43,7 @@ def new_pm(request, rec_id=0):
 
 @login_required
 def outbox(request):
+    """ all outgoing messages """
     try:
         page = int(request.GET.get('page', 1))
     except ValueError:
@@ -73,6 +76,7 @@ def outbox(request):
 
 @login_required
 def inbox(request):
+    """ all incoming messages """
     try:
         page = int(request.GET.get('page', 1))
     except ValueError:
@@ -97,6 +101,8 @@ def inbox(request):
 
 @login_required
 def mark_read(request):
+    """ mark all recipients the user has read """
+
     unread_list = Recipient.objects.filter(
         recipient=request.user,read=False).update(
             read=True)
@@ -104,6 +110,7 @@ def mark_read(request):
 
 @login_required
 def view_pm(request, pm_id):
+    """ display pm pm_id and if appropriate it's parent """
     pm = get_object_or_404(PM,pk=pm_id)
     #make sure only the sender and recipients can read it
     if pm.sender != request.user:
@@ -164,6 +171,7 @@ def view_pm(request, pm_id):
             context_instance = RequestContext(request))
 
 def pm_thread(request, pm_id):
+    """ view all appropriate pms with the same root_parent as pm_id """
     pm = get_object_or_404(PM,pk=pm_id)
 
     
@@ -221,6 +229,8 @@ def pm_thread(request, pm_id):
     
         
 def del_pm(request, pm_id):
+    """ delete pm pm_id for a user """
+
     pm = get_object_or_404(PM,pk=pm_id)
     if pm.sender == request.user:
         pm.deleted = True
@@ -237,6 +247,7 @@ def del_pm(request, pm_id):
 
 @login_required
 def get_quote(request, id):
+    """ if allowed get a quote of pm id """
     pm = get_object_or_404(PM, pk=id)
     if not pm.check_privacy(request.user):
         raise Http404

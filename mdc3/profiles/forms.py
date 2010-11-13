@@ -7,6 +7,7 @@ from models import Profile
 
 
 class InfoProfileForm(forms.ModelForm):
+    """ change the publicly viewable info """
     email_public = forms.CharField(label='Public email', widget=forms.TextInput(attrs={'size': 70, 'maxlength': 160}), required=False)
     aim_name = forms.CharField(label='AIM', widget=forms.TextInput(attrs={'size': 70, 'maxlength': 160}), required=False)
     gtalk_name = forms.CharField(label='Jabber', widget=forms.TextInput(attrs={'size': 70, 'maxlength': 160}), required=False)
@@ -26,6 +27,7 @@ class InfoProfileForm(forms.ModelForm):
         }
 
 class PrefsForm(forms.ModelForm):
+    """ change the private preferences """
     collapse_size = forms.IntegerField(label='Previously seen posts redisplayed')
     favs_first = forms.BooleanField(
                     label='Unread favorite threads displayed first', 
@@ -40,6 +42,7 @@ class PrefsForm(forms.ModelForm):
                   'market', 'time_zone')
 
 class PrivEmailForm(forms.ModelForm):
+    """ change the private email associated with a user """
     email = forms.CharField(label='Private email', widget=forms.TextInput(attrs={'size': 70, 'maxlength': 160}), required=False)
     class Meta:
         model = User
