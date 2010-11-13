@@ -310,6 +310,7 @@ def thread_history(request,id=None):
         'read_list' : queryset.all(),
     }, context_instance = RequestContext(request))
 
+##  WARNING THIS IS INSECURE MODS CAN BE TRICKED BY LINKS
 @login_required
 @permission_required('board.can_sticky')
 def sticky(request,id):
@@ -319,6 +320,7 @@ def sticky(request,id):
     thread.save()
     return HttpResponseRedirect(reverse('list-threads'))
 
+##  WARNING THIS IS INSECURE MODS CAN BE TRICKED BY LINKS
 @login_required
 @permission_required('board.can_sticky')
 def unsticky(request,id):
@@ -397,6 +399,7 @@ def get_quote(request, id):
             'user': user,
     })
 
+##  WARNING THIS IS INSECURE MODS CAN BE TRICKED BY LINKS
 @login_required
 @permission_required('board.can_lock')
 def lock_thread(request, id):
@@ -406,6 +409,7 @@ def lock_thread(request, id):
     thread.save()
     return HttpResponseRedirect(reverse('list-threads'))
 
+##  WARNING THIS IS INSECURE MODS CAN BE TRICKED BY LINKS
 @login_required
 @permission_required('board.can_lock')
 def unlock_thread(request, id):
@@ -414,7 +418,10 @@ def unlock_thread(request, id):
     thread.locked = False
     thread.save()
     return HttpResponseRedirect(reverse('list-threads'))
-    
+
+
+##  WARNING THIS IS INSECURE
+##  THE LINK NEEDS TO BE CHECKED
 @login_required
 def favorite_thread(request, id):
     """ add thread id to the users favorited """
@@ -422,6 +429,7 @@ def favorite_thread(request, id):
     thread.favorite.add(request.user)
     return HttpResponseRedirect(reverse('list-threads'))
 
+## WARNING THIS IS INSECURE
 @login_required
 def unfavorite_thread(request,id):
     """ remove thread id from the users favorites """ 
