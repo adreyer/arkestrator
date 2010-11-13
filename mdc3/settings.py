@@ -131,6 +131,9 @@ TZ_CHOICES = (('America/New_York'    , 'America/New_York'),
 ##  the default timezone when profiles.time_zone isn't set
 DEFAULT_TZ = 'America/New_York'
 
+## the default time format to use from TIME_FORMATS
+DEFAULT_TIME_FORMAT = 'long'
+
 ##  the time format options available for mdc_time
 TIME_FORMATS = { 'short'    : '%I:%M %p %d-%b-%y',
                  'long'     : '%a, %d-%b-%Y at %I:%M:%S %p',

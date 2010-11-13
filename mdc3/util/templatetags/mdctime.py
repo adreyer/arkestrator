@@ -5,7 +5,8 @@ from django.template import Library, Node, Variable, TemplateSyntaxError
 register = Library()
 
 class MDCTNode(Node):
-    def __init__(self,var_name,fmt_name='long',tz_var=None):
+    def __init__(self,var_name,fmt_name=settings.DEFAULT_TIME_FORMAT,
+                    tz_var=None):
         self.var_name = Variable(var_name)
         if tz_var is None:
             self.tz_var = None
