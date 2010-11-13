@@ -12,6 +12,8 @@ import forms
 
 @login_required
 def view_profile(request, user_id):
+    """ view profile of user user_id """
+
     user = get_object_or_404(User,pk=user_id)
     profile = get_object_or_404(Profile,user=user)
     if request.user != user:
@@ -26,6 +28,7 @@ def view_profile(request, user_id):
 
 @login_required
 def list_users(request):
+    """ list all users with some information and links to their profiles """
     user_list = User.objects.exclude(
         profile__isnull=True).order_by('date_joined')
     return render_to_response("profiles/list_users.html",
@@ -34,6 +37,7 @@ def list_users(request):
 
 @login_required
 def edit_info(request):
+    """ lets the user edit their publicly available info """
     prof = Profile.objects.get(user=request.user)
     if request.method == 'POST':
         profile_form = forms.InfoProfileForm(request.POST,
@@ -54,6 +58,7 @@ def edit_info(request):
     
 @login_required
 def edit_prefs(request):
+    """ lets the user edit their preferences and private email """
     prof = Profile.objects.get(user=request.user)
     if request.method == 'POST':
         prefs_form = forms.PrefsForm(request.POST,
