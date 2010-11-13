@@ -414,5 +414,6 @@ def ghetto_search(request):
         template_object_name = 'thread',
         paginate_by = 50,
         template_name = "board/thread_list.html",
+        extra_context = { 'search_query' : query },
     )
 
