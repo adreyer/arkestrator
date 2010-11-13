@@ -3,6 +3,7 @@ import random
 import sys
 import string
 import re
+import urllib
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.sites.models import Site
@@ -414,6 +415,9 @@ def ghetto_search(request):
         template_object_name = 'thread',
         paginate_by = 50,
         template_name = "board/thread_list.html",
-        extra_context = { 'search_query' : query },
+        extra_context = { 
+            'search_query' : query,
+            'paginator_query' : urllib.urlencode({ 'query' : query })
+        },
     )
 
