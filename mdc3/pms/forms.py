@@ -4,6 +4,8 @@ from models import PM, Recipient
 
 
 class NewPMForm(forms.ModelForm):
+    """ a form to create a new pm """
+
     recs = forms.CharField(required=True,
             label="To:", widget=forms.TextInput(attrs={'size': 70}))
     
@@ -16,6 +18,8 @@ class NewPMForm(forms.ModelForm):
         }
         
     def clean_recs(self):
+        """ create a list of users from a string of usernames """
+
         recipient_list = self.cleaned_data['recs'].split()
         user_list = []
         for rec in recipient_list:

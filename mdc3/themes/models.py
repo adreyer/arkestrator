@@ -8,6 +8,7 @@ import colorsys
 import time
 
 def invert_color(color):
+    """ return black or white to display on top of color """
     r = int(color[:2], 16)
     g = int(color[2:4], 16)
     b = int(color[4:], 16)
@@ -18,6 +19,7 @@ def invert_color(color):
         return "ffffff"
 
 class Theme(models.Model):
+    """ A theme """
     user = models.OneToOneField(User, blank=True, null=True)
     name = models.CharField(max_length=32, blank=True)
 

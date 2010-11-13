@@ -7,6 +7,7 @@ def site_name(request):
     return { 'site_name' : current_site.name }
 
 def online_users(request):
+    """ the number of users online recently see mdc3.middleware """
     return { 'online_users' : len(request.online_users) }
 
 

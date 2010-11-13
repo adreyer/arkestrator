@@ -13,6 +13,8 @@ import datetime
 
 
 class Thread(models.Model):
+    """ a Thread """
+        
     class Meta:
         permissions=(
             ('can_sticky', 'Can sticky threads'),
@@ -37,18 +39,23 @@ class Thread(models.Model):
 
     @instance_memcache('default-posts-list', 1800)
     def default_post_list(self):
+        """ the last ten posts made """
+
         post_list = self.post_set.select_related('creator').order_by("id")
         post_list = post_list[max(0,post_list.count()-10):]
         return post_list
 
     @instance_memcache('total-posts', 1800)
     def total_posts(self):
+        """ how many posts does a thread have """
         if getattr(self, 'post__count', None):
             return self.post__count
         return self.post_set.count()
 
     @instance_memcache('total-views', 1800)
     def total_views(self):
+        """ how many times has a thread been viewed """
+
         if getattr(self, 'lastread__read_count__sum', None):
             return self.lastread__read_count__sum
         queryset = LastRead.objects.filter(thread=self)
@@ -60,6 +67,8 @@ class Thread(models.Model):
 
 
 class Post(models.Model):
+    """ a post in a thread """
+
     thread = models.ForeignKey(Thread, null=False)
     creator = models.ForeignKey(User,null=False)
     body = models.TextField(blank=False)
@@ -74,6 +83,7 @@ class Post(models.Model):
         return "%s: %s"%(unicode(self.thread),self.body[:20])
     
 class LastRead(models.Model):
+    """ when did a user last read a thread """
     user = models.ForeignKey(User)
     thread = models.ForeignKey(Thread)
     post = models.ForeignKey(Post, null=True, blank=True)
@@ -84,6 +94,7 @@ class LastRead(models.Model):
 
 
 def update_thread(sender, instance, signal, *args, **kwargs):
+    """ a post was made in this thread clear cache appropriately """
     if instance.id > instance.thread.last_post_id:
 
         instance.thread.last_post = instance
@@ -106,6 +117,7 @@ def update_thread(sender, instance, signal, *args, **kwargs):
             )
 
 def invalidate_front_page(sender, instance, signal, *args, **kwargs):
+    """ something has changed on the front page clear cache appropriately """
     cache_key = "thread-list-page:%d:1"%Site.objects.get_current().id
     cache.delete(cache_key)
     del instance.default_post_list

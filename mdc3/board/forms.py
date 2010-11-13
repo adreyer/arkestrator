@@ -6,6 +6,7 @@ from mdc3.board.models import Thread, Post, LastRead
 
 
 class ThreadForm(forms.ModelForm):
+    """ a form for a new thread must be used with PostForm """
     class Meta:
         model = Thread
         fields = ('subject',)
@@ -14,6 +15,7 @@ class ThreadForm(forms.ModelForm):
         }
 
     def clean_subject(self):
+        """ remove leading and trailing whitespace from a subject """
         subj = self.cleaned_data["subject"]
         subj = subj.strip()
         if subj  == '':
@@ -22,6 +24,7 @@ class ThreadForm(forms.ModelForm):
                     
 
 class PostForm(forms.ModelForm):
+    """ a form for a new Post """
     class Meta:
         auto_id = False
         model = Post

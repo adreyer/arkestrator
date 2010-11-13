@@ -3,6 +3,7 @@ from django.contrib.sites.models import Site
 from mdc3.util.cache_set import TimedCacheSet
 
 class OnlineUsersMiddleware(object):
+    """ update the cache with the number of users online """
     def process_request(self, request):
         tcs = TimedCacheSet("online-users")
 

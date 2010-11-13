@@ -5,7 +5,8 @@ from django.template import Library, Node, Variable, TemplateSyntaxError
 register = Library()
 
 class MDCTNode(Node):
-    def __init__(self,var_name,fmt_name='long',tz_var=None):
+    def __init__(self,var_name,fmt_name=settings.DEFAULT_TIME_FORMAT,
+                    tz_var=None):
         self.var_name = Variable(var_name)
         if tz_var is None:
             self.tz_var = None
@@ -32,6 +33,19 @@ class MDCTNode(Node):
 
 @register.tag
 def mdctime(parser, token):
+    """ Usage: {% mdctime datetime_var [format_name] [tz_var] %}
+
+        If a tz is to be selected a format name must also be given
+
+        args:
+            datetime: a utc datetime object to display
+            format_name:  a format name from settings.TIME_FORMATS
+                        defaults to settings DEFAULT_TIME_FORMAT
+            tz_var:    the tz to cast the time into
+                        default to the users tz if she is logged in
+                        othewise to settings.DEFAULT_TZ
+    """
+
     args = token.split_contents()[1:]
     if args == [] or len(args) > 3 :
         raise TemplateSyntaxError(

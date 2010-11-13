@@ -30,14 +30,23 @@ from mdc3.decorators import super_no_cache
 
 
 @login_required
-def view_thread(request,id=None,start=False,expand=False,hide=None):
+def view_thread(request,id,start=False,expand=False,hide=None):
+    """ display thread  id for a user
+
+        args:
+        id: the thread id
+        start:  the first post to show otherwise prefs and collapsing are used
+        expand: show all posts in the thread
+        hide:  hide images in the thread
+
+    """
     thread = get_object_or_404(Thread,pk=id)
     try:
         event = Event.objects.get(thread=thread)
     except Event.DoesNotExist:
         event = None
                                   
-    
+    #try to make a new post in the thread  
     if request.method == 'POST':
         if thread.locked:
             return HttpResponseRedirect(reverse('list-threads'))
@@ -52,10 +61,11 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
             return HttpResponseRedirect(reverse('list-threads'))
     else:
         form = forms.PostForm()
-
+    
     queryset=thread.post_set.order_by(
         "id").select_related('creator')
-
+    
+    #try to collapse the thread appriately
     try:
         lastread = LastRead.objects.get(
             user = request.user,
@@ -80,7 +90,6 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
         )
         if event:
             cache.delete('event-count:%d'%(request.user.id))
-
     if not expand and not start and queryset.count() < 10:
         queryset = thread.default_post_list
         queryset = queryset=thread.post_set.order_by(
@@ -89,6 +98,8 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
  
             
     post_list = list(queryset)
+    
+    #hide images in the thread if appropriate
     try:
         if (not hide is False) and (hide or not request.user.get_profile().show_images):
             hide = True
@@ -116,7 +127,7 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
     if not start and post_list:
         start = post_list[0].id
 
-
+    #if this is an event display it as such
     if event:
         event = Event.objects.get(thread=thread)
         return render_to_response("events/view_event.html", {
@@ -147,12 +158,14 @@ def view_thread(request,id=None,start=False,expand=False,hide=None):
 
 @login_required
 def view_post(request, id):
+    """  view a thread starting with post num post id """
     post = get_object_or_404(Post, pk=id)
     return view_thread(request, id=post.thread.id,start=id)
     
 
 @login_required
 def new_thread(request):
+    """ create a new thead """
     if request.method == 'POST':
         thread = Thread(
             creator = request.user,
@@ -183,11 +196,13 @@ def new_thread(request):
 @super_no_cache
 @login_required
 def list_threads(request):
+    """ list threads """
     try:
         page = int(request.GET.get('page', 1))
     except ValueError:
         raise Http404
     
+    #get the right threads for the page
     cache_key = "thread-list-page:%d:%d"%(Site.objects.get_current().id, page)
     page_obj = cache.get(cache_key, None)
     if page_obj is None:
@@ -198,7 +213,8 @@ def list_threads(request):
         cache.set(cache_key, page_obj)
 
     thread_list = list(page_obj.object_list)
-
+    
+    #find out which ones are read
     last_read = LastRead.objects.filter(
         thread__in=[t.id for t in thread_list],
         user = request.user,
@@ -248,11 +264,13 @@ def list_threads(request):
 
 @login_required
 def favorite_list(request):
+    """ show the thread which requester has favorited """
     try:
         page = int(request.GET.get('page', 1))
     except ValueError:
         raise Http404
     
+    # get the threads
     queryset = request.user.favorites.all().order_by(
         '-last_post__id').select_related(
         "creator","last_post","last_post__creator")
@@ -261,7 +279,7 @@ def favorite_list(request):
     page_obj = paginator.page(page)
 
     thread_list = page_obj.object_list
-
+    #find out which ones are read
     last_read = LastRead.objects.filter(
         thread__in=[t.id for t in thread_list],
         user = request.user,
@@ -280,7 +298,8 @@ def favorite_list(request):
 
 @super_no_cache
 @login_required
-def thread_history(request,id=None,expand=False):
+def thread_history(request,id=None):
+    """ show who has read a thread and when they last did """
     thread = get_object_or_404(Thread,pk=id)
 
     queryset = LastRead.objects.filter(thread = thread).order_by("-timestamp")
@@ -291,17 +310,21 @@ def thread_history(request,id=None,expand=False):
         'read_list' : queryset.all(),
     }, context_instance = RequestContext(request))
 
+##  WARNING THIS IS INSECURE MODS CAN BE TRICKED BY LINKS
 @login_required
 @permission_required('board.can_sticky')
 def sticky(request,id):
+    """ if the user has permissions sticky thread id """
     thread = get_object_or_404(Thread,pk=id)
     thread.stuck = True
     thread.save()
     return HttpResponseRedirect(reverse('list-threads'))
 
+##  WARNING THIS IS INSECURE MODS CAN BE TRICKED BY LINKS
 @login_required
 @permission_required('board.can_sticky')
 def unsticky(request,id):
+    """ if the user has permission unsticky thread id """
     thread = get_object_or_404(Thread,pk=id)
     thread.stuck = False
     thread.save()
@@ -309,6 +332,7 @@ def unsticky(request,id):
 
 @login_required
 def mark_read(request):
+    """ mark all threads on the first page read """
     thread_list = Thread.objects.order_by("-stuck","-last_post")[0:50]
     lr_list = LastRead.objects.filter(
         thread__in=[t.id for t in thread_list],
@@ -336,6 +360,7 @@ def mark_read(request):
 
 @login_required
 def threads_by(request, id):
+    """ list all threads by user id """
     poster = get_object_or_404(User,pk=id)
     queryset = Thread.objects.filter(creator=id).order_by(
         '-last_post').select_related('last_post', 'last_post__creator')
@@ -350,6 +375,7 @@ def threads_by(request, id):
 
 @login_required
 def posts_by(request, id):
+    """ list all posts by user id """
     poster = get_object_or_404(User,pk=id)
     queryset = Post.objects.filter(creator = poster).order_by(
         '-created_at').select_related('thread__subject')
@@ -364,6 +390,7 @@ def posts_by(request, id):
 
 @login_required
 def get_quote(request, id):
+    """ get a quote of post id """
     post = get_object_or_404(Post, pk=id)
     user = get_object_or_404(User, pk=post.creator.id)
 
@@ -372,30 +399,40 @@ def get_quote(request, id):
             'user': user,
     })
 
+##  WARNING THIS IS INSECURE MODS CAN BE TRICKED BY LINKS
 @login_required
 @permission_required('board.can_lock')
 def lock_thread(request, id):
+    """ lock thread id if the requester has perms"""
     thread = get_object_or_404(Thread,pk=id)
     thread.locked = True
     thread.save()
     return HttpResponseRedirect(reverse('list-threads'))
 
+##  WARNING THIS IS INSECURE MODS CAN BE TRICKED BY LINKS
 @login_required
 @permission_required('board.can_lock')
 def unlock_thread(request, id):
+    """ unlock thread id id the requester has perms """
     thread = get_object_or_404(Thread,pk=id)
     thread.locked = False
     thread.save()
     return HttpResponseRedirect(reverse('list-threads'))
-    
+
+
+##  WARNING THIS IS INSECURE
+##  THE LINK NEEDS TO BE CHECKED
 @login_required
 def favorite_thread(request, id):
+    """ add thread id to the users favorited """
     thread = get_object_or_404(Thread,pk=id)
     thread.favorite.add(request.user)
     return HttpResponseRedirect(reverse('list-threads'))
 
+## WARNING THIS IS INSECURE
 @login_required
 def unfavorite_thread(request,id):
+    """ remove thread id from the users favorites """ 
     thread = get_object_or_404(Thread,pk=id)
     thread.favorite.remove(request.user)
     return HttpResponseRedirect(reverse('list-threads'))
