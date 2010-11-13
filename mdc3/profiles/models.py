@@ -9,6 +9,8 @@ from mdc3.events.models import Market
 
 
 class Profile(models.Model):
+    """ a profile for a user """
+
     #data
     user = models.OneToOneField(User,null=False)
     ip_signup = models.IPAddressField()
@@ -50,12 +52,16 @@ class Profile(models.Model):
         return self.user.username
 
     def total_posts(self):
+        """ how many posts the user has made """
         return self.user.post_set.count()
 
     def total_threads(self):
+        """ how many threads the user has made """
         return self.user.threads.count()
 
     def last_seen(self):
+        """ the last time the user viewed a thread """
+
         from mdc3.board.models import LastRead
         lr = LastRead.objects.filter(user=self.user).order_by(
                 '-timestamp')
