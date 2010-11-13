@@ -30,6 +30,12 @@
     {% block pagetitle %}
     <h1>{{ site_name }}</h1>
     {% endblock %}
+    <div id="search_box">
+    <form method="get" action="{% url search-threads %}">
+        <input type="text" name="query" value="{{ search_query }}" />
+        <input type="submit" value="Ghetto Search" />
+    </form>
+    </div>
     <div id="status">{{ thread_count }} thread{{ thread_count|pluralize }}, 
         <a href="{% url active-users %}">{% spaceless %}
             {{ online_users }} active user{{ online_users|pluralize }},

@@ -398,3 +398,22 @@ def unfavorite_thread(request,id):
     thread = get_object_or_404(Thread,pk=id)
     thread.favorite.remove(request.user)
     return HttpResponseRedirect(reverse('list-threads'))
+
+@login_required
+def ghetto_search(request):
+    'fuck this shit is ghetto'
+
+    query = request.GET.get('query', 'rev is the best')
+    
+    queryset = Thread.objects.filter(subject__icontains=query).order_by(
+        '-last_post__id')
+    
+    return list_detail.object_list(
+        request,
+        queryset = queryset,
+        template_object_name = 'thread',
+        paginate_by = 50,
+        template_name = "board/thread_list.html",
+        extra_context = { 'search_query' : query },
+    )
+

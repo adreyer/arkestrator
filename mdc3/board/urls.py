@@ -50,4 +50,5 @@ urlpatterns = patterns('',
     url(r"^threads/unfavorite/(?P<id>\d+)/$", views.unfavorite_thread,
         name='unfavorite'),
     url(r"^threads/favorites/$", views.favorite_list,name='favorite-list'),
+    url(r"^threads/search/$", views.ghetto_search, name='search-threads'),
 )

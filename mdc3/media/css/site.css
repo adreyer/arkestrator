@@ -287,3 +287,7 @@ div#submenu ul li, div#bottombezel ul li {
 div#status {
     margin-bottom: 1.25em;
 }
+
+div#search_box {
+    float: right;
+}
