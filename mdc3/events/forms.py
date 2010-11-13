@@ -14,6 +14,9 @@ class EditEventForm(forms.ModelForm):
 class NewEventForm(forms.ModelForm):
     post = forms.CharField(required=True,
             label="Post:", widget=forms.TextInput(attrs={'size': 70}))
+    time = forms.DateTimeField(required = True,
+            label="Date and Time",
+            help_text="mm/dd/yy hh:mm(24hour)")
     class Meta:
         model  = Event
         fields = ('title','description','location','time',
