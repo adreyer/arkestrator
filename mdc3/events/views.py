@@ -22,11 +22,21 @@ import forms
 
 @login_required
 def view_event(request, ev_id):
+    """ view event ev_id """
     event = get_object_or_404(Event,pk=ev_id)
     return view_thread(request,event.thread.id)
 
 @login_required
 def list_events(request, upcoming=True, local=True):
+    """ list events 
+         
+        args:
+        upcoming: if true only future events will be listed
+        local:    if true only events in the users market or
+                   events where all_markets are true will be 
+                   shown
+    """
+
     queryset = Event.objects.all()
     if upcoming:
         queryset = queryset.filter(time__gte=datetime.datetime.now)
@@ -54,6 +64,11 @@ def list_events(request, upcoming=True, local=True):
 
 @login_required
 def new_event(request):
+    """ 
+        create a new event
+
+    """
+
     if request.method =='POST':
         form = forms.NewEventForm(request.POST)
         if form.is_valid():
@@ -69,6 +84,11 @@ def new_event(request):
 
 @login_required
 def edit_event(request, ev_id):
+    """   edit event ev_id
+
+          only available to the events creator or
+          users with the events.can_edit permissions
+    """
     event = get_object_or_404(Event,pk=ev_id)
     if not request.user.has_perm('events.can_edit'):
         if not event.creator == request.user:
@@ -92,6 +112,10 @@ def edit_event(request, ev_id):
     
 @login_required
 def update_rsvp(request, ev_id):
+    """ update a users rsvp for ev_id  
+        
+        should be called from submit with RSVPForm
+    """
     event = get_object_or_404(Event,pk=ev_id)
     if request.method == 'POST':
         form = forms.RSVPForm(request.POST)
@@ -104,6 +128,17 @@ def update_rsvp(request, ev_id):
     
     
 def calendar(request, mstring=None, local=True):
+    """     NOT FULLY IMPLEMENTED
+            display a months events in calendar format
+            
+
+            args:
+            mstring = a string of the month  mm-yy
+                        if not included the current month will be displayed
+            local =   if True only events from the users 
+                      market will be displayed
+    """
+
     month = None
     year = None
     date = datetime.date.today()
