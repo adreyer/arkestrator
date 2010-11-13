@@ -9,6 +9,19 @@ import datetime
 from bbking.fields import BBCodeField
 
 class PM(models.Model):
+    """ a private message
+
+        subject: subject
+        body:   body
+        sender: sender
+        recipients: recipients
+        parent:  the pm this pm is reply to or null
+        root_parent: the original pm in this thread of replies
+        created_at: when the pm was created
+        deleted:  True if the sender has deleted this
+        bbcode:   the bbcode body
+    """
+
     subject = models.CharField(max_length=100, blank=False)
     body = models.TextField(default='')
     sender = models.ForeignKey(User, related_name='sent_pms',
@@ -31,6 +44,8 @@ class PM(models.Model):
     #there is clearly a one line query for this but this will
     #work for now
     def get_rec_str(self):
+        """ return a string of all recipients usernames """
+
         rec_list = Recipient.objects.filter(message=self)
         rec_str =''
         for rec in rec_list:
@@ -38,6 +53,8 @@ class PM(models.Model):
         return rec_str
     
     def get_reply_all(self, user):
+        """ return a string of the users reply all will go to """
+
         reply_all = self.sender.username
         recips = Recipient.objects.filter(message=self).exclude(
             recipient=user).exclude(
@@ -48,6 +65,7 @@ class PM(models.Model):
         return reply_all
 
     def check_privacy(self, user):
+        """returns true if user is a sender or recipient """
         if self.sender==user:
             return True
         if Recipient.objects.filter(message=self,recipient=user):
@@ -55,6 +73,7 @@ class PM(models.Model):
         return False
 
     def not_deleted(self, user):
+        """returns true if there is a sender or recipient who hasn't deleted"""
         if self.sender == user:
             if self.deleted:
                 return False
@@ -67,6 +86,12 @@ class PM(models.Model):
 
     
 class Recipient(models.Model):
+    """ a recipient of a pm
+        recipient: the user
+        message:  the PM
+        read:    Have they read it yet
+        deleted: have the deleted it
+    """
     recipient = models.ForeignKey(User)
     message = models.ForeignKey(PM)
     read = models.BooleanField(default=False)
@@ -77,6 +102,7 @@ class Recipient(models.Model):
 
 
 def clear_pm_count(sender, instance, signal, *args, **kwargs):
+    """ when a new message is sent some users pm-count cache is cleared """
     cache_key = "pm-count:%d:%d"%(
         Site.objects.get_current().id,
         instance.recipient.id,

@@ -4,6 +4,7 @@ from django.contrib.sites.models import Site
 from mdc3.pms.models import Recipient
 
 def new_pm(request):
+    """ the number of new pms a user has """
 
     if request.user.is_authenticated():
         cache_key = "pm-count:%d:%d"%(
