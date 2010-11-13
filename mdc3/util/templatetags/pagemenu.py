@@ -27,6 +27,10 @@ class PageNode(Node):
 
 @register.tag
 def pagemenu(parser, token):
+    """ Usage: {% pages page_obj %} 
+        
+        creates a page_menu for page_obj
+    """
     args = token.split_contents()[1:]
     if len(args) != 1:
         raise TemplateSyntaxError("Usage: {% pages page_obj %}")
