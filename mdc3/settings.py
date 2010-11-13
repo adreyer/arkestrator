@@ -140,5 +140,8 @@ BBKING_TAG_LIBRARIES = (
                         'bbking.bbtags.text',
                         'bbking.bbtags.hrefs',
                         'bbking.bbtags.quote',
+                        'bbking.bbtrags.code',
                         'mdc3.bbtags',
                     )
+
+BBKING_USE_WORDFILTERS = True
