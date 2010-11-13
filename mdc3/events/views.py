@@ -33,8 +33,6 @@ def list_events(request, upcoming=True, local=True):
         
     usr_mrk = request.user.get_profile().market
     if usr_mrk:
-        if usr_mrk.id == 1:
-            local = False
         if local:
             queryset = queryset.filter(Q(
                 Q(market=usr_mrk) | Q(all_markets=True)))
@@ -105,19 +103,47 @@ def update_rsvp(request, ev_id):
 
     
     
-def calendar(request, mstring=None, local=False):
+def calendar(request, mstring=None, local=True):
     month = None
     year = None
+    date = datetime.date.today()
     if mstring is None:
-        month = datetime.date.today()
+        month = tday.month
+        year = tday.year
     else:
         try:
             month, year = date.split('-')
+            month = int(month)
+            year = int(year)
+            date = datetime.date(year, month, 1)
         except ValueError:
             return Http404
-    cal = calendar.Calendar()
+    cal = calendar.monthcalendar(year,month)
+    events = Event.objects.filter(time__year=year,
+                time__month=month)
+    usr_mrk = request.user.get_profile().market
+    if usr_mrk:
+        if local:
+            events = events.filter(Q(
+                Q(market=usr_mrk) | Q(all_markets=True)))
+    events = events.order_by('time')
+    ecounter = 0
+    for week in cal:
+        for day in week:
+            if day == 0:
+                day = [0,[]]
+            else:
+                evs = []
+                while ecounter < events.count() and day == events[ecounter].time.day:
+                    evs.append(events[ecounter])
+                day = [day,evs]
     
-    return Http404
+    return render_to_response('events/calendar.html',
+                { 'cal' : cal,
+                  'month' : month,
+                  'year' : year,
+                },
+                context_instance = RequestContext(request))
     
     
    

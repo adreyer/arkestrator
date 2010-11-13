@@ -1,4 +1,4 @@
-from bbking import BBTagWithArg
+from bbking import BBTag
 
 __all__ = ['BBTagHidden']
 
@@ -6,11 +6,9 @@ import string
 import random
 lnn = ''.join([string.ascii_letters, string.digits])
 
-class BBTagHidden(BBTagWithArg):
+class BBTagHidden(BBTag):
     tag_name = 'hidden'
-
-    def __init__(self, contents, arg='hidden'):
-        super(BBTagHidden, self).__init__(contents,arg)
+    default_arg = 'hidden'
 
     def update_context(self, context):
         hiddenkey =''.join(random.choice(lnn) for i in range(10))
