@@ -6,6 +6,15 @@ from mdc3.profiles.models import Profile
 from models import Event
 
 def new_events(request):
+    """ returns the number of new events
+        
+        The number of new events since the last time the user visited
+        the events list with the exception of events whose thread
+        they have read.
+
+        new events don't show up immediately
+    """
+        
     if request.user.is_authenticated():
         try:
             profile = request.user.get_profile()
