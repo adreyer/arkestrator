@@ -20,6 +20,7 @@ import forms
 
 @login_required
 def invite_list(request):
+    """ if the user has perms list all open invites """
     if request.method == 'POST':
         form = forms.NewInviteForm(request.POST)
         if form.is_valid():
@@ -41,6 +42,7 @@ def invite_list(request):
 
 
 def register(request,code):
+    """ register a new user with invite_code code 404 bad codes """
     invite = get_object_or_404(Invite,invite_code=code)
     if invite.used:
         return HttpResponse("THIS INVITE IS USED OR EXPIRED")
@@ -74,14 +76,12 @@ def register(request,code):
          context_instance = RequestContext(request))
     
 
-##@login_required
-##@permission_required('invites.can_approve','/')
-##def invite_list(request):
-##
 
 @login_required
 @permission_required('invites.can_approve','/')
 def approve_invite(request, id):
+    """ approve and invite if the requester has perms """
+
     inv = get_object_or_404(Invite,id=id)
     if not inv.approved:
         inv.approved = True
@@ -105,6 +105,7 @@ Welcome to MDC. Use the link below to create your account
 @login_required
 @permission_required('invites.can_approve','/')
 def reject_invite(request, id):
+    """ reject and invite if the requester has perms """
     inv = get_object_or_404(Invite,id=id)
     if not inv.rejected:
         inv.rejected = True
