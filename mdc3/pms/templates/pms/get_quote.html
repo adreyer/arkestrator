@@ -1,2 +1,2 @@
-{% load mdctime %}{% autoescape off %}[quote={{ user.username }} posted this on {% mdctime pm.created_on long %}] [url=#PM{{ pm.id}}]PM#{{ pm.id }}[/url]
+{% load mdctime %}{% autoescape off %}[quote={{ user.username }} sent this on {% mdctime pm.created_on long %}] [url=#PM{{ pm.id}}]#{{ pm.id }}[/url]
 {{ pm.body }}[/quote]{% endautoescape %}
