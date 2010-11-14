@@ -14,6 +14,14 @@ class EditEventForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = ('title','description','location','time','market')
+
+    def clean(self):
+        utc = pytz.timezone('UTC')
+        ltz = pytz.timezone(self.cleaned_data['market'].timezone)
+        local_time = ltz.localize(self.cleaned_data['time'])
+        self.cleaned_data['time'] = local_time.astimezone(utc)
+        return self.cleaned_data
+
     
 
 class NewEventForm(forms.ModelForm):
