@@ -3,17 +3,14 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from mdc3.board.models import Thread, Post
-from models import Event, Market, RSVP, RSVP_CHOICES
+from models import Event, RSVP, RSVP_CHOICES
 
 
 class EditEventForm(forms.ModelForm):
     """ a form used to edit an existing event """
     time = forms.DateTimeField(required = True,
             label="Date and Time",
-                        help_text="mm/dd/yy hh:mm(24hour)")
-    market = forms.ModelChoiceField(queryset=Market.objects.all(),
-                        label = 'City')
-
+                        help_text="mm/dd/yy hh:mm (24 hour)")
     class Meta:
         model = Event
         fields = ('title','description','location','time','market')
@@ -23,15 +20,10 @@ class NewEventForm(forms.ModelForm):
     """ a form to create a new event """
 
     post = forms.CharField(required=True,
-            label="Post:", 
-            widget=forms.Textarea(attrs={'cols': 70, 'rows': 12}))
-
+            label="Post:", widget=forms.TextInput(attrs={'size': 70}))
     time = forms.DateTimeField(required = True,
             label="Date and Time",
-            help_text="mm/dd/yy hh:mm(24hour)")
-    market = forms.ModelChoiceField(queryset=Market.objects.all(),
-                    label = 'City')
-    
+            help_text="mm/dd/yy hh:mm (24 hour)")
     class Meta:
         model  = Event
         fields = ('title','description','location','time',

@@ -1,17 +1,14 @@
 {% extends "board/post_list.html" %}
 
 {% block extrapostmenu %}
-    <li class="submenuitem"> <a href="nowhere">rsvp</a></li>
     {% if perms.events.can_edit %}
         <li class="submenuitem"><a href="{% url edit-event event.id %}">Edit event</a></li>
     {% endif %}
 {% endblock %}
-
 {% load mdctime %}
 {% block prepostcontent %}
-<div class="row1">
-    <p>
-    <strong>{{ event.title }}</strong><br />
+<div class="body">
+    <h2>{{ event.title }}</h2><br />
     <strong>When: </strong> {% mdctime event.time long event.market.timezone %}<br />
     <strong>Where: </strong> {{ event.location }}<br />
     <strong>What: </strong> {{ event.description }}<br />
@@ -19,10 +16,9 @@
     <strong>Attendees: </strong>{% spaceless %}
     {% for rsvp in rsvp_list %}
         {% if rsvp.attending == 'Yes' %} {{ rsvp.user.username }}{% else %}
-        {% if rsvp.attending == 'Maybe' %}<em> {{ rsvp.user.username }}</em>{% endif %}{% endif %}
+        {% if rsvp.attending == 'Maybe' %}<em>{{ rsvp.user.username }}?</em>{% endif %}{% endif %}
     {% endfor %}
     <br />{% endspaceless %}
-    </p>
     <form action="{% url update-rsvp event.id %}" method="post">
         {% csrf_token %}
         <p>
