@@ -107,8 +107,8 @@ def edit_event(request, ev_id):
     else:
         utc = pytz.timezone('UTC')
         ltz = pytz.timezone(event.market.timezone)
-        local_time = ltz.localize(event.time)
-        local_time = local_time.astimezone(utc)
+        local_time = utc.localize(event.time)
+        local_time = local_time.astimezone(ltz)
         form = forms.EditEventForm(
             initial={ 'time' : local_time },
             instance = event)
