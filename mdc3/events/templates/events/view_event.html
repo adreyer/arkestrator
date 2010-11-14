@@ -1,7 +1,7 @@
 {% extends "board/post_list.html" %}
 
 {% block extrapostmenu %}
-    {% if perms.events.can_edit %}
+    {% if perms.events.can_edit or event.creator == user %}
         <li class="submenuitem"><a href="{% url edit-event event.id %}">Edit event</a></li>
     {% endif %}
 {% endblock %}
