@@ -10,7 +10,7 @@ class EditEventForm(forms.ModelForm):
     """ a form used to edit an existing event """
     time = forms.DateTimeField(required = True,
             label="Date and Time",
-                        help_text="mm/dd/yy hh:mm(24hour)")
+                        help_text="mm/dd/yy hh:mm (24 hour)")
     class Meta:
         model = Event
         fields = ('title','description','location','time','market')
@@ -23,7 +23,7 @@ class NewEventForm(forms.ModelForm):
             label="Post:", widget=forms.TextInput(attrs={'size': 70}))
     time = forms.DateTimeField(required = True,
             label="Date and Time",
-            help_text="mm/dd/yy hh:mm(24hour)")
+            help_text="mm/dd/yy hh:mm (24 hour)")
     class Meta:
         model  = Event
         fields = ('title','description','location','time',
