@@ -1,5 +1,6 @@
 import datetime
 import calendar
+import pytz
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.sites.models import Site
@@ -104,7 +105,13 @@ def edit_event(request, ev_id):
         return HttpResponseRedirect(reverse('view-thread',
                         args=[event.thread.id]))
     else:
-        form = forms.EditEventForm(instance = event)
+        utc = pytz.timezone('UTC')
+        ltz = pytz.timezone(event.market.timezone)
+        local_time = ltz.localize(event.time)
+        local_time = local_time.astimezone(utc)
+        form = forms.EditEventForm(
+            initial={ 'time' : local_time },
+            instance = event)
     return render_to_response('events/edit_event.html',
                 { 'form' : form ,
                   'event' : event},
