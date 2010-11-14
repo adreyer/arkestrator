@@ -5,6 +5,20 @@ from django.template import Node, Library, TemplateSyntaxError, Variable
 register = Library()
 
 
+page_offsets = [-20,-15,-10,-7,-5,-4,-3,-2,-1,0,1,2,3,4,5,7,10,15,20]
+
+def pick_pages(curr,last):
+    page_list = []
+    if last <= 20:
+        page_list = range(1,last+1)
+    else:
+        page_list = [curr+off for off in page_offsets
+                        if curr+off > 1 and curr+off<last]
+        page_list.insert(0,1)
+        page_list.append(last)
+    return page_list
+           
+
     
 class PageNode(Node):
     def __init__(self, var_name):
@@ -16,7 +30,7 @@ class PageNode(Node):
         additional_query = context.get('paginator_query','')
         if additional_query:
             additional_query += "&amp;"
-        for p in page_obj.paginator.page_range:
+        for p in pick_pages(page_obj.number,page_obj.paginator.num_pages):
             if p == page_obj.number:
                 page_menu+="<li class=\"submenuitem\"><a href=\"?%spage=%d\"><strong>%d</strong></a></li>\n"%(additional_query,p,p)
             else:
