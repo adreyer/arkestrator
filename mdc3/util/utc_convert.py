@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from django.contrib.auth.models import User
 from mdc3.board.models import Post, LastRead
@@ -6,38 +6,53 @@ from mdc3.pms.models import PM
 from mdc3.profiles.models import Profile
 from mdc3.themes.models import Theme
 
-def utc_convert(delta_num=4):
-    delta = timedelta(delta_num)
+
+
+def utc_convert():
+    delta1 = timedelta(5)
+    delta2 = timedelta(4)
+    cutoff = datetime(2010,11,7,1)
+
     themes = Theme.objects.all()
     for theme in themes:
-        theme.updated += delta
+        theme.updated += delta2
         theme.save()
 
     profs = Profile.objects.all()
     for prof in profs:
-        prof.last_login += delta
-        prof.last_view += delta
-        prof.last_post += delta
-        prof.last_profile_update += delta
+        prof.last_login += delta2
+        prof.last_view += delta2
+        prof.last_post += delta2
+        prof.last_profile_update += delta2
         prof.save()
 
-    pms = PM.objects.all()
+    pms = PM.objects.filter(created_at__lte=cutoff)
     for pm in pms:
-        pm.created_at += delta
+        pm.created_at += delta1
         pm.save()
 
-    posts = Post.objects.all()
+    pms = PM.objects.filter(created_at__gte=cutoff)
+    for pm in pms:
+        pm.created_at += delta2
+        pm.save()
+
+    posts = Post.objects.filter(created_at__lte=cutoff)
     for post in posts:
-        post.created_at += delta
+        post.created_at += delta1
+        post.save()
+
+    posts = Post.objects.filter(created_at__lte=cutoff)
+    for post in posts:
+        post.created_at += delta2
         post.save()
 
     lrs = LastRead.objects.all()
     for lr in lrs:
-        lr.timestamp += delta
+        lr.timestamp += delta2
         lr.save()
 
     users = User.objects.all()
     for user in users:
-        user.date_joined += delta
+        user.date_joined += delta1
         user.save()
         
