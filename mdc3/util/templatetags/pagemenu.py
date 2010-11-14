@@ -1,5 +1,5 @@
 import itertools
-
+from django.core.cache import cache
 from django.template import Node, Library, TemplateSyntaxError, Variable
 
 register = Library()
@@ -28,14 +28,25 @@ class PageNode(Node):
         page_obj = self.var.resolve(context)
         page_menu="<ul>\n <li class=\"submenulegend\">Page:</li>\n"
         additional_query = context.get('paginator_query','')
-        if additional_query:
-            additional_query += "&amp;"
-        for p in pick_pages(page_obj.number,page_obj.paginator.num_pages):
-            if p == page_obj.number:
-                page_menu+="<li class=\"submenuitem\"><a href=\"?%spage=%d\"><strong>%d</strong></a></li>\n"%(additional_query,p,p)
-            else:
-                page_menu+="<li class=\"submenuitem\"><a href=\"?%spage=%d\">%d</a></li>\n"%(additional_query,p,p)
-        page_menu+="</ul>"
+        curr = page_obj.number
+        last = page_obj.paginator.num_pages
+        cache_key = "page_menu:%d:%d:%s" %(
+                        curr,
+                        last,
+                        additional_query)
+        page_menu = cache.get(cache_key, None)
+        if page_menu is None:
+            page_menu="<ul>\n <li class=\"submenulegend\">Page:</li>\n"
+            if additional_query:
+                additional_query += "&amp;"
+            for p in pick_pages(page_obj.number,page_obj.paginator.num_pages):
+                if p == page_obj.number:
+                    page_menu+="<li class=\"submenuitem\"><a href=\"?%spage=%d\"><strong>%d</strong></a></li>\n"%(additional_query,p,p)
+                else:
+                    page_menu+="<li class=\"submenuitem\"><a href=\"?%spage=%d\">%d</a></li>\n"%(additional_query,p,p)
+            page_menu+="</ul>"
+            cache.set(cache_key,page_menu)
+
         return page_menu
 
 
