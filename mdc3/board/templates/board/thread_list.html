@@ -27,10 +27,10 @@
                 <a href="{% url unlock-thread thread.id %}">&#10005;</a>
             {% endif %}
             {% if thread.stuck %}
-                <a href="{% url unsticky thread.id %}">&#9733;</a>
+                <a href="{% url unsticky thread.id %}">!</a>
             {% endif %}
             {% if thread.fav %}
-                <a href="{% url unfavorite thread.id %}"><strong>!</strong></a>
+                <a href="{% url unfavorite thread.id %}"><strong>&#9733;</strong></a>
             {% endif %} </td>{% endspaceless %}
             <td class="wwwwwwww"><div class="wwwwwwww">{% if thread.unread %}
                     <a class="unread" href="{% url view-thread thread.id %}{% spaceless %}
