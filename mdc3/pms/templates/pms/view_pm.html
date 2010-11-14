@@ -27,7 +27,7 @@
     {% else %}
         <div class="row2">
     {% endif %}
-        <span id="info_{{ parent.id}}"><strong><a href="{% url view-profile parent.sender.id %}">{{ parent.sender.username }}</a></strong> posted this on {% mdctime parent.created_at long %} to {{ parent_rec_str }}</span><br />
+        <span id="info_{{ parent.id}}"><strong><a href="{% url view-profile parent.sender.id %}">{{ parent.sender.username }}</a></strong> sent this on {% mdctime parent.created_at long %} to {{ parent_rec_str }}</span><br />
          <strong>Subject: </strong>{{ parent.subject }}
          </div>
 
@@ -43,7 +43,7 @@
     {% else %}
         <div class="row2">
     {% endif %}
-        <span id="info_{{ pm.id}}"><strong><a href="{% url view-profile pm.sender.id %}">{{ pm.sender.username }}</a></strong> posted this on {% mdctime pm.created_at long %} to {{ rec_str }}</span><br />
+        <span id="info_{{ pm.id}}"><strong><a href="{% url view-profile pm.sender.id %}">{{ pm.sender.username }}</a></strong> sent this on {% mdctime pm.created_at long %} to {{ rec_str }}</span><br />
          <strong>Subject: </strong>{{ pm.subject }}
          </div>
 

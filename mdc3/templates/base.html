@@ -33,7 +33,7 @@
     <div id="search_box">
     <form method="get" action="{% url search-threads %}">
         <input type="text" name="query" value="{{ search_query }}" />
-        <input type="submit" value="Ghetto Search" />
+        <input type="submit" value="Search" />
     </form>
     </div>
     <div id="status">{{ thread_count }} thread{{ thread_count|pluralize }}, 
@@ -71,7 +71,7 @@
             {% if user.is_staff %}
             <li class="menuitem"><a href="{% url admin:index %}">Admin</a></li>
             {% endif %}
-            <li class="menuitem"><a href="http://trac.mdc2.org/mdc3/">Report bugs</a></li>
+            <li class="menuitem"><a href="http://trac.mdc2.org/mdc3/">Trac</a></li>
         </ul>
     </div>
         {% block extramenu %}
