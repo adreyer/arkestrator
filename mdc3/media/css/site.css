@@ -244,7 +244,7 @@ div#user ul li a, div#menu ul li a {
 
 div#submenu ul li a, div#bottombezel ul li a {
     display: block;
-    padding: 0.25em;
+    padding: 0.25em 0.33em 0.25em 0.33em;
     text-decoration: none;
 }
 
