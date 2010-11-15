@@ -28,6 +28,7 @@ import forms
 
 from mdc3.decorators import super_no_cache
 
+THREADS_PER_PAGE = 101
 
 @login_required
 def view_thread(request,id,start=False,expand=False,hide=None):
@@ -208,7 +209,8 @@ def list_threads(request):
     if page_obj is None:
         queryset = Thread.objects.order_by("-stuck","-last_post__id"
             ).select_related("creator","last_post","last_post__creator")
-        paginator = Paginator(queryset, 50, allow_empty_first_page=True)
+        paginator = Paginator(queryset, THREADS_PER_PAGE, 
+                            allow_empty_first_page=True)
         page_obj = paginator.page(page)
         cache.set(cache_key, page_obj)
 
@@ -368,7 +370,7 @@ def threads_by(request, id):
     return list_detail.object_list(
             request,
             queryset = queryset,
-            paginate_by = 50,
+            paginate_by = THREADS_PER_PAGE,
             template_name = "board/threads_by.html",
             extra_context = {"poster" : poster.username}
             )
@@ -383,7 +385,7 @@ def posts_by(request, id):
     return list_detail.object_list(
             request,
             queryset = queryset,
-            paginate_by = 50,
+            paginate_by = 49,
             template_name = "board/posts_by.html",
             extra_context = {"poster" : poster.username}
             )
@@ -450,7 +452,7 @@ def ghetto_search(request):
         request,
         queryset = queryset,
         template_object_name = 'thread',
-        paginate_by = 50,
+        paginate_by = 49,
         template_name = "board/thread_list.html",
         extra_context = { 
             'search_query' : query,
