@@ -26,7 +26,7 @@ class EditEventForm(forms.ModelForm):
         return self.cleaned_data
     
     def save(self, event):
-        event.thread.title = self.cleaned_data['title']
+        event.thread.subject = self.cleaned_data['title']
         event.thread.save()
         event.description = self.cleaned_data['description']
         event.location = self.cleaned_data['location']
