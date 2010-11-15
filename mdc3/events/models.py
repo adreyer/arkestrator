@@ -25,8 +25,6 @@ class Event(models.Model):
         attrs:
         thread: the thread associated with this event
         creator:  who created this event
-        title:    The title of the event(
-                    in most cases the same as thread.subjects
         description: what is this event
         time:        a UTC datetime of when the event takes place
         location:   where is the event
@@ -43,7 +41,6 @@ class Event(models.Model):
     from mdc3.board.models import Thread
     thread = models.OneToOneField(Thread,null=False)
     creator = models.ForeignKey(User,null=False)
-    title = models.CharField(max_length=160,blank=False)
     description = models.TextField(blank=True)
     time = models.DateTimeField(null=False)
     location = models.TextField(null=True)

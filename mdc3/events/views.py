@@ -98,10 +98,7 @@ def edit_event(request, ev_id):
         form = forms.EditEventForm(request.POST,
                     instance = event)
         if form.is_valid():
-            form.save()
-            if event.thread.subject != event.title:
-                event.thread.subject = event.title
-                event.thread.save()
+            form.save(event)
         return HttpResponseRedirect(reverse('view-thread',
                         args=[event.thread.id]))
     else:
@@ -110,7 +107,8 @@ def edit_event(request, ev_id):
         local_time = utc.localize(event.time)
         local_time = local_time.astimezone(ltz)
         form = forms.EditEventForm(
-            initial={ 'time' : local_time },
+            initial={ 'time' : local_time,
+                        'title' : event.thread.subject, },
             instance = event)
     return render_to_response('events/edit_event.html',
                 { 'form' : form ,

@@ -11,6 +11,9 @@ class EditEventForm(forms.ModelForm):
     time = forms.DateTimeField(required = True,
             label="Date and Time",
                         help_text="yyyy-mm-dd or mm/dd/yy hh:mm (24 hour)")
+    title = forms.CharField(label="Title:", 
+                widget=forms.TextInput(attrs={'size': 70}))
+
     class Meta:
         model = Event
         fields = ('title','description','location','time','market')
@@ -21,12 +24,22 @@ class EditEventForm(forms.ModelForm):
         local_time = ltz.localize(self.cleaned_data['time'])
         self.cleaned_data['time'] = local_time.astimezone(utc)
         return self.cleaned_data
-
     
+    def save(self, event):
+        event.thread.title = self.cleaned_data['title']
+        event.thread.save()
+        event.description = self.cleaned_data['description']
+        event.location = self.cleaned_data['location']
+        event.time = self.cleaned_data['time']
+        event.market = self.cleaned_data['market']
+        event.save()
+
 
 class NewEventForm(forms.ModelForm):
     """ a form to create a new event """
 
+    title = forms.CharField(label="Title:",
+                widget=forms.TextInput(attrs={'size': 70}))
     post = forms.CharField(required=True,
             label="Post:", widget=forms.TextInput(attrs={'size': 70}))
     time = forms.DateTimeField(required = True,
@@ -59,7 +72,6 @@ class NewEventForm(forms.ModelForm):
         event = Event(
             thread      =   thread,
             creator     =   user,
-            title       =   self.cleaned_data['title'],
             description =   self.cleaned_data['description'],
             location    =   self.cleaned_data['location'],
             time        =   time,

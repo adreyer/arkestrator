@@ -8,7 +8,7 @@
 {% load mdctime %}
 {% block prepostcontent %}
 <div class="body">
-    <h2>{{ event.title }}</h2><br />
+    <h2>{{ event.thread.subject }}</h2><br />
     <strong>When: </strong> {% mdctime event.time long event.market.timezone %}<br />
     <strong>Where: </strong> {{ event.location }}<br />
     <strong>What: </strong> {{ event.description }}<br />
