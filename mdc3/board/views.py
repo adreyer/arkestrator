@@ -100,17 +100,17 @@ def view_thread(request,id,start=False,expand=False,hide=None):
             
     post_list = list(queryset)
     
-##    #hide images in the thread if appropriate
-##    try:
-##        if (not hide is False) and (hide or not request.user.get_profile().show_images):
-##            hide = True
+    #hide images in the thread if appropriate
+    try:
+        if (not hide is False) and (hide or not request.user.get_profile().show_images):
+            hide = True
 ##            for post in post_list:
 ##                img_start = re.compile('\[img', re.IGNORECASE)
 ##                img_end = re.compile('\[/img\]', re.IGNORECASE)
 ##                post.body = img_start.sub('(img)[url',post.body)
 ##                post.body = img_end.sub('[/url]',post.body)
-##    except ObjectDoesNotExist:
-##        pass
+    except ObjectDoesNotExist:
+        pass
 
     lastread.timestamp = datetime.datetime.now()
     lastread.read_count += 1
