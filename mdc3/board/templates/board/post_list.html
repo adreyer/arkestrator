@@ -18,54 +18,54 @@
             {% if thread.total_posts > 10 %}
                 {% if not expand %}
                     {% if hide %}
-                    <li class="submenuitem"><a href="{% url view-thread-full-hide thread.id start %}">Show all ({{ thread.total_posts }})</a></li>
+                    <li class="submenuitem"><a href="{% url view-thread-full-hide thread.id start %}" title="show all posts">Show all ({{ thread.total_posts }})</a></li>
                     {% else %}
-                    <li class="submenuitem"><a href="{% url view-thread-full-start thread.id start %}">Show all ({{ thread.total_posts }})</a></li>
+                    <li class="submenuitem"><a href="{% url view-thread-full-start thread.id start %}" title="show all posts">Show all ({{ thread.total_posts }})</a></li>
                     {% endif %}
                 {% else %}
                     {% if hide %}
-                    <li class="submenuitem"><a href="{% url view-thread-hide thread.id start %}">Collapse</a></li>
+                    <li class="submenuitem"><a href="{% url view-thread-hide thread.id start %}" title="collapse old posts">Collapse</a></li>
                     {% else %}
-                    <li class="submenuitem"><a href="{% url view-thread-start thread.id start %}">Collapse</a></li>
+                    <li class="submenuitem"><a href="{% url view-thread-start thread.id start %}" title="collapse old posts">Collapse</a></li>
                     {% endif %}
                 {% endif %}
             {% endif %}
             {% if hide %}
                 {% if expand %}
-                    <li class="submenuitem"><a href="{% url view-thread-full-show thread.id start %}">Show Images</a></li>
+                    <li class="submenuitem"><a href="{% url view-thread-full-show thread.id start %}" title="show images">Show Images</a></li>
                 {% else %}
-                    <li class="submenuitem"><a href="{% url view-thread-show thread.id start %}">Show Images</a></li>
+                    <li class="submenuitem"><a href="{% url view-thread-show thread.id start %}" title="show images">Show Images</a></li>
                 {% endif %}
             {% else %}
                 {% if expand %}
-                    <li class="submenuitem"><a href="{% url view-thread-full-hide thread.id start %}">Hide Images</a></li>
+                    <li class="submenuitem"><a href="{% url view-thread-full-hide thread.id start %}" title="hide images">Hide Images</a></li>
                 {% else %}
-                    <li class="submenuitem"><a href="{% url view-thread-hide thread.id start %}">Hide Images</a></li>
+                    <li class="submenuitem"><a href="{% url view-thread-hide thread.id start %}" title="hide images">Hide Images</a></li>
                 {% endif %}
             {% endif %}
             {% if fav %}
-                <li class="submenuitem"><a href="{% url unfavorite thread.id %}">Unfavorite</a></li>
+                <li class="submenuitem"><a href="{% url unfavorite thread.id %}" title="remove from favorites">Unfavorite</a></li>
             {% else %}
-                <li class="submenuitem"><a href="{% url favorite thread.id %}">Favorite</a></li>
+                <li class="submenuitem"><a href="{% url favorite thread.id %}" title="add to favorites">Favorite</a></li>
             {% endif %}
-            <li class="submenuitem"><a href="{% url thread-history thread.id %}">History</a></li>
+            <li class="submenuitem"><a href="{% url thread-history thread.id %}" title="show thread history">History</a></li>
             {% if perms.board.can_sticky %}
               {% if thread.stuck %}
-                <li class="submenuitem"><a href="{% url unsticky thread.id %}">Unsticky</a></li>
+                <li class="submenuitem"><a href="{% url unsticky thread.id %}" title="unsticky this thread">Unsticky</a></li>
               {% else %}
-                <li class="submenuitem"><a href="{% url sticky thread.id %}">Sticky</a></li>
+                <li class="submenuitem"><a href="{% url sticky thread.id %}" title="sticky this thread">Sticky</a></li>
               {% endif %}
             {% endif %}
             {% if perms.board.can_lock %}
                 {% if thread.locked %}
-                <li class="submenuitem"><a href="{% url unlock-thread thread.id %}">Unlock</a></li>
+                <li class="submenuitem"><a href="{% url unlock-thread thread.id %}" title="unlock this thread">Unlock</a></li>
                 {% else %}
-                <li class="submenuitem"><a href="{% url lock-thread thread.id %}">Lock</a></li>
+                <li class="submenuitem"><a href="{% url lock-thread thread.id %}" title="lock this thread">Lock</a></li>
                 {% endif %}
              {% endif %}
              {% block extrapostmenu %}
              {% endblock %}
-            <li class="submenuitem floatright"><a href="#pagebottom">Jump to bottom</a></li>
+            <li class="submenuitem floatright"><a href="#pagebottom" title="jump to bottom">Jump to bottom</a></li>
         </ul>
     </div>
 {% endblock %}
@@ -80,8 +80,8 @@
             {% else %}
                 <div class="row2">
             {% endif %}
-                <strong><a href="{% url view-profile post.creator.id %}">{{ post.creator.username }}</a></strong> posted this on {% mdctime post.created_at long %}
-                <strong><a href="javascript:;" onclick="quote('{% url get-quote post.id %}')">#{{ post.id }}</a></strong>
+                <strong><a href="{% url view-profile post.creator.id %}" title="view {{ post.creator.username }}'s profile">{{ post.creator.username }}</a></strong> posted this on {% mdctime post.created_at long %}
+                <strong><a href="javascript:;" onclick="quote('{% url get-quote post.id %}')" title="quote this post">#{{ post.id }}</a></strong>
             </div>
             <div class="body" id="post_{{ post.id }}">
                 <p>{% bbcode post.bbcode %}</p>
@@ -92,8 +92,8 @@
 {% block bottombezel %}
     <div id="bottombezel">
         <ul>
-            <li class="submenuitem"><a href="{% url list-threads %}">Go back</a></li>
-            <li class="submenuitem floatright"><a href="#pagetop">Jump to top</a></li>
+            <li class="submenuitem"><a href="{% url list-threads %}" title="back to thread list">Go back</a></li>
+            <li class="submenuitem floatright" title="jump to top"><a href="#pagetop">Jump to top</a></li>
         </ul>
     </div>
 {% endblock %}
