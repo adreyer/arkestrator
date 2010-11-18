@@ -81,36 +81,37 @@ def register(request,code):
 @permission_required('invites.can_approve','/')
 def approve_invite(request, id):
     """ approve and invite if the requester has perms """
-
     inv = get_object_or_404(Invite,id=id)
-    if not inv.approved:
-        inv.approved = True
-        if inv.rejected:
-            inv.rejected=False
-        inv.approved_on = datetime.datetime.now()
-        inv.approved_by = request.user
-        inv.invite_code = hashlib.sha224(str(time.time())).hexdigest()[:16]
-        invite_url = 'http://board.mdc2.org/invites/' + inv.invite_code
-        send_mail(subject='Welcome to MDC',
-                message="""
+    if request.method == 'POST' and request.POST['confirm'] == 'true':
+        if not inv.approved:
+            inv.approved = True
+            if inv.rejected:
+                inv.rejected=False
+            inv.approved_on = datetime.datetime.now()
+            inv.approved_by = request.user
+            inv.invite_code = hashlib.sha224(str(time.time())).hexdigest()[:16]
+            invite_url = 'http://board.mdc2.org/invites/' + inv.invite_code
+            send_mail(subject='Welcome to MDC',
+                    message="""
 Welcome to MDC. Use the link below to create your account
 """ + invite_url,
-                from_email = 'cmr@mdc2.org',
-                recipient_list = [inv.invitee],
-                fail_silently=False)
-        cache.delete('inv_count')
-        inv.save()
+                    from_email = 'cmr@mdc2.org',
+                    recipient_list = [inv.invitee],
+                    fail_silently=False)
+            cache.delete('inv_count')
+            inv.save()
     return HttpResponseRedirect(reverse('list-threads'))
 
 @login_required
 @permission_required('invites.can_approve','/')
 def reject_invite(request, id):
     """ reject and invite if the requester has perms """
-    inv = get_object_or_404(Invite,id=id)
-    if not inv.rejected:
-        inv.rejected = True
-        inv.approved_on = datetime.datetime.now()
-        inv.approved_by = request.user
-        cache.delete('inv_count')
-        inv.save()
+    if request.method =='POST' and request.POST['confirm'] == 'true':
+        inv = get_object_or_404(Invite,id=id)
+        if not inv.rejected:
+            inv.rejected = True
+            inv.approved_on = datetime.datetime.now()
+            inv.approved_by = request.user
+            cache.delete('inv_count')
+            inv.save()
     return HttpResponseRedirect(reverse("list-threads"))

@@ -295,6 +295,17 @@ div#submenu ul li, div#bottombezel ul li {
     padding: 0.25em;
 }
 
+.submenuitem span {
+    border-radius: 0.5em;
+    -moz-border-radius: 0.5em;
+    margin: 0.25em;
+    padding: 0px;
+}
+
+.submenuitem form {
+    display: inline;
+}
+
 div#status {
     margin-bottom: 1.25em;
 }

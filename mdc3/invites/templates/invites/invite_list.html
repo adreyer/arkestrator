@@ -25,8 +25,13 @@
                 {% else %}
                     {% if not invite.rejected %}
                         <span class="submenuitem">
-                            <a href="{% url reject-invite invite.id %}">
-                            reject</a></span>
+                        <form class="submenuitem" name="rejf{{ invite.id }}" action="{% url reject-invite invite.id %}" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="confirm" value="true">
+                        <a href="javascript:void(1);"  onClick="document.rejf{{ invite.id }}.submit();" title="reject this invite">
+                            reject</a>
+                       </form>
+                       </span>
                     {% else %}
                         <br />
                         {{ invite.approved_by.username }}
@@ -34,9 +39,11 @@
                         {% mdctime invite.approved_on short%}
                     {% endif %}
                     <span class="submenuitem">
-                        <a href="{% url approve-invite invite.id %}">
-                        approve</a></span>
-                    
+                    <form class="submenuitem" name="appf{{ invite.id }}" action="{% url approve-invite invite.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="confirm" value="true">
+                    <a href="javascript:void(1);" onClick="document.appf{{ invite.id }}.submit();" title="approve this invite">
+                    approve</a></form></span>
                 {% endif %} 
             </div>
             <div class="body">
