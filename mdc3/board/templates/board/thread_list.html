@@ -32,7 +32,7 @@
             {% spaceless %}<td nowrap="nowrap" class="icons">
             {% if thread.locked %}
                     {% if perms.board.can_lock %}
-                    <form name="lockf{{ thread.id }}" action="{% url lock-thread thread.id %}" method="post">
+                    <form class="icons" name="lockf{{ thread.id }}" action="{% url lock-thread thread.id %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="lock" value="unlock">
                     <a href="javascript:void(1);" onClick="document.lockf{{ thread.id }}.submit();" title="unsticky this thread">
@@ -42,7 +42,7 @@
             {% endif %}
             {% if thread.stuck %}
                 {% if perms.board.can_sticky %}
-                    <form name="stickyf{{ thread.id }}" action="{% url sticky thread.id %}" method="post">
+                    <form class="icons" name="stickyf{{ thread.id }}" action="{% url sticky thread.id %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="sticky" value="unsticky">
                     <a href="javascript:void(1);" onClick="document.stickyf{{ thread.id }}.submit();" title="unsticky this thread">
@@ -51,7 +51,7 @@
                 {% else %}&#9733;{% endif %}
             {% endif %}
             {% if thread.fav %}
-                <form name="favf{{ thread.id }}" class="icon" action="{% url favorite thread.id %}" method="post">
+                <form class="icons" name="favf{{ thread.id }}" class="icon" action="{% url favorite thread.id %}" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="fav" value="remove">
                 <a href="javascript:void(1);" onClick="document.favf{{ thread.id }}.submit();" title="remove from favorites">
