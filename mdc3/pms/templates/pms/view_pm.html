@@ -10,7 +10,13 @@
 {% endblock %}
 
 {% block extrasubmenu %}
-<li class="submenuitem"><a href="{% url del-pm pm.id %}">Delete</a></li>
+<li class="submenuitem">
+<form name="delf" action="{% url del-pm pm.id %}" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="confirm" value="true">
+    <a href="javascript:void(1);" onClick="document.delf.submit();" title="delete this pm">Delete</a>
+</form>
+</li>
 {% if not thread %}
     <li class="submenuitem"><a href="{% url pm-thread pm.id %}">Show Thread</a></li>
 {% endif %}

@@ -6,7 +6,14 @@
             <li class="submenuitem"><a href="{% url new-pm %}">New message</a> </li>
             <li class="submenuitem"><a href="{% url inbox %}">Inbox</a> </li>
             <li class="submenuitem"><a href="{% url outbox %}">Outbox</a> </li>
-            <li class="submenuitem"><a href="{% url mark-read %}">Mark all read</a></li>
+            <li class="submenuitem">
+                <form name="markf" action="{% url mark-read %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="confirm" value="true">
+                <a href="javascript:void(1);" onClick="document.markf.submit()" title="mark all pms read">
+                    Mark all read</a>
+                </form>
+                </li>
             {% block extrasubmenu %}
             {% endblock %}
         </ul>

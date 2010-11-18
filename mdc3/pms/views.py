@@ -102,11 +102,11 @@ def inbox(request):
 @login_required
 def mark_read(request):
     """ mark all recipients the user has read """
-
-    unread_list = Recipient.objects.filter(
-        recipient=request.user,read=False).update(
-            read=True)
-    return HttpResponseRedirect("/pms/inbox")
+    if request.method == 'POST' and request.POST['confirm'] == 'true':
+        unread_list = Recipient.objects.filter(
+                        recipient=request.user,
+                        read=False).update(read=True)
+    return HttpResponseRedirect(reverse('inbox'))
 
 @login_required
 def view_pm(request, pm_id):
@@ -152,14 +152,9 @@ def view_pm(request, pm_id):
             parent_rec_str = parent.get_rec_str()
         else:
             parent=None
+    hide=False
     if not Profile.objects.get(user=request.user).show_images:
-        img_start = re.compile('\[img', re.IGNORECASE)
-        img_end = re.compile('\[/img\]', re.IGNORECASE)
-        pm.body = img_start.sub('(img)[url',pm.body)
-        pm.body = img_end.sub('[/url]',pm.body)
-        if parent:
-            parent.body = img_start.sub('(img)[url',parent.body)
-            parent.body = img_end.sub('[/url]',parent.body)
+        hide=True
     return render_to_response("pms/view_pm.html",
             { 'pm' : pm ,
               'parent' : parent,
@@ -167,7 +162,8 @@ def view_pm(request, pm_id):
               'parent_rec_str' : parent_rec_str,
               'form' : form ,
               'reply_all' : pm.get_reply_all(request.user),
-               'rec_str': rec_str},
+               'rec_str': rec_str,
+               'hide' : hide, },
             context_instance = RequestContext(request))
 
 def pm_thread(request, pm_id):
@@ -199,9 +195,6 @@ def pm_thread(request, pm_id):
             recip.save()
         except Recipient.DoesNotExist:
             pass
-        if not Profile.objects.get(user=request.user).show_images:
-            tpm.body = img_start.sub('(img)[url',tpm.body)
-            tpm.body = img_end.sub('[/url]',tpm.body)
         
     reply = copy(pm)
     reply.body = ''
@@ -219,30 +212,32 @@ def pm_thread(request, pm_id):
     else:
         form =forms.NewPMForm(instance=reply,
                 initial={'recs' : reply_recs})
+    hide = False
+    if not request.user.get_profile().show_images:
+        hide=True
     return render_to_response("pms/show_thread.html",
             { 'pm_list' : queryset,
               'pm' : pm,
               'form' : form,
               'thread' : True,
-              'reply_all' : pm.get_reply_all(request.user), },
+              'reply_all' : pm.get_reply_all(request.user), 
+              'hide' : hide, },
             context_instance = RequestContext(request))
     
         
 def del_pm(request, pm_id):
     """ delete pm pm_id for a user """
-
     pm = get_object_or_404(PM,pk=pm_id)
-    if pm.sender == request.user:
-        pm.deleted = True
-        pm.save()
-    rec_list = Recipient.objects.filter(message=pm)
-    rec_list.filter(recipient=request.user).update(deleted=True)
-    if pm.deleted and not rec_list.filter(deleted=False):
-        pm.body = ''
-        pm.subject = 'deleted'
-        pm.save()
-##        pm.delete()
-##        rec_list.delete()
+    if request.method == 'POST' and request.POST['confirm'] == 'true':
+        if pm.sender == request.user:
+            pm.deleted = True
+            pm.save()
+        rec_list = Recipient.objects.filter(message=pm)
+        rec_list.filter(recipient=request.user).update(deleted=True)
+        if pm.deleted and not rec_list.filter(deleted=False):
+            pm.body = ''
+            pm.subject = 'deleted'
+            pm.save()
     return HttpResponseRedirect(reverse('inbox'))
 
 @login_required
