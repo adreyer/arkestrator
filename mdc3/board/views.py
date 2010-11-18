@@ -104,11 +104,6 @@ def view_thread(request,id,start=False,expand=False,hide=None):
     try:
         if (not hide is False) and (hide or not request.user.get_profile().show_images):
             hide = True
-##            for post in post_list:
-##                img_start = re.compile('\[img', re.IGNORECASE)
-##                img_end = re.compile('\[/img\]', re.IGNORECASE)
-##                post.body = img_start.sub('(img)[url',post.body)
-##                post.body = img_end.sub('[/url]',post.body)
     except ObjectDoesNotExist:
         pass
 
@@ -196,7 +191,7 @@ def new_thread(request):
 
 @super_no_cache
 @login_required
-def list_threads(request):
+def list_threads(request, by=None, fav=False):
     """ list threads """
     try:
         page = int(request.GET.get('page', 1))
@@ -204,15 +199,23 @@ def list_threads(request):
         raise Http404
     
     #get the right threads for the page
-    cache_key = "thread-list-page:%d:%d"%(Site.objects.get_current().id, page)
-    page_obj = cache.get(cache_key, None)
+    if not by and not fav:
+        cache_key = "thread-list-page:%d:%d"%(Site.objects.get_current().id, page)
+        page_obj = cache.get(cache_key, None)
+    else:
+        page_obj = None
     if page_obj is None:
         queryset = Thread.objects.order_by("-stuck","-last_post__id"
             ).select_related("creator","last_post","last_post__creator")
+        if by:
+            queryset = queryset.filter(creator__id=by)
+        if fav:
+            queryset = queryset.filter(favorite=request.user)
         paginator = Paginator(queryset, THREADS_PER_PAGE, 
                             allow_empty_first_page=True)
         page_obj = paginator.page(page)
-        cache.set(cache_key, page_obj)
+        if not by and not fav:
+            cache.set(cache_key, page_obj)
 
     thread_list = list(page_obj.object_list)
     
@@ -264,39 +267,6 @@ def list_threads(request):
         'page_obj' : page_obj,
     }, context_instance = RequestContext(request))
 
-@login_required
-def favorite_list(request):
-    """ show the thread which requester has favorited """
-    try:
-        page = int(request.GET.get('page', 1))
-    except ValueError:
-        raise Http404
-    
-    # get the threads
-    queryset = request.user.favorites.all().order_by(
-        '-last_post__id').select_related(
-        "creator","last_post","last_post__creator")
-    
-    paginator = Paginator(queryset, 50, allow_empty_first_page=True)
-    page_obj = paginator.page(page)
-
-    thread_list = page_obj.object_list
-    #find out which ones are read
-    last_read = LastRead.objects.filter(
-        thread__in=[t.id for t in thread_list],
-        user = request.user,
-    ).values('thread__id', 'post__id')
-    last_viewed = dict((lr['thread__id'], lr) for lr in last_read)
-    for t in thread_list:
-        if t.id in last_viewed:
-            t.unread = last_viewed[t.id]['post__id'] < t.last_post_id
-            t.last_post_read = last_viewed[t.id]['post__id']
-        else:
-            t.unread = True
-    return render_to_response("board/thread_list.html", {
-        'thread_list' : thread_list,
-        'page_obj' : page_obj,
-    }, context_instance = RequestContext(request))
 
 @super_no_cache
 @login_required
@@ -312,24 +282,17 @@ def thread_history(request,id=None):
         'read_list' : queryset.all(),
     }, context_instance = RequestContext(request))
 
-##  WARNING THIS IS INSECURE MODS CAN BE TRICKED BY LINKS
 @login_required
 @permission_required('board.can_sticky')
 def sticky(request,id):
     """ if the user has permissions sticky thread id """
     thread = get_object_or_404(Thread,pk=id)
-    thread.stuck = True
-    thread.save()
-    return HttpResponseRedirect(reverse('list-threads'))
-
-##  WARNING THIS IS INSECURE MODS CAN BE TRICKED BY LINKS
-@login_required
-@permission_required('board.can_sticky')
-def unsticky(request,id):
-    """ if the user has permission unsticky thread id """
-    thread = get_object_or_404(Thread,pk=id)
-    thread.stuck = False
-    thread.save()
+    if request.method == 'POST':
+        if request.POST['sticky'] == 'sticky':
+            thread.stuck = True
+        elif request.POST['sticky'] == 'unsticky':
+            thread.stuck = False
+        thread.save()
     return HttpResponseRedirect(reverse('list-threads'))
 
 @login_required
@@ -360,20 +323,6 @@ def mark_read(request):
             lr.save()
     return HttpResponseRedirect(reverse('list-threads'))
 
-@login_required
-def threads_by(request, id):
-    """ list all threads by user id """
-    poster = get_object_or_404(User,pk=id)
-    queryset = Thread.objects.filter(creator=id).order_by(
-        '-last_post').select_related('last_post', 'last_post__creator')
-
-    return list_detail.object_list(
-            request,
-            queryset = queryset,
-            paginate_by = THREADS_PER_PAGE,
-            template_name = "board/threads_by.html",
-            extra_context = {"poster" : poster.username}
-            )
 
 @login_required
 def posts_by(request, id):
@@ -401,43 +350,34 @@ def get_quote(request, id):
             'user': user,
     })
 
-##  WARNING THIS IS INSECURE MODS CAN BE TRICKED BY LINKS
 @login_required
 @permission_required('board.can_lock')
 def lock_thread(request, id):
     """ lock thread id if the requester has perms"""
     thread = get_object_or_404(Thread,pk=id)
-    thread.locked = True
+    if request.method == 'POST':
+        print "lock was post"
+        if request.POST['lock'] == 'lock':
+            print "lock was true"
+            thread.locked = True
+        elif request.POST['lock'] == 'unlock':
+            print "unlock was true"
+            thread.locked = False
     thread.save()
     return HttpResponseRedirect(reverse('list-threads'))
 
-##  WARNING THIS IS INSECURE MODS CAN BE TRICKED BY LINKS
-@login_required
-@permission_required('board.can_lock')
-def unlock_thread(request, id):
-    """ unlock thread id id the requester has perms """
-    thread = get_object_or_404(Thread,pk=id)
-    thread.locked = False
-    thread.save()
-    return HttpResponseRedirect(reverse('list-threads'))
 
-
-##  WARNING THIS IS INSECURE
-##  THE LINK NEEDS TO BE CHECKED
 @login_required
 def favorite_thread(request, id):
     """ add thread id to the users favorited """
     thread = get_object_or_404(Thread,pk=id)
-    thread.favorite.add(request.user)
+    if request.method == 'POST':
+        if request.POST['fav'] == 'add':
+            thread.favorite.add(request.user)
+        elif request.POST['fav'] == 'remove':
+            thread.favorite.remove(request.user)
     return HttpResponseRedirect(reverse('list-threads'))
 
-## WARNING THIS IS INSECURE
-@login_required
-def unfavorite_thread(request,id):
-    """ remove thread id from the users favorites """ 
-    thread = get_object_or_404(Thread,pk=id)
-    thread.favorite.remove(request.user)
-    return HttpResponseRedirect(reverse('list-threads'))
 
 @login_required
 def ghetto_search(request):

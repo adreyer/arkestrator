@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block extramenu %}
-    <div id="submenu">
+        <div id="submenu">
         <ul>
             {% if thread.total_posts > 10 %}
                 {% if not expand %}
@@ -43,25 +43,46 @@
                     <li class="submenuitem"><a href="{% url view-thread-hide thread.id start %}" title="hide images">Hide Images</a></li>
                 {% endif %}
             {% endif %}
+            <li class="submenuitem">
+            <form name="fav_form" action="{% url favorite thread.id %}" method="post">
+            {% csrf_token %}
             {% if fav %}
-                <li class="submenuitem"><a href="{% url unfavorite thread.id %}" title="remove from favorites">Unfavorite</a></li>
+                <input type="hidden" name="fav" value="remove">
+                <a href="javascript:void(1);" onClick="document.fav_form.submit();" title="remove from favorites">Unfavorite</a>
             {% else %}
-                <li class="submenuitem"><a href="{% url favorite thread.id %}" title="add to favorites">Favorite</a></li>
+                <input type="hidden" name="fav" value="add">
+                <a href="javascript:void(1);" onClick="document.fav_form.submit();" title="add to favorites">Favorite</a>
             {% endif %}
+            </form>
+            </li>
             <li class="submenuitem"><a href="{% url thread-history thread.id %}" title="show thread history">History</a></li>
             {% if perms.board.can_sticky %}
+              <li class="submenuitem">
+              <form name="stickform" action="{% url sticky thread.id %}" method="post">
+              {% csrf_token %}
               {% if thread.stuck %}
-                <li class="submenuitem"><a href="{% url unsticky thread.id %}" title="unsticky this thread">Unsticky</a></li>
+                <input type="hidden" name="sticky" value="unsticky">
+                <a href="javascript:void(1);" onClick="document.stickform.submit();" title="unsticky this thread">Unsticky</a>
               {% else %}
-                <li class="submenuitem"><a href="{% url sticky thread.id %}" title="sticky this thread">Sticky</a></li>
+                <input type="hidden" name="sticky" value="sticky">
+                <a href="javascript:void(1)" onClick="document.stickform.submit();" title="sticky this thread">Sticky</a></li>
               {% endif %}
+              </form>
+              </li>
             {% endif %}
             {% if perms.board.can_lock %}
+                <li class="submenuitem">
+                <form name="lockform" action="{% url lock-thread thread.id %}" method="post">
+                {% csrf_token %}
                 {% if thread.locked %}
-                <li class="submenuitem"><a href="{% url unlock-thread thread.id %}" title="unlock this thread">Unlock</a></li>
+                    <input type="hidden" name="lock" value="unlock">
+                    <a href="javascript:void(1)" onClick="document.lockform.submit();" title="unlock this thread">Unlock</a>
                 {% else %}
-                <li class="submenuitem"><a href="{% url lock-thread thread.id %}" title="lock this thread">Lock</a></li>
+                    <input type="hidden" name="lock" value="lock">
+                    <a href="javascript:void(1)" onClick="document.lockform.submit();" title="lock this thread">Lock</a>
                 {% endif %}
+                </form>
+                </li>
              {% endif %}
              {% block extrapostmenu %}
              {% endblock %}

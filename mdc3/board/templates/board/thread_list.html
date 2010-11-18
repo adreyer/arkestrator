@@ -25,16 +25,31 @@
             {% spaceless %}<td nowrap="nowrap" class="icons">
             {% if thread.locked %}
                     {% if perms.board.can_lock %}
-                        <a href="{% url unlock-thread thread.id %}" title="unlock this thread">&#10005;</a>
+                    <form name="lockf" action="{% url lock-thread thread.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="lock" value="lock">
+                    <a href="javascript:void(1);" onClick="document.lockf.submit();" title="unsticky this thread">
+                    <strong>&#10005;</strong></a>
+                    </form>
                     {% else %}&#10005;{% endif %}
             {% endif %}
             {% if thread.stuck %}
-                {% if perms.board.can_lock %}
-                    <a href="{% url unsticky thread.id %}" title="unsticky">&#9733;</a>
+                {% if perms.board.can_sticky %}
+                    <form name="stickyform" action="{% url sticky thread.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="sticky" value="unsticky">
+                    <a href="javascript:void(1);" onClick="document.stickyform.submit();" title="unsticky this thread">
+                    <strong>&#9733;</strong></a>
+                    </form>
                 {% else %}&#9733;{% endif %}
             {% endif %}
             {% if thread.fav %}
-                <a href="{% url unfavorite thread.id %}" title="unfavorite"><strong>&#9829;</strong></a>
+                <form name="fav_form" class="icon" action="{% url favorite thread.id %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="fav" value="remove">
+                <a href="javascript:void(1);" onClick="document.fav_form.submit();" title="remove from favorites">
+                <strong>&#9829;</strong></a>
+                </form>
             {% endif %} </td>{% endspaceless %}
             <td class="wwwwwwww"><div class="wwwwwwww">{% if thread.unread %}
                     <a class="unread" href="{% url view-thread thread.id %}{% spaceless %}
