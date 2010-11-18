@@ -6,7 +6,14 @@
     <div id="submenu">
         <ul>
             <li class="submenuitem"><a href="{% url new-thread %}" title="new thread">New thread</a></li>
-            <li class="submenuitem"><a href="{% url mark-threads-read %}" title="mark all read">Mark all read</a></li>
+            <li class="submenuitem">
+                <form name="markf" action="{% url mark-threads-read %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="confirm" value="true">
+                    <a href="javascript:void(1);" onClick="document.markf.submit();" title="mark all read">
+                        Mark all read</a>
+                 </form>
+            </li>
             <li class="submenuitem"><a href="{% url favorite-list%}" title="view favorites">Favorites</a></li>
         </ul>
     </div>
