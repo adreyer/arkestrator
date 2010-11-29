@@ -18,7 +18,7 @@
 </form>
 </li>
 {% if not thread %}
-    <li class="submenuitem"><a href="{% url pm-thread pm.id %}">Show Thread</a></li>
+    <li class="submenuitem"><a href="{% url pm-thread pm.id %}" title="view all related pms as a thread">Show Thread</a></li>
 {% endif %}
 {% endblock %}
 
@@ -33,7 +33,7 @@
     {% else %}
         <div class="row2">
     {% endif %}
-        <span id="info_{{ parent.id}}"><strong><a href="{% url view-profile parent.sender.id %}">{{ parent.sender.username }}</a></strong> sent this on {% mdctime parent.created_at long %} to {{ parent_rec_str }}</span><br />
+        <span id="info_{{ parent.id}}"><strong><a href="{% url view-profile parent.sender.id %}" title="view {{ parent.sender.username }}'s profile">{{ parent.sender.username }}</a></strong> sent this on {% mdctime parent.created_at long %} to {{ parent_rec_str }}</span><br />
          <strong>Subject: </strong>{{ parent.subject }}
          </div>
 
@@ -49,7 +49,7 @@
     {% else %}
         <div class="row2">
     {% endif %}
-        <span id="info_{{ pm.id}}"><strong><a href="{% url view-profile pm.sender.id %}">{{ pm.sender.username }}</a></strong> sent this on {% mdctime pm.created_at long %} to {{ rec_str }}</span><br />
+        <span id="info_{{ pm.id}}"><strong><a href="{% url view-profile pm.sender.id %}" title="view {{pm.sender.username }}'s profile">{{ pm.sender.username }}</a></strong> sent this on {% mdctime pm.created_at long %} to {{ rec_str }}</span><br />
          <strong>Subject: </strong>{{ pm.subject }}
          </div>
 
@@ -61,8 +61,8 @@
 {% block bottombezel %}
     <div id="bottombezel">
         <ul>
-            <li class="submenuitem"><a href="javascript:;" onclick="quote('{% url get-pm-quote pm.id %}')">Quote</a></li>
-            <li class="submenuitem"><a href="javascript:;" onClick="getElementById('id_recs').value='{{ reply_all }}'">Reply All </a></li>
+            <li class="submenuitem"><a href="javascript:;" onclick="quote('{% url get-pm-quote pm.id %}')" title="quote this pm in reply">Quote</a></li>
+            <li class="submenuitem"><a href="javascript:;" onClick="getElementById('id_recs').value='{{ reply_all }}'" title="reply to all">Reply All </a></li>
         </ul>
     </div>
 

@@ -3,9 +3,9 @@
 {% block extramenu %}
     <div id="submenu">
         <ul>
-            <li class="submenuitem"><a href="{% url new-pm %}">New message</a> </li>
-            <li class="submenuitem"><a href="{% url inbox %}">Inbox</a> </li>
-            <li class="submenuitem"><a href="{% url outbox %}">Outbox</a> </li>
+            <li class="submenuitem"><a href="{% url new-pm %}" title="send a new pm">New message</a> </li>
+            <li class="submenuitem"><a href="{% url inbox %}" title="go to your inbox">Inbox</a> </li>
+            <li class="submenuitem"><a href="{% url outbox %}" title="go to your outbox">Outbox</a> </li>
             <li class="submenuitem">
                 <form name="markf" action="{% url mark-read %}" method="post">
                 {% csrf_token %}
