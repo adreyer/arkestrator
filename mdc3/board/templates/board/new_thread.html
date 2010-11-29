@@ -12,6 +12,26 @@
         {{ thread_form.subject }} {{ thread_form.subject.errors }}<br />
         {{ post_form.body }} {{ post_form.body.errors }}<br />
         <input type="submit" id="postbutton" value="Say It" />
+        <input type="button" class="button" onClick="toggle('bbcode_cheat')" value="BBCode help" />
     </div>
 </form>
+{% endblock %}
+
+{% block replyform %}
+<div style="position: relative; margin-top: 2em;">
+<div style="display: none;" id="bbcode_cheat">
+<pre>[url]http://www.example.com/[/url]
+[url=http://www.example.com/]Example link text[/url]
+[img]http://www.example.com/picture.jpg[/img]
+[u]underline[/u]
+[b]bold[/b]
+[i]italic[/i]
+[strike]strikethrough[/strike]
+[code]monospace or preformatted text[/code]
+[youtube]http://www.youtube.com/watch?v=WAwLYJYsa0A[/youtube]
+[quote]quoted text[/quote]
+[hidden]hidden spoilers etc.[/hidden]</pre>
+</div>
+</div>
+
 {% endblock %}
