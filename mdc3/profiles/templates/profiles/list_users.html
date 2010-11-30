@@ -17,7 +17,7 @@
             <td>joined {% mdctime user.date_joined date %}</td>
             <td><a href="{% url threads-by user.id %}" title="view threads by {{user.username }}">{{ user.get_profile.total_threads }} threads</a></td>
             <td><a href="{% url posts-by user.id %}" title="view posts by {{ user.username }}">{{ user.get_profile.total_posts }} posts</a></td>
-            <td>last seen {% mdctime user.get_profile.last_seen long %}</td>
+            <td>last seen {% mdctime user.get_profile.last_seen short %}</td>
             <td>{% if user.theme %}<a href="{% url edit-existing-theme user.theme.id %}" title="view {{user.username }}'s theme">theme</a></td>{% endif %}
 
         </tr>
