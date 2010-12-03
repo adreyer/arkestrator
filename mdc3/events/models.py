@@ -58,7 +58,7 @@ class Event(models.Model):
         return RSVP.objects.filter(event=self).order_by('user__username')
         
     def __str__(self):
-        return self.title
+        return self.thread.title
 
 RSVP_CHOICES = (
         ( 'Yes' , 'Yes'),
