@@ -59,6 +59,14 @@ class Profile(models.Model):
         """ how many threads the user has made """
         return self.user.threads.count()
 
+    def total_views(self):
+        """ how many thread views does the user have """
+        lrs = self.user.lastread_set.all()
+        count = 0
+        for lr in lrs:
+            count += lr.read_count
+        return count
+
     def last_seen(self):
         """ the last time the user viewed a thread """
 
