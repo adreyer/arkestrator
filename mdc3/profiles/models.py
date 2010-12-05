@@ -14,9 +14,6 @@ class Profile(models.Model):
     #data
     user = models.OneToOneField(User,null=False)
     ip_signup = models.IPAddressField()
-    last_login = models.DateTimeField(default=datetime.datetime.now)
-    last_view = models.DateTimeField(default=datetime.datetime.now)
-    last_post = models.DateTimeField(default=datetime.datetime.now)
     last_profile_update = models.DateTimeField(default=datetime.datetime.now)
     profile_views = models.IntegerField(default=0)
     last_events_view = models.DateTimeField(default=datetime.datetime.now)
@@ -42,7 +39,6 @@ class Profile(models.Model):
     time_zone = models.CharField(default=settings.DEFAULT_TZ,
                                  max_length = 20,
                                  choices = settings.TZ_CHOICES)
-    #fuck hidden
     
     
     def get_absolute_url(self):
@@ -61,18 +57,11 @@ class Profile(models.Model):
 
     def total_views(self):
         """ how many thread views does the user have """
-        lrs = self.user.lastread_set.all()
-        count = 0
-        for lr in lrs:
-            count += lr.read_count
-        return count
+        return self.user.lastread_set.aggregate(models.Sum('read_count'))['read_count__sum']
 
     def last_seen(self):
         """ the last time the user viewed a thread """
-
-        from mdc3.board.models import LastRead
-        lr = LastRead.objects.filter(user=self.user).order_by(
-                '-timestamp')
-        if lr:
-            return lr[0].timestamp
-        return self.user.date_joined
+        try:
+            return self.user.lastread_set.order_by('-timestamp')[0].timestamp
+        except IndexError:
+            return self.user.date_joined
