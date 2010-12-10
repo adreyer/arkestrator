@@ -27,7 +27,7 @@ class Invite(models.Model):
             related_name='created_invite')
     invitee = models.EmailField(null=False)
     created_on = models.DateTimeField(default=datetime.datetime.now)
-    explanation = models.CharField(max_length=150, blank=True)
+    explanation = models.CharField(max_length=2500, blank=True)
     approved = models.BooleanField(default=False)
     rejected = models.BooleanField(default=False)
     approved_by = models.ForeignKey(User,null=True,
