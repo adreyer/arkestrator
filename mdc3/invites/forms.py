@@ -9,7 +9,7 @@ import re
 class NewInviteForm(forms.Form):
     """ a form to create a new invite """
     invitee = forms.EmailField(required=True, label="Email", widget=forms.TextInput(attrs={'size': 70, 'maxlength': 160}))
-    explanation = forms.CharField(max_length=150,
+    explanation = forms.CharField(max_length=2500,
         label="Explain",
         widget=forms.Textarea(attrs={'rows': 6, 'cols': 70}))
 
