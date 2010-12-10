@@ -29,8 +29,9 @@ def invite_list(request):
             return HttpResponseRedirect(reverse('list-threads'))
     else:
         form = forms.NewInviteForm()
-        queryset = Invite.objects.filter(rejected=False,
-            approved=False).order_by('-created_on')
+
+    queryset = Invite.objects.filter(rejected=False,
+        approved=False).order_by('-created_on')
     return list_detail.object_list(
         request,
         queryset = queryset,
