@@ -352,12 +352,9 @@ def lock_thread(request, id):
     """ lock thread id if the requester has perms"""
     thread = get_object_or_404(Thread,pk=id)
     if request.method == 'POST':
-        print "lock was post"
         if request.POST['lock'] == 'lock':
-            print "lock was true"
             thread.locked = True
         elif request.POST['lock'] == 'unlock':
-            print "unlock was true"
             thread.locked = False
     thread.save()
     return HttpResponseRedirect(reverse('list-threads'))
