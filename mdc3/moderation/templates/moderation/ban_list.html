@@ -1,0 +1,15 @@
+{% extends "moderation/mod_base.html" %}
+
+{% load mdctime %}
+{% block content %}
+    <table class="thread_list">
+        {% for ban in object_list %}
+            <tr class="{% cycle "row1" "row2" %}">
+                <td nowrap="nowrap"><a href="{% url view-profile ban.creator.id %}" title="view {{ ban.creator.username }}'s profile">{{ ban.creator.username }}</a></td>
+                <td nowrap="nowrap"><a href="{% url view-profile ban.user.id %}" title="view {{ ban.user.username }}'s profile">{{ ban.user.username }}</a></td>                <td>{% mdctime ban.start %}</td>
+                <td>{% mdctime ban.end %}</td>
+                <td>{{ ban.reason }}</td>
+             </tr>
+        {% endfor %}
+    </table>
+{% endblock content %}

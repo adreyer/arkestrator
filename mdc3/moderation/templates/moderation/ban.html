@@ -2,21 +2,11 @@
 
 {% load mdctime %}
 {% block content %}
-<table class="thread_list">
-{% for user in user_list %}
-    <tr class="{% cycle "row1" "row2" %}">
-    <td><a href="{% url view-profile user.id %}" title="view {{user.username }}'s profile">{{ user.username }}</a></td>
-    <td>joined {% mdctime user.date_joined date %}</td>
-    <td>
-        <form class="icons" name="banf{{ user.id }}" action="{% url ban-user user.id %}" method="post">
-            {% csrf_token %}
-            {% if user.is_active %}<input type="hidden" name="ban" value="ban">
-            {% else %} <input type="hidden" name="ban" value="unban">{% endif%}
-            <a href="javascript:void(1);" onClick="document.banf{{ user.id }}.submit();" title="ban/unban this user">
-            <strong>{% if user.is_active %}ban{% else %}unban{% endif %}</strong></a>
-       </form>
-    </td>
-    </tr>
-{% endfor %}
-</table>
+    <form method="post" action="{% url ban %}">
+        {% csrf_token %}
+        <table>
+        {{ form.as_table }}
+        </table>
+        <input type="submit" value="ban">
+    </form>
 {% endblock content %}

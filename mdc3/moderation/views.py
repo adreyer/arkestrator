@@ -5,29 +5,36 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 
-#using can_lock is temporary till moderation has some models
-@permission_required('board.can_lock')
-def ban_user(request, id=None):
-    """ display a list of users to ban or ban/unban user id """
-    if id:
-        user = get_object_or_404(User,pk=id)
-        if request.method == 'POST':
-            if request.POST['ban'] == 'ban':
-                user.is_active = False
-                user.save()
-            elif request.POST['ban'] == 'unban':
-                user.is_active = True
-                user.save()
-            return HttpResponseRedirect(reverse('ban'))
+from forms import BanForm
+from models import Ban
 
-    queryset = User.objects.user_list = User.objects.exclude(
-            profile__isnull=True).order_by('is_active','username')
+#using can_lock is temporary till moderation has some models
+@permission_required('moderation.can_ban')
+def ban_user(request):
+    """ display a list of users to ban or ban/unban user id """
+    if request.method == 'POST':
+        ban = Ban(creator=request.user)
+        form = BanForm(request.POST,instance=ban)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('ban-list'))
+
+    else:
+        form = BanForm()
 
     return render_to_response("moderation/ban.html",
-            { 'user_list' : queryset },
+            { 'form' : form, },
             context_instance = RequestContext(request))
 
-@permission_required('board.can_lock')
+
+@permission_required('moderation.can_ban')
+def ban_list(request):
+    queryset = Ban.objects.all()
+    return render_to_response('moderation/ban_list.html',
+        { 'object_list' : queryset,},
+        context_instance = RequestContext(request))
+
+@permission_required('moderation.can_ban')
 def mod_panel(request):
     return render_to_response("moderation/mod_panel",
         context_instance = RequestContext(request))
