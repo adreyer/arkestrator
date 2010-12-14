@@ -68,7 +68,7 @@
                     <span class="urgent">Invites ({{ new_invites }})</span>
                  {% else %}Invite{% endif %}</a></li>
             {% if perms.board.can_lock %}
-                <li class="menuitem"><a href="{% url ban %}" title="manage banishment">Banishment</a>
+                <li class="menuitem"><a href="{% url ban %}" title="manage banishment">Banishment</a></li>
             {% endif %}
             {% if user.is_staff %}
             <li class="menuitem"><a href="{% url admin:index %}" title="admin panel">Admin</a></li>
