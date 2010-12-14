@@ -38,3 +38,8 @@ def ban_list(request):
 def mod_panel(request):
     return render_to_response("moderation/mod_panel",
         context_instance = RequestContext(request))
+
+def ban_page(request, bans):
+    return render_to_response("moderation/ban_page.html",
+            { 'ban' : bans[0] },
+            context_instance = RequestContext(request))

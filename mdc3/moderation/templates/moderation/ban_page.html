@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block header %}
+<h1> You are BANNED</h1>
+{% endblock header %}
+
+{% load mdctime %}
+{% block content %}
+<h2>You were banned for:</h2>
+<p>{{ ban.reason }}</p>
+<p> This ban will be lifted on {% mdctime ban.end %}</p>
+{% endblock content %}
