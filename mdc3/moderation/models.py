@@ -7,7 +7,7 @@ class Ban(models.Model):
 
     class Meta:
         permissions = (
-                ('can_ban','Can ban users')
+                ('can_ban','Can ban users'),
                 )
     user = models.ForeignKey(User,null=False,related_name='bans')
     creator = models.ForeignKey(User,null=False,related_name='created_bans')
