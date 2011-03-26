@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.contrib.sites.managers import CurrentSiteManager
 from django.core.cache import cache
+from django.core.urlresolvers import reverse
 
 from mdc3.decorators import instance_memcache
 from bbking.fields import BBCodeField
@@ -14,13 +15,13 @@ import datetime
 
 class Thread(models.Model):
     """ a Thread """
-        
+
     class Meta:
         permissions=(
             ('can_sticky', 'Can sticky threads'),
             ('can_lock', 'Can lock threads'),
             )
-    
+
     subject = models.CharField(max_length=160, blank=False)
     creator = models.ForeignKey(User,null=False,related_name='threads')
     last_post = models.ForeignKey("board.Post", null=True, 
@@ -36,6 +37,12 @@ class Thread(models.Model):
 
     def __unicode__(self):
         return self.subject
+
+    def search_title(self):
+        return self.subject
+
+    def search_info(self):
+        return None
 
     @instance_memcache('default-posts-list', 1800)
     def default_post_list(self):
@@ -65,6 +72,11 @@ class Thread(models.Model):
             return 0
         return total
 
+    # this is stupid but I'm an idiot right now and I just want to play with
+    # search TODO: fix this shit and fix the index template 
+    def posts(self):
+        return Post.objects.filter(thread=self)
+
 
 class Post(models.Model):
     """ a post in a thread """
@@ -79,6 +91,15 @@ class Post(models.Model):
     posted_from = models.IPAddressField(blank=True, null=True)
 
     bbcode = BBCodeField('body', 'bbhash')
+
+    def search_title(self):
+        return self.thread.subject
+
+    def search_info(self):
+        return self.body
+
+    def get_absolute_url(self):
+        return reverse('view-post', args=[self.id])
 
     def __unicode__(self):
         return "%s: %s"%(unicode(self.thread),self.body[:20])

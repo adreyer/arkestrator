@@ -1,7 +1,6 @@
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import user_passes_test
-from mdc3.profiles.models import Profile
 
 
 class BetterCacher(object):
@@ -82,6 +81,7 @@ def super_no_cache(fn):
 
 
 def moderator_required(redirect_field_name='/'):
+    from mdc3.profiles.models import Profile
     actual_decorator = user_passes_test(
         lambda u: Profile.objects.get(user=u).moderator ,
         redirect_field_name=redirect_field_name )

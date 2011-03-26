@@ -116,9 +116,8 @@ INSTALLED_APPS = (
     'mdc3.events',
     'mdc3.moderation',
     'bbking',
+    'haystack',
 )
-
-BBCODE_DEFAULT_NAMESPACES = ('no-smilies','no-colors')
 
 AUTH_PROFILE_MODULE = 'profiles.Profile'
 LOGIN_REDIRECT_URL = '/'
@@ -150,3 +149,7 @@ BBKING_TAG_LIBRARIES = (
                     )
 
 BBKING_USE_WORDFILTERS = True
+
+HAYSTACK_SITECONF = 'mdc3.search_sites'
+HAYSTACK_SEARCH_ENGINE = 'solr'
+HAYSTACK_SOLR_URL = 'http://127.0.0.1:8983/solr'

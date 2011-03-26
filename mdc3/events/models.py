@@ -3,9 +3,11 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 
+from mdc3.board.models import Thread
+
 class Market(models.Model):
     """   A city or region in which events take place
-        
+
          Attrs:
          name:  What the market will be called
          timezone: what timezone the market is in
@@ -18,10 +20,10 @@ class Market(models.Model):
 
     def __str__(self):
         return self.name
-    
+
 class Event(models.Model):
     """   An event
-        
+
         attrs:
         thread: the thread associated with this event
         creator:  who created this event
@@ -37,8 +39,7 @@ class Event(models.Model):
 
     class Meta:
         permissions=(('can_edit', 'Can Edit Events'),)
-    
-    from mdc3.board.models import Thread
+
     thread = models.OneToOneField(Thread,null=False)
     creator = models.ForeignKey(User,null=False)
     description = models.TextField(blank=True)
@@ -56,7 +57,7 @@ class Event(models.Model):
             I don't remember why this is here(amd)
         """
         return RSVP.objects.filter(event=self).order_by('user__username')
-        
+
     def __str__(self):
         return self.thread.subject
 

@@ -24,4 +24,5 @@ urlpatterns = patterns('',
     url(r'^active/$', 'mdc3.util.views.active_users',
         name='active-users'),
     url(r'^quote/(?P<id>\d+)/$', 'mdc3.board.views.get_quote', name='get-quote'),
+    (r'^search/', include('haystack.urls')),
 )

@@ -1,0 +1,4 @@
+{{ object.subject }}
+{% for post in object.posts %}
+	{{ post.body }}
+{% endfor %}

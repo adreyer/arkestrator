@@ -5,11 +5,11 @@ from django.core.urlresolvers import reverse
 from django.db import models
 
 from mdc3.invites.models import Invite
-from mdc3.events.models import Market
 
 
 class Profile(models.Model):
     """ a profile for a user """
+    from mdc3.events.models import Market
 
     #data
     user = models.OneToOneField(User,null=False)
@@ -18,8 +18,7 @@ class Profile(models.Model):
     profile_views = models.IntegerField(default=0)
     last_events_view = models.DateTimeField(default=datetime.datetime.now)
     invite_used = models.ForeignKey(Invite, null=True, blank=True)
-    
-    
+
     #info
     name = models.CharField(max_length=50, blank=True)
     location = models.CharField(max_length=50, blank=True)
