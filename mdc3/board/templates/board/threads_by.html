@@ -10,7 +10,7 @@
 {% block extramenu %}
     <div id="submenu">
         <ul>
-            <li class="submenuitem"><a href="{% url new-thread %}" title="start a new thread">New Thread</a></li>
+            <li class="submenuitem"><a href="{% url new-thread %}" title="Start a new thread">New Thread</a></li>
         </ul>
     </div>
 {% endblock extramenu %}
@@ -21,36 +21,36 @@
     {% withcycle "row1" "row2" as row_color %}
         {% for thread in object_list %}
             <tr class="{{ row_color }}">
-            <td nowrap="nowrap"><a href="{% url view-profile thread.creator.id %}" title="view {{ thread.creator.username }}'s profile">{{ thread.creator.username }}</a></td>
+            <td nowrap="nowrap"><a href="{% url view-profile thread.creator.id %}" title="View {{ thread.creator.username }}'s profile">{{ thread.creator.username }}</a></td>
             <td nowrap="nowrap" class="icons">{% spaceless %}
-                {% if thread.fav %}<a href="{% url unfavorite thread.id %}" title="remove this thread from favorites">&#9829;</a>{% endif %}
+                {% if thread.fav %}<a href="{% url unfavorite thread.id %}" title="Remove this thread from favorites">&#9829;</a>{% endif %}
                 {% if thread.locked %}
                 {% if perms.board.can_lock %}
-                    <a href="{% url unlock-thread thread.id %}" title="unlock this thread">&#10005;</a>
+                    <a href="{% url unlock-thread thread.id %}" title="Unlock this thread">&#10005;</a>
                 {% else %}&#10005;{% endif %}
                 {% endif %}
                 {% if thread.stuck %}
                 {% if perms.board.can_sticky%}
-                    <a href="{% url unsticky thread.id %}" title="unsticky this thread">&#9733;</a>
+                    <a href="{% url unsticky thread.id %}" title="Unsticky this thread">&#9733;</a>
                 {% else %}&#9733{% endif %}
                 {% endif %}{% endspaceless %}</td>
             <td class="wwwwwwww">{% if thread.unread %}
                     <b><a href="{% url view-thread thread.id %}{% spaceless %}
                         {% if thread.last_post_read %}
                                 #{{ thread.last_post_read }}
-                            {% endif %}{% endspaceless %}" title="view this thread">
+                            {% endif %}{% endspaceless %}" title="View this thread">
                         {{ thread.subject }}</a></b>
                 {% else %}
                     <a href="{% url view-thread thread.id %}{% spaceless %}
                         {% if thread.last_post_read %}
                                 #{{ thread.last_post_read }}
-                            {% endif %}{% endspaceless %}" title="view this thread">
+                            {% endif %}{% endspaceless %}" title="View this thread">
                         {{ thread.subject }}</a>
                 {% endif %}
             </td>
-            <td nowrap="nowrap">{% mdctime thread.last_post.created_at short %} <a class="smallfont" href="{% url view-profile thread.last_post.creator.id %}" title="view {{thread.last_post.creator.username }}'s profile">{{ thread.last_post.creator.username }}</a></td>
+            <td nowrap="nowrap">{% mdctime thread.last_post.created_at short %} <a class="smallfont" href="{% url view-profile thread.last_post.creator.id %}" title="View {{thread.last_post.creator.username }}'s profile">{{ thread.last_post.creator.username }}</a></td>
             <td nowrap="nowrap" class="count">{{ thread.total_posts }}</td>
-            <td nowrap="nowrap" class="count"><a href="{% url thread-history thread.id %}" title="view thread history">
+            <td nowrap="nowrap" class="count"><a href="{% url thread-history thread.id %}" title="View thread history">
                 {{ thread.total_views }}</a></td>
             </tr>
             {% nextcycle row_color %}

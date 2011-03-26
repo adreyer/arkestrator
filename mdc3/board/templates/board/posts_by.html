@@ -11,7 +11,7 @@
 {% block extramenu %}
     <div id="submenu">
         <ul>
-            <li class="submenuitem"><a href="{% url new-thread %}" title="start a new thread">New Thread</a></li>
+            <li class="submenuitem"><a href="{% url new-thread %}" title="Start a new thread">New Thread</a></li>
         </ul>
     </div>
 {% endblock %}
@@ -19,7 +19,7 @@
     {% for post in object_list %}
         <div class="post">
         <div class="row2">
-            <strong>Subject: </strong><a href="{% url view-post post.id %}#{{ post.id }}" title="view post in thread">{{ post.thread.subject }}</a><br/>
+            <strong>Subject: </strong><a href="{% url view-post post.id %}#{{ post.id }}" title="View post in thread">{{ post.thread.subject }}</a><br/>
             <strong>Posted:</strong>
                 {% mdctime post.created_at long %}
             </div>
