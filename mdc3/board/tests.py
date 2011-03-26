@@ -1,5 +1,6 @@
 from django.test import TestCase
 from models import Thread, Post
+from forms import ThreadForm, PostForm
 
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
@@ -64,4 +65,26 @@ class PostTest(TestCase):
 
         self.assertEqual(self.thread.last_post.creator, self.user2)
         self.assertEqual(self.thread.last_post.created_at, ts)
+
+class FormsTestCase(TestCase):
+    def test_subject_required_robert(self):
+        tf = ThreadForm({ 'subject' : 'yay' })
+        self.assertTrue(tf.is_valid())
+
+        tf = ThreadForm({ 'subject' : '' })
+        self.assertFalse(tf.is_valid())
+
+        tf = ThreadForm({ 'subject' : ' \t \t \n\n\n' })
+        self.assertFalse(tf.is_valid())
+
+    def test_body_required_robert(self):
+        pf = PostForm({ 'body' : 'yay' })
+        self.assertTrue(pf.is_valid())
+
+        pf = PostForm({ 'body' : '' })
+        self.assertFalse(pf.is_valid())
+
+        pf = PostForm({ 'body' : ' \t \t \n\n\n' })
+        self.assertFalse(pf.is_valid())
+
 
