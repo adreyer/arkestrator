@@ -28,7 +28,6 @@ class UserRegistrationForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'email')
-    
     pass1 = forms.CharField(required=True,
             label="Password",
             widget=forms.PasswordInput)
@@ -39,9 +38,13 @@ class UserRegistrationForm(forms.ModelForm):
     #don't allow whitespace in usernames
     def clean_username(self):
         """ make sure there is no whitespace in usernames """
-        if re.search(r'\s', self.cleaned_data['username']):
+        username = self.cleaned_data['username']
+        if re.search(r'[^a-zA-Z0-9@.+-_]', username):
             raise forms.ValidationError(
-                    "No whitespace is allowed in usernames. Perhaps you'd like to use an _")
+                    "Only letters, numbers and @/./+/-/_ characters are allowed in usernames.  No whitespace")
+        # Not sure why this isn't happening automatically
+        if User.objects.filter(username=username):
+            raise forms.ValidationError("Sorry that username is already in use")
         return self.cleaned_data['username']
 
     def clean(self):
