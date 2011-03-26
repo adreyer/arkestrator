@@ -121,31 +121,15 @@
 {% block replyform %}
 {% if not thread.locked %}
 <a name="post"></a>
-    <form method="post" action="{% url view-thread thread.id %}#post" onSubmit="document.getElementById('postbutton').style.display='none';">
+    <form method="post" action="{% url view-thread thread.id %}#post" onSubmit="document.getElementById('postbutton').value='Please wait...';">
     {% csrf_token %}
     <div class="replyform" style="float: left;">
         {{ form.body.errors }}<br />{{ form.body }}<br />
         {{ form.form_lock }}
         <input class="button" type="submit" id="postbutton" value="Say it" />
-        <input type="button" class="button" onClick="toggle('bbcode_cheat')" value="BBCode help" style="float: right;"/>
+        <a class="button" href="http://wiki.mdc2.org/index.php/Cheat_codes" target="_blank">BBCode help</a>
     </div>
     </form>
-
-    <div style="position: relative; margin-top: 2em;">
-    <div style="display: none;" id="bbcode_cheat">
-    <pre>[url]http://www.example.com/[/url]
-[url=http://www.example.com/]Example link text[/url]
-[img]http://www.example.com/picture.jpg[/img]
-[u]underline[/u]
-[b]bold[/b]
-[i]italic[/i]
-[strike]strikethrough[/strike]
-[code]monospace or preformatted text[/code]
-[youtube]http://www.youtube.com/watch?v=WAwLYJYsa0A[/youtube]
-[quote]quoted text[/quote]
-[hidden]hidden spoilers etc.[/hidden]</pre>
-    </div>
-    </div>
 {% else %}
 {% block locknotice %}
     <div class="notice">This thread is locked. No more replies may be added.</div>

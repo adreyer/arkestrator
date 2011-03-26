@@ -152,7 +152,7 @@ div.post div.body a {
     text-decoration: underline;
 }
 
-div.post div.body a:hover {
+div.post div.body a:hover, a.button:hover {
     text-decoration: none;
 }
 
@@ -164,7 +164,7 @@ div.post {
    padding: 0.33em;
 }
 
-textarea, input {
+textarea, input, a.button {
     padding: 0.2em;
     padding-left: 0.5em;
     padding-right: 0.5em;
@@ -317,3 +317,4 @@ div#search_box {
 img.bbking-img {
     max-width: 100%;
 }
+
