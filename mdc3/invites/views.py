@@ -9,6 +9,7 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.sites.models import Site
 from django.core.mail import send_mail
+from django.db import transaction
 from django.views.generic import list_detail
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
@@ -41,7 +42,7 @@ def invite_list(request):
         })
 
 
-
+@transaction.commit_on_success()
 def register(request,code):
     """ register a new user with invite_code code 404 bad codes """
     invite = get_object_or_404(Invite,invite_code=code)
@@ -75,8 +76,6 @@ def register(request,code):
           'profile_form' : profile_form,
           'code' : code },
          context_instance = RequestContext(request))
-    
-
 
 @login_required
 @permission_required('invites.can_approve','/')
