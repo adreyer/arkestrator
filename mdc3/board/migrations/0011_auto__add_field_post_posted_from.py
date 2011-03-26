@@ -9,7 +9,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         
         # Adding field 'Post.posted_from'
-        db.add_column('board_post', 'posted_from', self.gf('django.db.models.fields.IPAddressField')(default='', max_length=15, blank=True), keep_default=False)
+        db.add_column('board_post', 'posted_from', self.gf('django.db.models.fields.IPAddressField')(max_length=15, null=True, blank=True), keep_default=False)
 
 
     def backwards(self, orm):
@@ -64,7 +64,7 @@ class Migration(SchemaMigration):
             'created_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now', 'db_index': 'True'}),
             'creator': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['auth.User']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'posted_from': ('django.db.models.fields.IPAddressField', [], {'default': "''", 'max_length': '15', 'blank': 'True'}),
+            'posted_from': ('django.db.models.fields.IPAddressField', [], {'max_length': '15', 'null': 'True', 'blank': 'True'}),
             'thread': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['board.Thread']"})
         },
         'board.thread': {

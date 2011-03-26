@@ -76,7 +76,7 @@ class Post(models.Model):
     created_at = models.DateTimeField('Created at',
         default = datetime.datetime.now, 
         db_index = True)
-    posted_from = models.IPAddressField(blank=True, default='')
+    posted_from = models.IPAddressField(blank=True, null=True)
 
     bbcode = BBCodeField('body', 'bbhash')
 
