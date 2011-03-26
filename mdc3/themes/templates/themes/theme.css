@@ -55,7 +55,7 @@ div.body {
     border-top: 1px solid #{{ object.row2 }};
 }
 
-textarea, input { 
+textarea, input, a.button { 
     font-family: {{ object.font_face }};
     color: #{{ object.form_text_color }}; 
     background-color: #{{ object.form_background }}; 
@@ -98,3 +98,4 @@ div#submenu {
 .menuitem:hover a, .submenuitem:hover a {
     color: #{{ object.mypost_text_color }};
 }
+

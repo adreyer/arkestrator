@@ -18,29 +18,29 @@
             {% if thread.total_posts > 10 %}
                 {% if not expand %}
                     {% if hide %}
-                    <li class="submenuitem"><a href="{% url view-thread-full-hide thread.id start %}" title="show all posts">Show all ({{ thread.total_posts }})</a></li>
+                    <li class="submenuitem"><a href="{% url view-thread-full-hide thread.id start %}" title="Show all posts">Show all ({{ thread.total_posts }})</a></li>
                     {% else %}
-                    <li class="submenuitem"><a href="{% url view-thread-full-start thread.id start %}" title="show all posts">Show all ({{ thread.total_posts }})</a></li>
+                    <li class="submenuitem"><a href="{% url view-thread-full-start thread.id start %}" title="Show all posts">Show all ({{ thread.total_posts }})</a></li>
                     {% endif %}
                 {% else %}
                     {% if hide %}
-                    <li class="submenuitem"><a href="{% url view-thread-hide thread.id start %}" title="collapse old posts">Collapse</a></li>
+                    <li class="submenuitem"><a href="{% url view-thread-hide thread.id start %}" title="Collapse old posts">Collapse</a></li>
                     {% else %}
-                    <li class="submenuitem"><a href="{% url view-thread-start thread.id start %}" title="collapse old posts">Collapse</a></li>
+                    <li class="submenuitem"><a href="{% url view-thread-start thread.id start %}" title="Collapse old posts">Collapse</a></li>
                     {% endif %}
                 {% endif %}
             {% endif %}
             {% if hide %}
                 {% if expand %}
-                    <li class="submenuitem"><a href="{% url view-thread-full-show thread.id start %}" title="show images">Show Images</a></li>
+                    <li class="submenuitem"><a href="{% url view-thread-full-show thread.id start %}" title="Show images">Show Images</a></li>
                 {% else %}
-                    <li class="submenuitem"><a href="{% url view-thread-show thread.id start %}" title="show images">Show Images</a></li>
+                    <li class="submenuitem"><a href="{% url view-thread-show thread.id start %}" title="Show images">Show Images</a></li>
                 {% endif %}
             {% else %}
                 {% if expand %}
-                    <li class="submenuitem"><a href="{% url view-thread-full-hide thread.id start %}" title="hide images">Hide Images</a></li>
+                    <li class="submenuitem"><a href="{% url view-thread-full-hide thread.id start %}" title="Hide images">Hide Images</a></li>
                 {% else %}
-                    <li class="submenuitem"><a href="{% url view-thread-hide thread.id start %}" title="hide images">Hide Images</a></li>
+                    <li class="submenuitem"><a href="{% url view-thread-hide thread.id start %}" title="Hide images">Hide Images</a></li>
                 {% endif %}
             {% endif %}
             <li class="submenuitem">
@@ -48,24 +48,24 @@
             {% csrf_token %}
             {% if fav %}
                 <input type="hidden" name="fav" value="remove">
-                <a href="javascript:void(1);" onClick="document.fav_form.submit();" title="remove from favorites">Unfavorite</a>
+                <a href="javascript:void(1);" onClick="document.fav_form.submit();" title="Remove from favorites">Unfavorite</a>
             {% else %}
                 <input type="hidden" name="fav" value="add">
-                <a href="javascript:void(1);" onClick="document.fav_form.submit();" title="add to favorites">Favorite</a>
+                <a href="javascript:void(1);" onClick="document.fav_form.submit();" title="Add to favorites">Favorite</a>
             {% endif %}
             </form>
             </li>
-            <li class="submenuitem"><a href="{% url thread-history thread.id %}" title="show thread history">History</a></li>
+            <li class="submenuitem"><a href="{% url thread-history thread.id %}" title="Show thread history">History</a></li>
             {% if perms.board.can_sticky %}
               <li class="submenuitem">
               <form name="stickform" action="{% url sticky thread.id %}" method="post">
               {% csrf_token %}
               {% if thread.stuck %}
                 <input type="hidden" name="sticky" value="unsticky">
-                <a href="javascript:void(1);" onClick="document.stickform.submit();" title="unsticky this thread">Unsticky</a>
+                <a href="javascript:void(1);" onClick="document.stickform.submit();" title="Unsticky this thread">Unsticky</a>
               {% else %}
                 <input type="hidden" name="sticky" value="sticky">
-                <a href="javascript:void(1)" onClick="document.stickform.submit();" title="sticky this thread">Sticky</a></li>
+                <a href="javascript:void(1)" onClick="document.stickform.submit();" title="Sticky this thread">Sticky</a></li>
               {% endif %}
               </form>
               </li>
@@ -76,17 +76,17 @@
                 {% csrf_token %}
                 {% if thread.locked %}
                     <input type="hidden" name="lock" value="unlock">
-                    <a href="javascript:void(1)" onClick="document.lockform.submit();" title="unlock this thread">Unlock</a>
+                    <a href="javascript:void(1)" onClick="document.lockform.submit();" title="Unlock this thread">Unlock</a>
                 {% else %}
                     <input type="hidden" name="lock" value="lock">
-                    <a href="javascript:void(1)" onClick="document.lockform.submit();" title="lock this thread">Lock</a>
+                    <a href="javascript:void(1)" onClick="document.lockform.submit();" title="Lock this thread">Lock</a>
                 {% endif %}
                 </form>
                 </li>
              {% endif %}
              {% block extrapostmenu %}
              {% endblock %}
-            <li class="submenuitem floatright"><a href="#pagebottom" title="jump to bottom">Jump to bottom</a></li>
+            <li class="submenuitem floatright"><a href="#pagebottom" title="Jump to bottom">Jump to bottom</a></li>
         </ul>
     </div>
 {% endblock %}
@@ -101,8 +101,8 @@
             {% else %}
                 <div class="row2">
             {% endif %}
-                <strong><a href="{% url view-profile post.creator.id %}" title="view {{ post.creator.username }}'s profile">{{ post.creator.username }}</a></strong> posted this on {% mdctime post.created_at long %}
-                <strong><a href="javascript:;" onclick="quote('{% url get-quote post.id %}')" title="quote this post">#{{ post.id }}</a></strong>
+                <strong><a href="{% url view-profile post.creator.id %}" title="View {{ post.creator.username }}'s profile">{{ post.creator.username }}</a></strong> posted this on {% mdctime post.created_at long %}
+                <strong><a href="javascript:;" onclick="quote('{% url get-quote post.id %}')" title="Quote this post">#{{ post.id }}</a></strong>
             </div>
             <div class="body" id="post_{{ post.id }}">
                 <p>{% bbcode post.bbcode %}</p>
@@ -113,7 +113,7 @@
 {% block bottombezel %}
     <div id="bottombezel">
         <ul>
-            <li class="submenuitem"><a href="{% url list-threads %}" title="back to thread list">Go back</a></li>
+            <li class="submenuitem"><a href="{% url list-threads %}" title="Back to thread list">Go back</a></li>
             <li class="submenuitem floatright" title="jump to top"><a href="#pagetop">Jump to top</a></li>
         </ul>
     </div>
@@ -121,31 +121,15 @@
 {% block replyform %}
 {% if not thread.locked %}
 <a name="post"></a>
-    <form method="post" action="{% url view-thread thread.id %}#post" onSubmit="document.getElementById('postbutton').style.display='none';">
+    <form method="post" action="{% url view-thread thread.id %}#post" onSubmit="document.getElementById('postbutton').value='Please wait...';">
     {% csrf_token %}
     <div class="replyform" style="float: left;">
         {{ form.body.errors }}<br />{{ form.body }}<br />
         {{ form.form_lock }}
         <input class="button" type="submit" id="postbutton" value="Say it" />
-        <input type="button" class="button" onClick="toggle('bbcode_cheat')" value="BBCode help" style="float: right;"/>
+        <a class="button" href="http://wiki.mdc2.org/index.php/Cheat_codes" target="_blank">BBCode help</a>
     </div>
     </form>
-
-    <div style="position: relative; margin-top: 2em;">
-    <div style="display: none;" id="bbcode_cheat">
-    <pre>[url]http://www.example.com/[/url]
-[url=http://www.example.com/]Example link text[/url]
-[img]http://www.example.com/picture.jpg[/img]
-[u]underline[/u]
-[b]bold[/b]
-[i]italic[/i]
-[strike]strikethrough[/strike]
-[code]monospace or preformatted text[/code]
-[youtube]http://www.youtube.com/watch?v=WAwLYJYsa0A[/youtube]
-[quote]quoted text[/quote]
-[hidden]hidden spoilers etc.[/hidden]</pre>
-    </div>
-    </div>
 {% else %}
 {% block locknotice %}
     <div class="notice">This thread is locked. No more replies may be added.</div>

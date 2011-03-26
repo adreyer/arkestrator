@@ -112,6 +112,9 @@ class LastRead(models.Model):
     timestamp = models.DateTimeField(default = datetime.datetime.now,
         db_index = True)
     read_count = models.IntegerField(default=0)
+    
+    def post_count(self):
+        return Post.objects.filter(thread=self.thread, creator=self.user).count()
 
 
 

@@ -28,7 +28,7 @@
                         <form class="submenuitem" name="rejf{{ invite.id }}" action="{% url reject-invite invite.id %}" method="post">
                         {% csrf_token %}
                         <input type="hidden" name="confirm" value="true">
-                        <a href="javascript:void(1);"  onClick="document.rejf{{ invite.id }}.submit();" title="reject this invite">
+                        <a href="javascript:void(1);"  onClick="document.rejf{{ invite.id }}.submit();" title="Reject this invite">
                             reject</a>
                        </form>
                        </span>
@@ -42,7 +42,7 @@
                     <form class="submenuitem" name="appf{{ invite.id }}" action="{% url approve-invite invite.id %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="confirm" value="true">
-                    <a href="javascript:void(1);" onClick="document.appf{{ invite.id }}.submit();" title="approve this invite">
+                    <a href="javascript:void(1);" onClick="document.appf{{ invite.id }}.submit();" title="Approve this invite">
                     approve</a></form></span>
                 {% endif %} 
             </div>
@@ -62,7 +62,7 @@
                 <td>{{ form.invitee.errors }}</td>
             </tr>
             <tr>
-                <th class="legend">Explain: </th>
+                <th class="legend">Who is this?<br/>How do you know<br/>this person? </th>
                 <td>{{ form.explanation }}</td>
                 <td>{{ form.explanation.errors }}</td>
             </tr>
