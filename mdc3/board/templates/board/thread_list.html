@@ -74,9 +74,7 @@
             </div></td>
             <td nowrap="nowrap">{% mdctime thread.last_post.created_at short %} 
                 <a class="smallfont" href="{% url view-profile thread.last_post.creator.id %}" title="view {{ thread.last_post.creator.username }}'s profile">{{ thread.last_post.creator.username }}</a></td>
-            <td nowrap="nowrap" class="count">{{ thread.total_posts }}</td>
-            <td nowrap="nowrap" class="count"><a href="{% url thread-history thread.id %}" title="thread history">
-                {{ thread.total_views }}</a></td>
+            <td nowrap="nowrap" class="count"><a href="{% url thread-history thread.id %}" title="thread history">{{ thread.total_posts }}</a></td>
             </tr>
             {% nextcycle row_color %}
         {% endfor %}

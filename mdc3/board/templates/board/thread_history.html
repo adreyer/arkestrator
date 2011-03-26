@@ -12,6 +12,7 @@
     <tr>
         <th class="heading">User</th>
         <th class="heading">Last read</th>
+        <th class="heading">Posts</th>
         <th class="heading">Views</th>
     </tr>
     {% withcycle "row1" "row2" as row_color %}
@@ -19,6 +20,7 @@
         <tr class="{{ row_color }}">
             <td>{{ last_read.user.username }}</td>
             <td>{% mdctime last_read.timestamp short %}</td>
+            <td>{{ last_read.post_count }}</td>
             <td>{{ last_read.read_count }}</td>
         </tr>
         {% nextcycle row_color %}
