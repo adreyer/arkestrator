@@ -1,3 +1,4 @@
+import string
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django import forms
@@ -17,7 +18,7 @@ class ThreadForm(forms.ModelForm):
     def clean_subject(self):
         """ remove leading and trailing whitespace from a subject """
         subj = self.cleaned_data["subject"]
-        subj = subj.strip()
+        subj = subj.strip(bbking.NON_PRINTING)
         if subj  == '':
             raise forms.ValidationError("whitespace is not a subject")
         return subj
@@ -34,7 +35,7 @@ class PostForm(forms.ModelForm):
         }
 
     def clean_body(self):
-        naked = self.cleaned_data['body'].strip()
+        naked = self.cleaned_data['body'].strip(bbking.NON_PRINTING)
 
         if not naked: # lol
             raise forms.ValidationError("This post doesn't say enough.")
