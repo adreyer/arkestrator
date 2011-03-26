@@ -313,3 +313,7 @@ div#status {
 div#search_box {
     float: right;
 }
+
+img.bbking-img {
+    max-width: 100%;
+}
