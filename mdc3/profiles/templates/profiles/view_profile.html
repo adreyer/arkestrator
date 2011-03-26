@@ -12,16 +12,16 @@
     <div id="submenu">
         <ul>
             {% if not view_user.id == user.id %}
-                <li class="submenuitem"><a href="{% url new-pm view_user.id %}" title="send {{view_user.username }} a pm">Send {{ view_user.username }} a message</a></li>
-                <li class="submenuitem"><a href="{% url threads-by view_user.id %}" title="view threads by {{ view_user.username }}">Threads by {{view_user.username}} ({{ view_user.get_profile.total_threads }})</a></li>
-                <li class="submenuitem"><a href="{% url posts-by view_user.id %}" title="view posts by {{ view_user.username }}">Posts by {{view_user.username}} ({{ view_user.get_profile.total_posts }})</a></li>
+                <li class="submenuitem"><a href="{% url new-pm view_user.id %}" title="Send {{view_user.username }} a pm">Send {{ view_user.username }} a message</a></li>
+                <li class="submenuitem"><a href="{% url threads-by view_user.id %}" title="View threads by {{ view_user.username }}">Threads by {{view_user.username}} ({{ view_user.get_profile.total_threads }})</a></li>
+                <li class="submenuitem"><a href="{% url posts-by view_user.id %}" title="View posts by {{ view_user.username }}">Posts by {{view_user.username}} ({{ view_user.get_profile.total_posts }})</a></li>
             {% else %}
-                <li class="submenuitem"><a href="{% url edit-prefs %}" title="edit your preferences">Preferences</a></li>
-                <li class="submenuitem"><a href="{% url edit-info %}" title="edit your profile">Profile</a></li>
-                <li class="submenuitem"><a href="{% url edit-theme %}" title="edit your theme">Theme</a></li>
-                <li class="submenuitem"><a href="{% url passwd %}" title="change your password">Password</a></li>
-                <li class="submenuitem"><a href="{% url threads-by view_user.id %}" title="view thread you've created">My threads ({{ view_user.get_profile.total_threads }})</a></li>
-                <li class="submenuitem"><a href="{% url posts-by view_user.id %}" title="view posts you've made">My posts ({{ view_user.get_profile.total_posts }})</a></li>
+                <li class="submenuitem"><a href="{% url edit-prefs %}" title="Edit your preferences">Preferences</a></li>
+                <li class="submenuitem"><a href="{% url edit-info %}" title="Edit your profile">Profile</a></li>
+                <li class="submenuitem"><a href="{% url edit-theme %}" title="Edit your theme">Theme</a></li>
+                <li class="submenuitem"><a href="{% url passwd %}" title="Change your password">Password</a></li>
+                <li class="submenuitem"><a href="{% url threads-by view_user.id %}" title="View thread you've created">My threads ({{ view_user.get_profile.total_threads }})</a></li>
+                <li class="submenuitem"><a href="{% url posts-by view_user.id %}" title="View posts you've made">My posts ({{ view_user.get_profile.total_posts }})</a></li>
             {% endif %}
         </ul>
     </div>

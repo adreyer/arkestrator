@@ -37,7 +37,7 @@
     </form>
     </div>
     <div id="status">{{ thread_count }} thread{{ thread_count|pluralize }}, 
-        <a href="{% url active-users %}" title="view active users">{% spaceless %}
+        <a href="{% url active-users %}" title="View active users">{% spaceless %}
             {{ online_users }} active user{{ online_users|pluralize }},
             {{ posting_users }} posting user{{ posting_users|pluralize }}
         {% endspaceless %}</a>
@@ -45,35 +45,35 @@
     {% if user.is_authenticated %}
     <div id="user">
         <ul>
-            <li class="menuitem"><a href="{% url view-profile user.id %}" title="view and edit your profile">{{ user.username }}</a></li>
-            <li class="menuitem"><a href="{% url django.contrib.auth.views.logout %}" title="logout">Log out</a></li>
+            <li class="menuitem"><a href="{% url view-profile user.id %}" title="View and edit your profile">{{ user.username }}</a></li>
+            <li class="menuitem"><a href="{% url django.contrib.auth.views.logout %}" title="Log out">Log out</a></li>
         </ul>
     </div>
     {% endif %}
     <div id="menu">
         <ul>
-            <li class="menuitem"><a href="{% url list-threads %}" title="thread list">Index</a></li>
-            <li class="menuitem"><a href="{% url inbox %}" title="pms">
+            <li class="menuitem"><a href="{% url list-threads %}" title="Thread list">Index</a></li>
+            <li class="menuitem"><a href="{% url inbox %}" title="Private messages">
                 {% if new_pms %}
                     <span class="urgent">Messages ({{ new_pms }})</span>
                 {% else %}Messages{% endif %}</a></li>
-            <li class="menuitem"><a href="{% url list-events %}" title="event list">
+            <li class="menuitem"><a href="{% url list-events %}" title="Event list">
                 {% if new_events %}
                     <span class="urgent">Events ({{ new_events }})</span>
                 {% else %}Events{% endif %}</a></li>
-            <li class="menuitem"><a href="{% url list-users %}" title="user list">User list</a></li>
+            <li class="menuitem"><a href="{% url list-users %}" title="User list">User list</a></li>
             <li class="menuitem"><a href="http://wiki.mdc2.org/index.php/Main_Page" title="MDC wiki">Wiki</a></li>
-            <li class="menuitem"><a href="{% url invite-list %}" title="make and invite">
+            <li class="menuitem"><a href="{% url invite-list %}" title="Invite a new user">
                 {% if new_invites and perms.invites.can_approve %}
                     <span class="urgent">Invites ({{ new_invites }})</span>
                  {% else %}Invite{% endif %}</a></li>
             {% if perms.board.can_lock %}
-                <li class="menuitem"><a href="{% url ban %}" title="manage banishment">Banishment</a></li>
+                <li class="menuitem"><a href="{% url ban %}" title="Manage bans">Bans</a></li>
             {% endif %}
             {% if user.is_staff %}
-            <li class="menuitem"><a href="{% url admin:index %}" title="admin panel">Admin</a></li>
+            <li class="menuitem"><a href="{% url admin:index %}" title="Admin panel">Admin</a></li>
             {% endif %}
-            <li class="menuitem"><a href="http://www.arkestrator.org/" title="report a bug with trac">Trac</a></li>
+            <li class="menuitem"><a href="http://www.arkestrator.org/" title="Report bugs and request features">Trac</a></li>
         </ul>
     </div>
         {% block extramenu %}
