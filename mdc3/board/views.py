@@ -23,6 +23,7 @@ from django.contrib.auth.models import User
 from mdc3.profiles.models import Profile
 from mdc3.events.models import Event
 from mdc3.events.forms import RSVPForm
+from mdc3.util import get_client_ip
 from models import Thread, Post, LastRead
 import forms
 
@@ -53,7 +54,8 @@ def view_thread(request,id,start=False,expand=False,hide=None):
             return HttpResponseRedirect(reverse('list-threads'))
         post = Post(
             thread = thread,
-            creator = request.user
+            creator = request.user,
+            posted_from = get_client_ip(request)
         )
         form = forms.PostForm(request.POST, instance = post)
         if form.is_valid():
@@ -167,7 +169,8 @@ def new_thread(request):
         )
         post = Post(
             thread = thread,
-            creator = request.user
+            creator = request.user,
+            posted_from = get_client_ip(request)
         )
         thread_form = forms.ThreadForm(request.POST, instance = thread)
         post_form = forms.PostForm(request.POST, instance = post)
