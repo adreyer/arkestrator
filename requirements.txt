@@ -5,4 +5,5 @@ ply==3.3
 pytz
 hg+http://hg.mdc2.org/bbking#egg=bbking
 django-haystack
+json
 pysolr
