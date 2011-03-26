@@ -46,8 +46,8 @@ def view_thread(request,id,start=False,expand=False,hide=None):
         event = Event.objects.get(thread=thread)
     except Event.DoesNotExist:
         event = None
-                                  
-    #try to make a new post in the thread  
+
+    #try to make a new post in the thread
     if request.method == 'POST':
         if thread.locked:
             return HttpResponseRedirect(reverse('list-threads'))
@@ -62,10 +62,10 @@ def view_thread(request,id,start=False,expand=False,hide=None):
             return HttpResponseRedirect(reverse('list-threads'))
     else:
         form = forms.PostForm()
-    
+
     queryset=thread.post_set.order_by(
         "id").select_related('creator')
-    
+
     #try to collapse the thread appriately
     try:
         lastread = LastRead.objects.get(
@@ -96,10 +96,9 @@ def view_thread(request,id,start=False,expand=False,hide=None):
         queryset = queryset=thread.post_set.order_by(
             "created_at").select_related('creator')
         queryset = queryset[max(0,queryset.count()-10):]
- 
-            
+
     post_list = list(queryset)
-    
+
     #hide images in the thread if appropriate
     try:
         if (not hide is False) and (hide or not request.user.get_profile().show_images):
@@ -116,7 +115,7 @@ def view_thread(request,id,start=False,expand=False,hide=None):
     fav = False
     if thread.favorite.filter(id=request.user.id):
         fav = True
-    
+
     if len(post_list)< 10:
         expand = True
 
@@ -140,7 +139,6 @@ def view_thread(request,id,start=False,expand=False,hide=None):
         },
         context_instance = RequestContext(request))
 
-    
     return render_to_response("board/post_list.html", {
         'object_list' : post_list,
         'thread' : thread,
@@ -197,7 +195,7 @@ def list_threads(request, by=None, fav=False):
         page = int(request.GET.get('page', 1))
     except ValueError:
         raise Http404
-    
+
     #get the right threads for the page
     if not by and not fav:
         cache_key = "thread-list-page:%d:%d"%(Site.objects.get_current().id, page)
@@ -206,19 +204,20 @@ def list_threads(request, by=None, fav=False):
         page_obj = None
     if page_obj is None:
         queryset = Thread.objects.order_by("-stuck","-last_post__id"
-            ).select_related("creator","last_post","last_post__creator")
+            ).select_related("creator","last_post","last_post__creator",
+                                "favorite")
         if by:
             queryset = queryset.filter(creator__id=by)
         if fav:
             queryset = queryset.filter(favorite=request.user)
-        paginator = Paginator(queryset, THREADS_PER_PAGE, 
+        paginator = Paginator(queryset, THREADS_PER_PAGE,
                             allow_empty_first_page=True)
         page_obj = paginator.page(page)
         if not by and not fav:
             cache.set(cache_key, page_obj)
 
     thread_list = list(page_obj.object_list)
-    
+
     #find out which ones are read
     last_read = LastRead.objects.filter(
         thread__in=[t.id for t in thread_list],
@@ -234,26 +233,25 @@ def list_threads(request, by=None, fav=False):
 
     #pull unread favorites to the top if favs_first
     if request.user.get_profile().favs_first:
-        fav_indexes = []
-        stickies = -1
-        for i, t in zip(range(len(thread_list)), thread_list):
-            if t.favorite.filter(id = request.user.id):
+        favs = []
+        stickies = []
+	rest = []
+        for t in thread_list:
+            if request.user in t.favorite.all():
                 t.fav = True
-                if t.unread:
-                    fav_indexes.append(i) 
+                if t.stuck:
+                    stickies.append(t)
+                elif t.unread:
+                    favs.append(t)
+                else:
+                    rest.append(t)
             else:
                 t.fav = False
-            if t.stuck:
-                stickies=i
-            
-        favs = []
-        for i in fav_indexes:
-            favs.append(thread_list.pop(i))
-        if stickies != -1:
-            thread_list = thread_list[0:stickies+1] + favs + thread_list[stickies+1:]
-        else:
-            thread_list = favs + thread_list
-        
+                if t.stuck:
+                    stickies.append(t)
+                else:
+                    rest.append(t)
+        thread_list = stickies + favs + rest
     #otherwise just figure out what's favorited
     else:
         for t in thread_list:
