@@ -3,7 +3,7 @@ from django.contrib.sites.models import Site
 from django import forms
 from django.db.models import Q
 from mdc3.board.models import Thread, Post, LastRead
-
+import bbking
 
 class ThreadForm(forms.ModelForm):
     """ a form for a new thread must be used with PostForm """
@@ -32,3 +32,19 @@ class PostForm(forms.ModelForm):
         widgets = {
             'body': forms.Textarea(attrs={'cols': 70, 'rows': 12})
         }
+
+    def clean_body(self):
+        naked = self.cleaned_data['body'].strip()
+
+        if not naked: # lol
+            raise forms.ValidationError("This post doesn't say enough.")
+
+        try:
+            compiled = bbking.compile(naked)
+            if len(compiled) < 1:
+                raise forms.ValidationError("This post doesn't say enough.")
+        except bbking.CompilationError:
+            pass
+
+        return naked
+ 
