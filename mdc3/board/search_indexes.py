@@ -13,8 +13,6 @@ class SubjectIndex(RealTimeSearchIndex):
 
 class ThreadIndex(RealTimeSearchIndex):
     text = CharField(document=True, use_template=True)
-    subject = CharField(model_attr='subject')
-    creator = CharField(model_attr='creator')
 
 #    def get_queryset(self):
 #        """Used when the entire index for model is updated."""
