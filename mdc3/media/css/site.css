@@ -57,12 +57,12 @@ th.heading {
 
 td.wwwwwwww {
     max-width: 30em;
-    overflow: hidden;
+/*    overflow: hidden;*/
 }
 
 div.wwwwwwww {
-    max-height: 3.5em;
-    overflow: hidden;
+/*    max-height: 3.5em;
+    overflow: hidden;*/
 }
 
 td.icons {
