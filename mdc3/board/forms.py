@@ -22,7 +22,6 @@ class ThreadForm(forms.ModelForm):
         if subj  == '':
             raise forms.ValidationError("whitespace is not a subject")
         return subj
-                    
 
 class PostForm(forms.ModelForm):
     """ a form for a new Post """
@@ -48,4 +47,3 @@ class PostForm(forms.ModelForm):
             pass
 
         return naked
- 
