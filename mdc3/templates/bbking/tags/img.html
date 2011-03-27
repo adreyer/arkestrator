@@ -1,1 +1,1 @@
-{% spaceless %}{% if hide %}[image: {{ contents }}]{% else %}<img src="{{ contents }}" class="bbking-img" />{% endif %}{% endspaceless %}
+{% spaceless %}{% if hide %}<a href="{{ contents }}">[image: {{ contents }}]</a>{% else %}<img src="{{ contents }}" class="bbking-img" />{% endif %}{% endspaceless %}
