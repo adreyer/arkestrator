@@ -1,0 +1,4 @@
+{{ event.thread.subject }}
+{{ event.description }}
+{{ event.location }}
+{{ event.creator }}
