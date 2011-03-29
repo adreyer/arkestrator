@@ -72,12 +72,6 @@ class Thread(models.Model):
             return 0
         return total
 
-    # this is stupid but I'm an idiot right now and I just want to play with
-    # search TODO: fix this shit and fix the index template 
-    def posts(self):
-        return Post.objects.filter(thread=self)
-
-
 class Post(models.Model):
     """ a post in a thread """
 
