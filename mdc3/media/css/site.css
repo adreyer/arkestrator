@@ -60,6 +60,10 @@ td.wwwwwwww {
 /*    overflow: hidden;*/
 }
 
+td.right-align {
+    text-align: right;
+}
+
 div.wwwwwwww {
 /*    max-height: 3.5em;
     overflow: hidden;*/

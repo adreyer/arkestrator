@@ -23,12 +23,14 @@
     <table class="thread_list">
     {% withcycle "row1" "row2" as row_color %}
         {% for thread in thread_list %}
+{# user column #}
             {% if thread.creator == user %}
                 <tr class="my_post">
             {% else %}
                 <tr class="{{ row_color }}">
             {% endif %}
             <td nowrap="nowrap"><a href="{% url view-profile thread.creator.id %}" title="View {{ thread.creator.username }}'s profile">{{ thread.creator.username }}</a></td>
+{# icons column #}
             {% spaceless %}<td nowrap="nowrap" class="icons">
             {% if thread.locked %}
                     {% if perms.board.can_lock %}
@@ -58,6 +60,7 @@
                 <strong>&#9829;</strong></a>
                 </form>
             {% endif %} </td>{% endspaceless %}
+{# subject column #}
             <td class="wwwwwwww"><div class="wwwwwwww">{% if thread.unread %}
                     <a class="unread" href="{% url view-thread thread.id %}{% spaceless %}
                         {% if thread.last_post_read %}
@@ -72,9 +75,10 @@
                         {{ thread.subject|wordfilter }}</a>
                 {% endif %}
             </div></td>
-            <td nowrap="nowrap">{% mdctime thread.last_post.created_at short %} 
-                <a class="smallfont" href="{% url view-profile thread.last_post.creator.id %}" title="View {{ thread.last_post.creator.username }}'s profile">{{ thread.last_post.creator.username }}</a></td>
+{# post count column #}
             <td nowrap="nowrap" class="count"><a href="{% url thread-history thread.id %}" title="Thread history">{{ thread.total_posts }}</a></td>
+{# last post column #}
+            <td nowrap="nowrap" class="right-align smallfont"><a href="{% url view-profile thread.last_post.creator.id %}" title="View {{ thread.last_post.creator.username }}'s profile">{{ thread.last_post.creator.username }}</a> {% mdctime thread.last_post.created_at short %}</td>
             </tr>
             {% nextcycle row_color %}
         {% endfor %}
