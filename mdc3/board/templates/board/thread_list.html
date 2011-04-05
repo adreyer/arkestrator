@@ -29,7 +29,7 @@
             {% else %}
                 <tr class="{{ row_color }}">
             {% endif %}
-            <td nowrap="nowrap"><a href="{#{% url view-profile thread.creator.id %}#}" title="View {{ thread.creator.username }}'s profile">{{ thread.creator.username }}</a></td>
+            <td nowrap="nowrap"><a href="{% url view-profile thread.creator.id %}" title="View {{ thread.creator.username }}'s profile">{{ thread.creator.username }}</a></td>
 {# icons column #}
             {% spaceless %}<td nowrap="nowrap" class="icons">
             {% if thread.locked %}
@@ -78,7 +78,7 @@
 {# post count column #}
             <td nowrap="nowrap" class="count"><a href="{% url thread-history thread.id %}" title="Thread history">{{ thread.total_posts }}</a></td>
 {# last post column #}
-            <td nowrap="nowrap" class="right-align smallfont"><a href="{% url view-profile thread.last_post.creator.id %}" title="View {{ thread.last_post.creator.username }}'s profile">{{ thread.last_post.creator.username }}</a> {#{% mdctime thread.last_post.created_at short %}#}</td>
+            <td nowrap="nowrap" class="right-align smallfont"><a href="{% url view-profile thread.last_post.creator.id %}" title="View {{ thread.last_post.creator.username }}'s profile">{{ thread.last_post.creator.username }}</a> {% mdctime thread.last_post.created_at short %}</td>
             </tr>
             {% nextcycle row_color %}
         {% endfor %}
