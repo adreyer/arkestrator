@@ -24,3 +24,6 @@ SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 
 PARSER_DIR='/var/mdc3_dev/parser'
 
+HAYSTACK_SITECONF = 'mdc3.search_sites'
+HAYSTACK_SEARCH_ENGINE = 'solr'
+HAYSTACK_SOLR_URL = 'http://127.0.0.1:8080/solr-mdc3_dev'
