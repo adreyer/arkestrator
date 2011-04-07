@@ -1,0 +1,10 @@
+{% load bbking mdctime %}
+<div class="post">
+<div class="row2">
+    <strong>Subject: </strong><a href="{% url view-post object.id %}#{{ object.id }}" title="View post in thread">{{ object.thread.subject }}</a><br/>
+    <strong>{{ object.creator }}</strong> posted this at {% mdctime object.created_at long %}
+</div>
+<div class="body">
+    <p>{% bbcode object.bbcode %}</p>
+</div>
+</div>
