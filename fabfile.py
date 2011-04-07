@@ -36,7 +36,7 @@ def rebuild_virtualenv():
         run("virtualenv %(virtualenv)s"%env)
         run("""
         source %(virtualenv)s/bin/activate;
-        pip --use-mirrors install -r %(current_symlink)s/requirements.txt
+        pip install --use-mirrors -r %(current_symlink)s/requirements.txt
         """%env)
     
 def graceful_servers():
