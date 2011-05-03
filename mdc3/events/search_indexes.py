@@ -1,9 +1,9 @@
-from haystack.indexes import RealTimeSearchIndex, CharField, DateTimeField
+from haystack.indexes import SearchIndex, CharField, DateTimeField
 from haystack import site
 from mdc3.events.models import Event
 
 
-class EventIndex(RealTimeSearchIndex):
+class EventIndex(SearchIndex):
     text = CharField(document=True, use_template=True)
     creator = CharField(model_attr='creator')
     datetime = DateTimeField(model_attr='time')

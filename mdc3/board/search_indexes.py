@@ -1,14 +1,14 @@
-from haystack.indexes import RealTimeSearchIndex, CharField, DateTimeField
+from haystack.indexes import SearchIndex, CharField, DateTimeField
 from haystack import site
 from mdc3.board.models import Post
 
 
-class PostIndex(RealTimeSearchIndex):
+class PostIndex(SearchIndex):
     text = CharField(document=True, use_template=True)
     creator = CharField(model_attr='creator')
     datetime = DateTimeField(model_attr='created_at')
 
-class ThreadIndex(RealTimeSearchIndex):
+class ThreadIndex(SearchIndex):
     text = CharField(document=True, use_template=True)
     creator = CharField(model_attr='creator')
     datetime = DateTimeField()
