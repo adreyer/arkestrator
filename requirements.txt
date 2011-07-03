@@ -7,3 +7,4 @@ hg+http://hg.mdc2.org/bbking#egg=bbking
 django-haystack
 simplejson
 pysolr
+multiprocessing
