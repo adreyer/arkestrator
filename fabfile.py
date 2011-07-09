@@ -10,14 +10,14 @@ env.user = 'deploy'
 def dev():
     "The Development Environment"
     env.remote_dir = '/var/mdc3_dev'
-    env.repo = '/var/cache/hg/repos/mdc3'
+    env.repo = '/git/arkestrator.git'
     env.settings_module = "mdc3.settings_dev"
     _set_extra_dirs()
 
 def prod():
     "The Production Environment"
     env.remote_dir = '/var/mdc3'
-    env.repo = '/var/cache/hg/repos/mdc3'
+    env.repo = '/git/arkestrator.git'
     env.settings_module = "mdc3.settings_prod"
     _set_extra_dirs()
 
@@ -61,7 +61,7 @@ def deploy():
     env.release_dir = "%(releases_dir)s/%(ts)s"%env
 
     # clone the repo
-    run("hg clone %(repo)s %(release_dir)s"%env)
+    run("git clone %(repo)s %(release_dir)s"%env)
 
     # change the symlink for the current release
     run("ln -fsT %(release_dir)s %(current_symlink)s"%env)
