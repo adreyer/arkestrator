@@ -103,10 +103,7 @@ class Recipient(models.Model):
 
 def clear_pm_count(sender, instance, signal, *args, **kwargs):
     """ when a new message is sent some users pm-count cache is cleared """
-    cache_key = "pm-count:%d:%d"%(
-        Site.objects.get_current().id,
-        instance.recipient.id,
-    )
+    cache_key = "pm-count:%d" %instance.recipient.id
     cache.delete(cache_key)
    
 post_save.connect(clear_pm_count, sender=Recipient)
