@@ -7,7 +7,7 @@ def new_pm(request):
     """ the number of new pms a user has """
 
     if request.user.is_authenticated():
-        cache_key = "pm-count:%d:%d" %request.user.id
+        cache_key = "pm-count:%d" %request.user.id
         pm_count = cache.get(cache_key, None)
         if pm_count is None:
             pm_count = Recipient.objects.filter(
