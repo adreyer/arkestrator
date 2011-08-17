@@ -50,7 +50,7 @@ def set_permissions():
     run("sudo /bin/chgrp -R www-data %(current_symlink)s/"%env,shell=False)
     run("sudo /usr/bin/find %(current_symlink)s/ -type d -exec chmod g+w {} \;"%env)
 
-def deploy():
+def deploy(branch='master'):
     "Deploy the code and gracefully restart the web servers"
 
     require('releases_dir','repo','current_symlink',
@@ -62,6 +62,10 @@ def deploy():
 
     # clone the repo
     run("git clone %(repo)s %(release_dir)s"%env)
+
+    # check out specified branch
+    with cd("%(release_dir)s" % env):
+        run("git checkout %s" % branch)
 
     # change the symlink for the current release
     run("ln -fsT %(release_dir)s %(current_symlink)s"%env)
