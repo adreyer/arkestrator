@@ -10,3 +10,4 @@ pysolr
 multiprocessing
 BeautifulSoup
 unittest2
+mock
