@@ -6,6 +6,9 @@ from django.db import models
 
 class Migration(SchemaMigration):
 
+    depends_on = ( 
+        ("events", "0001_initial.py"),
+    )
     def forwards(self, orm):
         
         # Adding field 'Profile.market'
