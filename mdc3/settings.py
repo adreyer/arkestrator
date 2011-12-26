@@ -146,6 +146,7 @@ BBKING_TAG_LIBRARIES = (
                         'bbking.bbtags.hrefs',
                         'bbking.bbtags.quote',
                         'bbking.bbtags.code',
+                        'bbking.bbtags.oembed',
                         'mdc3.bbtags',
                     )
 
