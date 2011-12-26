@@ -11,3 +11,4 @@ multiprocessing
 BeautifulSoup
 unittest2
 mock
+django-oembed
