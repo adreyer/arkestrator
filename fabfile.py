@@ -10,7 +10,7 @@ env.user = 'deploy'
 def dev():
     "The Development Environment"
     env.remote_dir = '/var/mdc3_dev'
-    env.repo = '/git/arkestrator.git'
+    env.repo = 'git://github.com/adreyer/arkestrator.git'
     env.settings_module = "mdc3.settings_dev"
     _set_extra_dirs()
 
