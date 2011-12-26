@@ -17,7 +17,7 @@ def dev():
 def prod():
     "The Production Environment"
     env.remote_dir = '/var/mdc3'
-    env.repo = '/git/arkestrator.git'
+    env.repo = 'git://github.com/adreyer/arkestrator.git'
     env.settings_module = "mdc3.settings_prod"
     _set_extra_dirs()
 
@@ -33,7 +33,7 @@ def _set_extra_dirs():
 def rebuild_virtualenv():
     with cd("%(remote_dir)s"%env):
         run("rm -fr %(virtualenv)s"%env)
-        run("virtualenv %(virtualenv)s"%env)
+        run("python2.5 /usr/bin/virtualenv %(virtualenv)s"%env)
         run("""
         source %(virtualenv)s/bin/activate;
         pip install -r %(current_symlink)s/requirements.txt
