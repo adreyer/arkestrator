@@ -17,7 +17,7 @@ def dev():
 def prod():
     "The Production Environment"
     env.remote_dir = '/var/mdc3'
-    env.repo = '/git/arkestrator.git'
+    env.repo = 'git://github.com/adreyer/arkestrator.git'
     env.settings_module = "mdc3.settings_prod"
     _set_extra_dirs()
 
