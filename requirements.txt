@@ -3,7 +3,7 @@ South>=0.7.2
 python-memcached
 ply==3.3
 pytz
-git+https://github.com/adreyer/BBKing.git#egg=bbking
+git+git://github.com/adreyer/BBKing.git#egg=bbking
 django-haystack
 simplejson
 pysolr
