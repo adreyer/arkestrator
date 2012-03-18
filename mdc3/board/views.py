@@ -1,8 +1,4 @@
 import datetime
-import random
-import sys
-import string
-import re
 import urllib
 
 from django.contrib.auth.decorators import login_required, permission_required
@@ -10,18 +6,16 @@ from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.db.models import Q
 from django.shortcuts import render_to_response,get_object_or_404
 from django.http import HttpResponseRedirect, Http404
 from django.template import RequestContext
 from django.views.generic import list_detail
-from django.db.models.signals import post_save
-from django.db.models import Sum, Count, Max, F
 from django.core.cache import cache
-from django.core.paginator import Paginator, InvalidPage
+from django.core.paginator import Paginator
 from django.contrib.auth.models import User
 
-from mdc3.profiles.models import Profile
+from django.views.generic import ListView
+
 from mdc3.events.models import Event
 from mdc3.events.forms import RSVPForm
 from mdc3.util import get_client_ip
