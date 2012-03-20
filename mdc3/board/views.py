@@ -28,22 +28,20 @@ THREADS_PER_PAGE = 101
 
 class ThreadList(ListView):
 
-    def last_reads(self, user):
+    def last_reads(self, thread_list, user):
         """ Annotate a queryset of threads with the last read status for a user.
             Add an unread booleand to each thread
             if it was read before add a last_post_read id
-            :note: WARNING: while this returns a queryset evaluating it again
-                    will wipe out this information
-            :TODO: make this hook into the evaluation.
 
-            :params: user the user who should be looked up.
+            :param: thread_list the list of threads to annotate
+            :param: user the user who should be looked up.
         """
 
         last_read = LastRead.objects.filter(
-                thread__in=self.queryset,
+                thread__in=thread_list,
                 user = user).values('thread__id', 'post__id')
         last_viewed = dict((lr['thread__id'], lr) for lr in last_read)
-        for t in self.queryset:
+        for t in thread_list:
             try:
                 # TODO: this will make a query for each thread
                 t.unread = last_viewed[t.id]['post__id'] < t.last_post_id
@@ -51,17 +49,17 @@ class ThreadList(ListView):
             except KeyError:
                 t.unread = True
 
-        return self.queryset
+        return thread_list
 
-    def favorites(self, user):
+    def favorites(self, thread_list, user):
         """ annotate a queryset of threads with a users favorites """
-        favs = set(Favorite.objects.filter(
-                                thread__in=self.qeueryset,
-                                user=user).values('thread__id'))
+        favs = Favorite.objects.filter(
+                                thread__in=thread_list,
+                                user=user).values('thread__id')
 
-        for thread in self.queryset:
+        for thread in thread_list:
             thread.fav = thread.id in favs
-        return self.queryset
+        return thread_list
 
 @login_required
 def view_thread(request,id,start=False,expand=False,hide=None):
@@ -189,7 +187,7 @@ def view_post(request, id):
     """  view a thread starting with post num post id """
     post = get_object_or_404(Post, pk=id)
     return view_thread(request, id=post.thread.id,start=id)
-    
+
 
 @login_required
 @transaction.commit_on_success
@@ -264,7 +262,7 @@ def list_threads(request, by=None, fav=False):
     if request.user.get_profile().favs_first:
         favs = []
         stickies = []
-	rest = []
+        rest = []
         for t in thread_list:
             if t.id in fav_ids:
                 t.fav = True

@@ -1,11 +1,15 @@
 from django.test import TestCase
-from models import Thread, Post
-from forms import ThreadForm, PostForm
 
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 
 import datetime
+
+
+from mdc3.board.tests.test_views import TestThreadList
+
+from mdc3.board.forms import ThreadForm, PostForm
+from mdc3.board.models import Thread, Post
 
 class ThreadTest(TestCase):
     def setUp(self):
