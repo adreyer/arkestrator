@@ -30,7 +30,6 @@ class Thread(models.Model):
     last_read = models.ManyToManyField(User,
         through = 'LastRead',
         related_name='last_read')
-    favorite = models.ManyToManyField(User, related_name='favorites')
 
     def __unicode__(self):
         return self.subject
@@ -115,7 +114,7 @@ class Favorite(models.Model):
         db_table = 'board_thread_favorite'
 
     thread = models.ForeignKey(Thread, related_name="favorite")
-    user = models.ForeignKey(User, "related_name=favorites")
+    user = models.ForeignKey(User, related_name="favorites")
 
 
 def update_thread(sender, instance, signal, *args, **kwargs):
