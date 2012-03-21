@@ -28,9 +28,25 @@ THREADS_PER_PAGE = 101
 
 class ThreadList(ListView):
 
+    template_name = "board/thread_list.html"
+    paginate_by = THREADS_PER_PAGE
+    queryset = Thread.objects.order_by(
+            "-stuck","-last_post__id").select_related(
+            "creator","last_post","last_post__creator","favorite")
+
+    def get_context_data(self, **kwargs):
+        """ set up extra context data """
+        context = super(ThreadList, self).get_context_data(**kwargs)
+        context['object_list'] = self.last_reads(context['object_list'],
+                                                self.request.user)
+        context['object_list'] = self.favorites(context['object_list'],
+                                                self.request.user)
+
+        return context
+
     def last_reads(self, thread_list, user):
         """ Annotate a queryset of threads with the last read status for a user.
-            Add an unread booleand to each thread
+            Add an unread boolean to each thread
             if it was read before add a last_post_read id
 
             :param: thread_list the list of threads to annotate
@@ -40,12 +56,12 @@ class ThreadList(ListView):
         last_read = LastRead.objects.filter(
                 thread__in=thread_list,
                 user = user).values('thread__id', 'post__id')
-        last_viewed = dict((lr['thread__id'], lr) for lr in last_read)
+        last_viewed = dict((lr['thread__id'], lr['post__id']) for lr in last_read)
         for t in thread_list:
             try:
                 # TODO: this will make a query for each thread
-                t.unread = last_viewed[t.id]['post__id'] < t.last_post_id
-                t.last_post_read = last_viewed[t.id]['post__id']
+                t.unread = last_viewed[t.id] < t.last_post_id
+                t.last_post_read = last_viewed[t.id]
             except KeyError:
                 t.unread = True
 
