@@ -59,7 +59,6 @@ class ThreadList(ListView):
         last_viewed = dict((lr['thread__id'], lr['post__id']) for lr in last_read)
         for t in thread_list:
             try:
-                # TODO: this will make a query for each thread
                 t.unread = last_viewed[t.id] < t.last_post_id
                 t.last_post_read = last_viewed[t.id]
             except KeyError:
