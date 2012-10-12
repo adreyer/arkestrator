@@ -233,7 +233,6 @@ div.notice {
 
 div #user ul, div#menu ul, div#submenu ul, div#bottombezel ul {
     list-style-type: none;
-    overflow: auto;
     padding: 0;
     margin: 0;
 }
