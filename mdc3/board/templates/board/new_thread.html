@@ -7,13 +7,22 @@
 {% endblock %}
 {% block content %}
 <form method="post" action="{% url new-thread %}" onSubmit="document.getElementById('postbutton').style.display='none';" class="replyform">
-    <div class="replyform">
         {% csrf_token %}
-        {{ thread_form.subject }} {{ thread_form.subject.errors }}<br />
-        {{ post_form.body }} {{ post_form.body.errors }}<br />
-        <input type="submit" id="postbutton" value="Say It" />
-        <a class="button" href="http://wiki.mdc2.org/index.php/Cheat_codes" target="_blank">BBCode help</a>
-    </div>
+        <table>
+            <tr>
+                <th nowrap="nowrap" class="legend"><label for="subject">Subject:</label></th>
+                <td>{{ thread_form.subject }} {{ thread_form.subject.errors }}</td>
+            </tr>
+            <tr>
+                <th />
+                <td>{{ post_form.body }} {{ post_form.body.errors }}</td>
+            </tr>
+            <tr>
+                <th />
+                <td><input type="submit" id="postbutton" value="Say It" />
+                <a class="button" href="http://wiki.mdc2.org/index.php/Cheat_codes" target="_blank">BBCode help</a></td>
+            </td>
+        </table>
 </form>
 {% endblock %}
 
