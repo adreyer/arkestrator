@@ -1,17 +1,15 @@
 from django.db import models
-from django.db.models import Q
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
-from django.contrib.sites.managers import CurrentSiteManager
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 
 from mdc3.decorators import instance_memcache
+
 from bbking.fields import BBCodeField
 
 import datetime
-
 
 class Thread(models.Model):
     """ a Thread """
@@ -32,8 +30,6 @@ class Thread(models.Model):
     last_read = models.ManyToManyField(User,
         through = 'LastRead',
         related_name='last_read')
-    favorite = models.ManyToManyField(User, related_name='favorites')
-    objects = CurrentSiteManager()
 
     def __unicode__(self):
         return self.subject
@@ -72,6 +68,7 @@ class Thread(models.Model):
             return 0
         return total
 
+
 class Post(models.Model):
     """ a post in a thread """
 
@@ -97,7 +94,7 @@ class Post(models.Model):
 
     def __unicode__(self):
         return "%s: %s"%(unicode(self.thread),self.body[:20])
-    
+
 class LastRead(models.Model):
     """ when did a user last read a thread """
     user = models.ForeignKey(User)
@@ -106,10 +103,18 @@ class LastRead(models.Model):
     timestamp = models.DateTimeField(default = datetime.datetime.now,
         db_index = True)
     read_count = models.IntegerField(default=0)
-    
+
     def post_count(self):
         return Post.objects.filter(thread=self.thread, creator=self.user).count()
 
+
+class Favorite(models.Model):
+    """ Explicitly declare this linking table but mimic the old schema """
+    class Meta:
+        db_table = 'board_thread_favorite'
+
+    thread = models.ForeignKey(Thread, related_name="favorite")
+    user = models.ForeignKey(User, related_name="favorites")
 
 
 def update_thread(sender, instance, signal, *args, **kwargs):
