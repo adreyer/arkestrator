@@ -23,7 +23,7 @@
     <table class="thread_list">
     {% withcycle "row1" "row2" as row_color %}
     {% for thread in thread_list %}
-        {% include "board.thread_include.html" %}
+        {% include "board/thread_include.html" %}
             {% nextcycle row_color %}
         {% endfor %}
     {% endwithcycle %}

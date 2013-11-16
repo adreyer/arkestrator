@@ -19,6 +19,7 @@ from django.views.generic import ListView
 from mdc3.events.models import Event
 from mdc3.events.forms import RSVPForm
 from mdc3.util import get_client_ip
+from mdc3.views import LoginRequiredMixin
 from models import Thread, Post, LastRead, Favorite
 import forms
 
@@ -26,7 +27,7 @@ from mdc3.decorators import super_no_cache
 
 THREADS_PER_PAGE = 101
 
-class ThreadList(ListView):
+class ThreadList(LoginRequiredMixin, ListView):
 
     template_name = "board/thread_list.html"
     paginate_by = THREADS_PER_PAGE
@@ -75,6 +76,18 @@ class ThreadList(ListView):
         for thread in thread_list:
             thread.fav = thread.id in favs
         return thread_list
+
+class FavoritesList(ThreadList):
+    """ subclass of ThreadList that displays the current users favorites """
+
+    def get_queryset(self):
+        return Thread.objects.filter(favorite__user=self.request.user)
+
+class ThreadsByList(ThreadList):
+    """ Thread list takes a single argument the user id of the user """
+
+    def get_queryset(self):
+        return Thread.objects.filter(creator_id = self.args[0])
 
 @login_required
 def view_thread(request,id,start=False,expand=False,hide=None):
@@ -406,9 +419,9 @@ def favorite_thread(request, id):
     thread = get_object_or_404(Thread,pk=id)
     if request.method == 'POST':
         if request.POST['fav'] == 'add':
-            thread.favorite.add(request.user)
+            Favorite.objects.create(thread=thread, user=request.user)
         elif request.POST['fav'] == 'remove':
-            thread.favorite.remove(request.user)
+            Favorite.objects.get(thread=thread,user=request.user).delete()
     return HttpResponseRedirect(reverse('list-threads'))
 
 
