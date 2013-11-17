@@ -33,7 +33,7 @@ def _set_extra_dirs():
 def rebuild_virtualenv():
     with cd("%(remote_dir)s"%env):
         run("rm -fr %(virtualenv)s"%env)
-        run("python2.5 /usr/bin/virtualenv %(virtualenv)s"%env)
+        run("python2.7 /usr/bin/virtualenv %(virtualenv)s"%env)
         run("""
         source %(virtualenv)s/bin/activate;
         pip install -r %(current_symlink)s/requirements.txt
