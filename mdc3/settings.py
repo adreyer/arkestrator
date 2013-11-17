@@ -51,10 +51,9 @@ MEDIA_ROOT = "%s/media"%BASE_DIR
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = '/media/'
 
-# URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
-# trailing slash.
-# Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/admin/media/'
+# TODO: should these be the same?
+STATIC_ROOT = MEDIA_ROOT
+STATIC_URL = MEDIA_URL
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'c8-s2vc_*&(c(^!se3m3gi-lu)i+uod*!qb*ld^%06*a40443('
@@ -72,13 +71,14 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'mdc3.moderation.middleware.BanMiddleware',
     'mdc3.middleware.OnlineUsersMiddleware',
     'mdc3.board.middleware.PostingUsersMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.core.context_processors.auth",
+    "django.contrib.auth.context_processors.auth",
     "django.core.context_processors.debug",
     "django.core.context_processors.i18n",
     "django.core.context_processors.media",
@@ -118,6 +118,7 @@ INSTALLED_APPS = (
     'oembed',
     'bbking',
     'haystack',
+    'debug_toolbar',
 )
 
 AUTH_PROFILE_MODULE = 'profiles.Profile'
@@ -158,3 +159,14 @@ HAYSTACK_SOLR_URL = 'http://127.0.0.1:8983/solr'
 
 OEMBED_MAX_WIDTH = 640
 OEMBED_MAX_HEIGHT = 640
+
+
+# DDTB settings
+# too lazy to put this anywhere else
+def custom_show_toolbar(request):
+  return request.user.is_superuser
+
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': custom_show_toolbar,
+}
