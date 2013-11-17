@@ -202,24 +202,16 @@ def list_threads(request, by=None, fav=False):
         raise Http404
 
     #get the right threads for the page
-    if not by and not fav:
-        cache_key = "thread-list-page:%d:%d"%(Site.objects.get_current().id, page)
-        page_obj = cache.get(cache_key, None)
-    else:
-        page_obj = None
-    if page_obj is None:
-        queryset = Thread.objects.order_by("-stuck","-last_post__id"
-            ).select_related("creator","last_post","last_post__creator",
-                                "favorite")
-        if by:
-            queryset = queryset.filter(creator__id=by)
-        if fav:
-            queryset = queryset.filter(favorite=request.user)
-        paginator = Paginator(queryset, THREADS_PER_PAGE,
-                            allow_empty_first_page=True)
-        page_obj = paginator.page(page)
-        if not by and not fav:
-            cache.set(cache_key, page_obj)
+    queryset = Thread.objects.order_by("-stuck","-last_post__id"
+        ).select_related("creator","last_post","last_post__creator",
+                            "favorite")
+    if by:
+        queryset = queryset.filter(creator__id=by)
+    if fav:
+        queryset = queryset.filter(favorite=request.user)
+    paginator = Paginator(queryset, THREADS_PER_PAGE,
+                        allow_empty_first_page=True)
+    page_obj = paginator.page(page)
 
     thread_list = list(page_obj.object_list)
 
@@ -236,13 +228,14 @@ def list_threads(request, by=None, fav=False):
         else:
             t.unread = True
 
+    fav_ids = Thread.objects.filter(favorite=request.user).values_list('id', flat=True)
     #pull unread favorites to the top if favs_first
     if request.user.get_profile().favs_first:
         favs = []
         stickies = []
 	rest = []
         for t in thread_list:
-            if request.user in t.favorite.all():
+            if t.id in fav_ids:
                 t.fav = True
                 if t.stuck:
                     stickies.append(t)
@@ -260,7 +253,7 @@ def list_threads(request, by=None, fav=False):
     #otherwise just figure out what's favorited
     else:
         for t in thread_list:
-            if t.favorite.filter(id = request.user.id):
+            if t.id in fav_ids:
                 t.fav = True
             else:
                 t.fav = False
