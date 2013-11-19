@@ -45,16 +45,22 @@ cd ark
 source bin/activate
 ```
 
-We are going to install Arkestrator using Pip. We are using `pip -e` so that these repositories are editable. Substitute your own fork's URL here, rather than using mine:
+We are going to install Arkestrator using Pip. We are using `pip -e` so that these repositories are editable. Substitute your own fork's URL here, rather than using mine. You probably want to add adreyer's repo as your upstream remote, too:
 
 ```bash
 pip install -e git+ssh://git@github.com/cmroddy/arkestrator.git#egg=mdc3
+cd src/mdc3/
+git remote add upstream https://github.com/adreyer/arkestrator.git
+cd -
 ```
 
 If you want to work on BBKing, install that the same way:
 
 ```bash
 pip install -e git+ssh://git@github.com/cmroddy/BBKing.git#egg=bbking
+cd src/mdc3/
+git remote add upstream https://github.com/adreyer/BBKing.git
+cd -
 ```
 
 If you don't want to work on BBKing, you can just install it with the rest of the requirements. Regardless, you need to install them, so:
