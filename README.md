@@ -13,15 +13,21 @@ To hack on Arkestrator, you will need some basic components installed on your sy
 
 On a Debian Wheezy system, for example, you should be able to get these things by running:
 
-> apt-get install python2.7 python-pip python-virtualenv
+```bash
+apt-get install python2.7 python-pip python-virtualenv
+```
 
 You will also need a database. SQLite 3 might still work, so perhaps you can get away with:
 
-> apt-get install sqlite3
+```bash
+apt-get install sqlite3
+```
 
 We all use PostgreSQL because it is awesome. If you want to use PostgreSQL, in addition to the server and the client libraries, you'll need the development headers so that you can build Pyscopg2 inside your virtualenv later on:
 
+```bash
 > apt-get install postgresql postgresql-server-dev-9.1
+```
 
 At this point, you should have all of the prerequisites for building a local Arkestrator environment.
 
@@ -32,23 +38,31 @@ On Github, you should fork the main Arkestrator repository. Visit https://github
 
 Next, create a virtualenv and activate it. Change to the working directory where you want to set up your virtualenv:
 
+```bash
 > cd ~/src/stuff/whatevs
 > virtualenv ark
 > cd ark
 > source bin/activate
+```
 
 We are going to install Arkestrator using Pip. We are using `pip -e` so that these repositories are editable. Substitute your own fork's URL here, rather than using mine:
 
+```bash
 > pip install -e git+ssh://git@github.com/cmroddy/arkestrator.git#egg=mdc3
+```
 
 If you want to work on BBKing, install that the same way:
 
+```bash
 > pip install -e git+ssh://git@github.com/cmroddy/BBKing.git#egg=bbking
+```
 
 If you don't want to work on BBKing, you can just install it with the rest of the requirements. Regardless, you need to install them, so:
 
+```bash
 > cd src/mdc3
 > pip install -r requirements.txt
+```
 
 At this point, you should have all the Python code you need. Maybe Psycopg2 failed to build or something else failed to install, so make sure there are no errors in the output from Pip. If there are, fix the problem and try again.
 
@@ -61,7 +75,9 @@ The `settings.py` that ships with the repo is probably wrong for you. Maybe you 
 
 To sync and migrate the database, run:
 
+```bash
 > django-admin.py syncdb --migrate --settings=mdc3.settings_cmroddy
+```
 
 This should spew out a bunch of output about table creation, prompt you to create an admin account, and then spew out a bunch more output about schema migrations. If there are any problems, fix them.
 
@@ -70,7 +86,9 @@ Run the development server
 
 If you made it this far, then everything should be working. Start the development server:
 
+```bash
 > django-admin.py runserver --settings=settings_cmroddy
+```
 
 
 Production installation
