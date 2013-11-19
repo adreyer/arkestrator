@@ -87,7 +87,7 @@ Run the development server
 If you made it this far, then everything should be working. Start the development server:
 
 ```bash
-django-admin.py runserver --settings=settings_cmroddy
+django-admin.py runserver --settings=mdc3.settings_cmroddy
 ```
 
 
