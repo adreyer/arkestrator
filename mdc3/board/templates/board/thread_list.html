@@ -22,8 +22,64 @@
 {% block content %}
     <table class="thread_list">
     {% withcycle "row1" "row2" as row_color %}
-    {% for thread in thread_list %}
-        {% include "board/thread_include.html" %}
+        {% for thread in thread_list %}
+{# user column #}
+            {% if thread.creator == user %}
+                <tr class="my_post">
+            {% else %}
+                <tr class="{{ row_color }}">
+            {% endif %}
+            <td nowrap="nowrap"><a href="{% url view-profile thread.creator.id %}" title="View {{ thread.creator.username }}'s profile">{{ thread.creator.username }}</a></td>
+{# icons column #}
+            {% spaceless %}<td nowrap="nowrap" class="icons">
+            {% if thread.locked %}
+                    {% if perms.board.can_lock %}
+                    <form class="icons" name="lockf{{ thread.id }}" action="{% url lock-thread thread.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="lock" value="unlock">
+                    <a href="javascript:void(1);" onClick="document.lockf{{ thread.id }}.submit();" title="Unsticky this thread">
+                    <strong>&#10005;</strong></a>
+                    </form>
+                    {% else %}&#10005;{% endif %}
+            {% endif %}
+            {% if thread.stuck %}
+                {% if perms.board.can_sticky %}
+                    <form class="icons" name="stickyf{{ thread.id }}" action="{% url sticky thread.id %}" method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="sticky" value="unsticky">
+                    <a href="javascript:void(1);" onClick="document.stickyf{{ thread.id }}.submit();" title="Unsticky this thread">
+                    <strong>&#9733;</strong></a>
+                    </form>
+                {% else %}&#9733;{% endif %}
+            {% endif %}
+            {% if thread.fav %}
+                <form class="icons" name="favf{{ thread.id }}" class="icon" action="{% url favorite thread.id %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="fav" value="remove">
+                <a href="javascript:void(1);" onClick="document.favf{{ thread.id }}.submit();" title="Remove from favorites">
+                <strong>&#9829;</strong></a>
+                </form>
+            {% endif %} </td>{% endspaceless %}
+{# subject column #}
+            <td class="wwwwwwww"><div class="wwwwwwww">{% if thread.unread %}
+                    <a class="unread" href="{% url view-thread thread.id %}{% spaceless %}
+                        {% if thread.last_post_read %}
+                                #{{ thread.last_post_read }}
+                            {% endif %}{% endspaceless %}" title="View thread">
+                        {{ thread.subject|wordfilter }}</a>
+                {% else %}
+                    <a href="{% url view-thread thread.id %}{% spaceless %}
+                        {% if thread.last_post_read %}
+                                #{{ thread.last_post_read }}
+                            {% endif %}{% endspaceless %}" title="View thread">
+                        {{ thread.subject|wordfilter }}</a>
+                {% endif %}
+            </div></td>
+{# post count column #}
+            <td nowrap="nowrap" class="count"><a href="{% url thread-history thread.id %}" title="Thread history">{{ thread.total_posts }}</a></td>
+{# last post column #}
+            <td nowrap="nowrap" class="right-align smallfont"><a href="{% url view-profile thread.last_post.creator.id %}" title="View {{ thread.last_post.creator.username }}'s profile">{{ thread.last_post.creator.username }}</a> {% mdctime thread.last_post.created_at short %}</td>
+            </tr>
             {% nextcycle row_color %}
         {% endfor %}
     {% endwithcycle %}
