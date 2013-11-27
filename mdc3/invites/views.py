@@ -13,6 +13,7 @@ from django.db import transaction
 from django.views.generic import list_detail
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
+from django.conf import settings
 
 from mdc3.invites.models import Invite
 from mdc3.profiles.models import Profile
@@ -58,7 +59,6 @@ def register(request,code):
         if user_form.is_valid() and profile_form.is_valid():
                 user = user_form.save()
                 user.set_password(user_form.cleaned_data["pass2"])
-                user.groups.add(Group.objects.get(name='everyone').id)
                 user.save()
                 temp_profile.user = user
                 profile_form = forms.ProfileRegistrationForm(request.POST,
@@ -90,12 +90,13 @@ def approve_invite(request, id):
             inv.approved_on = datetime.datetime.now()
             inv.approved_by = request.user
             inv.invite_code = hashlib.sha224(str(time.time())).hexdigest()[:16]
-            invite_url = 'http://board.mdc2.org/invites/' + inv.invite_code
-            send_mail(subject='Welcome to MDC',
+            domain = Site.objects.get_current().domain
+            invite_url = 'http://%s%s' % (domain, reverse('register', args=[inv.invite_code]))
+            send_mail(subject='Welcome to %s' % domain,
                     message="""
-Welcome to MDC. Use the link below to create your account
-""" + invite_url,
-                    from_email = 'cmr@mdc2.org',
+                    Welcome to %s. Use the link below to create your account
+                    """ % (domain) + invite_url,
+                    from_email = settings.EMAIL_FROM,
                     recipient_list = [inv.invitee],
                     fail_silently=False)
             cache.delete('inv_count')

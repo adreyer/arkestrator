@@ -25,6 +25,8 @@ DATABASES = {
 
 CACHE_BACKEND = 'dummy://'
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -170,3 +172,5 @@ def custom_show_toolbar(request):
 DEBUG_TOOLBAR_CONFIG = {
     'SHOW_TOOLBAR_CALLBACK': custom_show_toolbar,
 }
+
+EMAIL_FROM = 'arkestrator@example.com'
