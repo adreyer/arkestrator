@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block header %}
+    <h1>{{ site_name }}</h1>
+{% endblock %}
+
+{% block loginbezel %}<div id="submenu"><br /></div>{% endblock %}
+{%  block content %}
+<div id="gtfo">
+<p>ACCESS TO THIS SYSTEM IS RESTRICTED TO AUTHORIZED USERS ONLY. INDIVIDUALS ATTEMPTING UNAUTHORIZED ACCESS WILL BE PROSECUTED. IF UNAUTHORIZED, TERMINATE ACCESS NOW!</p>
+</div>
+
+{% if form.errors %}
+<p>Your username and password didn't match. Please try again.</p>
+{% endif %}
+
+<form method="post" action="{% url django.contrib.auth.views.login %}">
+{% csrf_token %}
+<table>
+<tr>
+    <th>{{ form.username.label_tag }}</td>
+    <td>{{ form.username }}</td>
+</tr>
+<tr>
+    <th>{{ form.password.label_tag }}</td>
+    <td>{{ form.password }}</td>
+</tr>
+<tr>
+    <th/>
+    <td><input type="submit" value="login" /></td>
+    <td><a href="{% url django.contrib.auth.views.password_reset %}">Reset</a>
+</tr>
+</table>
+
+</form>
+
+{% endblock %}

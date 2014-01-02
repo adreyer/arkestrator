@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block header %}
+    <h1>{{ site_name }}</h1>
+{% endblock %}
+
+{% block loginbezel %}<div id="submenu"><br /></div>{% endblock %}
+
+{% block content %}
+<a href="{% url django.contrib.auth.views.login %}">You've been logged out. You can click anywhere on this entire line to log back in.</a>
+{% endblock %}
