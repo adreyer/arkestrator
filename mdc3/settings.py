@@ -25,6 +25,8 @@ DATABASES = {
 
 CACHE_BACKEND = 'dummy://'
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -157,3 +159,5 @@ HAYSTACK_SOLR_URL = 'http://127.0.0.1:8983/solr'
 
 OEMBED_MAX_WIDTH = 640
 OEMBED_MAX_HEIGHT = 640
+
+EMAIL_FROM = 'arkestrator@example.com'
