@@ -19,7 +19,7 @@
                 <li class="submenuitem"><a href="{% url edit-prefs %}" title="Edit your preferences">Preferences</a></li>
                 <li class="submenuitem"><a href="{% url edit-info %}" title="Edit your profile">Profile</a></li>
                 <li class="submenuitem"><a href="{% url edit-theme %}" title="Edit your theme">Theme</a></li>
-                <li class="submenuitem"><a href="{% url passwd %}" title="Change your password">Password</a></li>
+                <li class="submenuitem"><a href="{% url django.contrib.auth.views.password_change %}" title="Change your password">Password</a></li>
                 <li class="submenuitem"><a href="{% url threads-by view_user.id %}" title="View thread you've created">My threads ({{ view_user.get_profile.total_threads }})</a></li>
                 <li class="submenuitem"><a href="{% url posts-by view_user.id %}" title="View posts you've made">My posts ({{ view_user.get_profile.total_posts }})</a></li>
             {% endif %}
@@ -34,36 +34,36 @@
 <table class="thread_list">
     <tr>
         <td align="left" valign="top" >
-            {% if view_profile.name %} 
+            {% if view_profile.name %}
                 <strong>Name:</strong> {{ view_profile.name }} <br />
             {% endif %}
-            {% if view_profile.location %} 
+            {% if view_profile.location %}
                 <strong>Location:</strong> {{ view_profile.location }} <br />
             {% endif %}
-            {% if view_profile.phone %} 
+            {% if view_profile.phone %}
                 <strong>Phone Number:</strong> {{ view_profile.phone }} <br />
             {% endif %}
-            {% if view_profile.public_email %} 
+            {% if view_profile.public_email %}
                 <strong>Email:</strong>  {{ view_profile.public_email }} <br />
             {% endif %}
-            {% if view_profile.aim_name %} 
+            {% if view_profile.aim_name %}
                 <strong>AIM:</strong> {{ view_profile.aim_name }} <br />
             {% endif %}
-            {% if view_profile.gtalk_name %} 
+            {% if view_profile.gtalk_name %}
                 <strong>Google Talk: </strong> {{ view_profile.gtalk_name }} <br />
             {% endif %}
-            {% if view_profile.website %} 
+            {% if view_profile.website %}
                 <strong>Website: </strong> <a href="{{ view_profile.website }}">{{ view_profile.website }} </a> <br />
             {% endif %}
-            {% if view_profile.info %} 
-                <strong>Info:</strong> <br /> 
+            {% if view_profile.info %}
+                <strong>Info:</strong> <br />
                 <p>{{ view_profile.info|linebreaks }}</p> <br/>
             {% endif %}
             <strong>Profile views:</strong> {{ view_profile.profile_views }}<br />
-            <strong>Last seen:</strong> {% mdctime view_profile.last_seen %}<br /> 
+            <strong>Last seen:</strong> {% mdctime view_profile.last_seen %}<br />
         </td>
         {% if view_profile.photo_url %}
-            <td align="right" valign="top">    
+            <td align="right" valign="top">
                 <img src="{{ view_profile.photo_url }}"> <br>
         {% endif %}
     </tr>
