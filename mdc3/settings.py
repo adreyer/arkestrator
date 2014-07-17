@@ -71,7 +71,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'mdc3.moderation.middleware.BanMiddleware',
     'mdc3.middleware.OnlineUsersMiddleware',
     'mdc3.board.middleware.PostingUsersMiddleware',
@@ -118,7 +117,6 @@ INSTALLED_APPS = (
     'oembed',
     'bbking',
     'haystack',
-    'debug_toolbar',
 )
 
 AUTH_PROFILE_MODULE = 'profiles.Profile'
@@ -159,14 +157,3 @@ HAYSTACK_SOLR_URL = 'http://127.0.0.1:8983/solr'
 
 OEMBED_MAX_WIDTH = 640
 OEMBED_MAX_HEIGHT = 640
-
-
-# DDTB settings
-# too lazy to put this anywhere else
-def custom_show_toolbar(request):
-  return request.user.is_superuser
-
-
-DEBUG_TOOLBAR_CONFIG = {
-    'SHOW_TOOLBAR_CALLBACK': custom_show_toolbar,
-}
