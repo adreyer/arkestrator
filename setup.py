@@ -8,12 +8,17 @@ setup(name="mdc3",
     packages=[
         'mdc3',
         'mdc3.board',
+        'mdc3.events',
         'mdc3.gallery',
         'mdc3.invites',
+        'mdc3.moderation',
+        'mdc3.pms',
         'mdc3.profiles',
+        'mdc3.search',
         'mdc3.shenanigans',
         'mdc3.tags',
-        'mdc3.themes'
+        'mdc3.themes',
+        'mdc3.util',
     ],
     package_data={
         'mdc3':['media/*/*','templates/*'],
