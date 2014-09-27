@@ -1,7 +1,7 @@
 Django==1.4.10
 South==0.7.3
 python-memcached==1.48
-ply==3.3
+ply==3.4
 pytz
 git+git://github.com/adreyer/BBKing.git#egg=bbking
 django-haystack==1.2.7
