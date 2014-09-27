@@ -14,7 +14,7 @@ To hack on Arkestrator, you will need some basic components installed on your sy
 On a Debian Wheezy system, for example, you should be able to get these things by running:
 
 ```bash
-apt-get install python2.7 python-pip python-virtualenv
+apt-get install python2.7 python-pip python-virtualenv python-dev
 ```
 
 You will also need a database. SQLite 3 might still work, so perhaps you can get away with:
