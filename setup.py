@@ -1,4 +1,3 @@
-
 from distutils.core import setup
 
 setup(name="mdc3",
@@ -17,7 +16,24 @@ setup(name="mdc3",
         'mdc3.themes'
     ],
     package_data={
-        'mdc3':['media/*','templates/*'],
+        'mdc3':['media/*/*','templates/*'],
         'mdc3.board':['templates/*']
-    })
-
+    },
+    install_requires=[
+      'Django == 1.4.10',
+      'South == 0.7.3',
+      'python-memcached == 1.48',
+      'ply == 3.4',
+      'pytz',
+      #'git+git://github.com/adreyer/BBKing.git#egg=bbking',
+      'django-haystack == 1.2.7',
+      'simplejson == 2.3.0',
+      'pysolr == 2.1.0-beta',
+      'multiprocessing == 2.6.2.1',
+      'BeautifulSoup == 3.2.0',
+      'unittest2 == 0.5.1',
+      'mock == 0.7.2',
+      'django-oembed == 0.1.3',
+      'django-debug-toolbar == 0.11.0',
+      ],
+    )
