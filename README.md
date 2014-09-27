@@ -36,37 +36,35 @@ Virtualenv setup
 
 On Github, you should fork the main Arkestrator repository. Visit https://github.com/adreyer/arkestrator and click the "fork" button. If you want to work on BBKing, you should visit https://github.com/adreyer/BBKing and fork that too.
 
-Next, create a virtualenv and activate it. Change to the working directory where you want to set up your virtualenv:
+Next, create a virtualenv and activate it.
 
 ```bash
-cd ~/src/stuff/whatevs
+cd ~/virtualenvs
 virtualenv ark
 cd ark
 source bin/activate
 ```
 
-We are going to install Arkestrator using Pip. We are using `pip -e` so that these repositories are editable. Substitute your own fork's URL here, rather than using mine. You probably want to add adreyer's repo as your upstream remote, too:
+We are going to install Arkestrator using Pip. We are using `pip -e` so that these repositories are editable. **Substitute your own fork's URL here.** You'll want to add adreyer's repo as your upstream remote, too:
 
 ```bash
 pip install -e git+ssh://git@github.com/cmroddy/arkestrator.git#egg=mdc3
-cd src/mdc3/
+cd ~/virtualenvs/ark/src/mdc3/
 git remote add upstream https://github.com/adreyer/arkestrator.git
-cd -
 ```
 
 If you want to work on BBKing, install that the same way:
 
 ```bash
 pip install -e git+ssh://git@github.com/cmroddy/BBKing.git#egg=bbking
-cd src/mdc3/
+cd ~/virtualenvs/ark/src/bbking
 git remote add upstream https://github.com/adreyer/BBKing.git
-cd -
 ```
 
 If you don't want to work on BBKing, you can just install it with the rest of the requirements. Regardless, you need to install them, so:
 
 ```bash
-cd src/mdc3
+cd $path_to_arkestrator_clone
 pip install -r requirements.txt
 ```
 
@@ -77,12 +75,10 @@ Sync and migrate database
 
 You will need to sync and migrate your database. If you're using SQLite, make sure that you keep track of where the local database file is. Your working directory actually matters. If you're using Postgres, make sure that you've created an appropriate user and database. You probably need to edit `pg_hba.conf`. Whatever, I am not going to tell you how to administer your database server.
 
-The `settings.py` that ships with the repo is probably wrong for you. Maybe you want to make your own and call it `settings_cmroddy.py`. If so, make sure to use that in your `DJANGO_SETTINGS_MODULE` environment variable, or after your `--settings` option whenever you run `django-admin.py`.
-
 To sync and migrate the database, run:
 
 ```bash
-django-admin.py syncdb --migrate --settings=mdc3.settings_cmroddy
+django-admin.py syncdb --migrate --settings=mdc3.settings
 ```
 
 This should spew out a bunch of output about table creation, prompt you to create an admin account, and then spew out a bunch more output about schema migrations. If there are any problems, fix them.
@@ -93,7 +89,7 @@ Run the development server
 If you made it this far, then everything should be working. Start the development server:
 
 ```bash
-django-admin.py runserver --settings=mdc3.settings_cmroddy
+django-admin.py runserver --settings=mdc3.settings
 ```
 
 
@@ -101,4 +97,3 @@ Production installation
 =======================
 
 Production installation is possible.
-
