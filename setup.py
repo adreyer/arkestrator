@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="mdc3",
+    name="arkestrator",
     version="0.0.1",
     description="An Internet Message Board",
     author="Rev. Johnny Healey",

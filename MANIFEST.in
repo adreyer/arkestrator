@@ -1,2 +1,2 @@
-recursive-include mdc3/templates *.html *.txt
-recursive-include mdc3/media *.css *.js *.png
+recursive-include arkestrator/templates *.html *.txt
+recursive-include arkestrator/media *.css *.js *.png

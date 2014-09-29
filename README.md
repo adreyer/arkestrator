@@ -42,8 +42,8 @@ source bin/activate
 We are going to install Arkestrator using Pip. We are using `pip -e` so that these repositories are editable. **Substitute your own fork's URL here.** You'll want to add adreyer's repo as your upstream remote, too:
 
 ```bash
-pip install -e git+ssh://git@github.com/$GITHUB_USER/arkestrator.git#egg=mdc3
-cd ~/virtualenvs/ark/src/mdc3/
+pip install -e git+ssh://git@github.com/cmroddy/arkestrator.git#egg=arkestrator
+cd ~/virtualenvs/ark/src/arkestrator/
 git remote add upstream https://github.com/adreyer/arkestrator.git
 ```
 
@@ -72,7 +72,7 @@ CREATE DATABASE mdc3_dev WITH OWNER mdc3_dev;
 To sync and migrate the database, run:
 
 ```bash
-django-admin.py syncdb --migrate --settings=mdc3.settings
+django-admin.py syncdb --migrate --settings=arkestrator.settings
 ```
 
 This should spew out a bunch of output about table creation, prompt you to create an admin account, and then spew out a bunch more output about schema migrations. If there are any problems, fix them.
@@ -83,7 +83,7 @@ Run the development server
 If you made it this far, then everything should be working. Start the development server:
 
 ```bash
-django-admin.py runserver --settings=mdc3.settings
+django-admin.py runserver --settings=arkestrator.settings
 ```
 
 
