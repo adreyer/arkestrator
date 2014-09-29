@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name="mdc3",
@@ -6,22 +6,7 @@ setup(
     description="An Internet Message Board",
     author="Rev. Johnny Healey",
     author_email="rev.null@gmail.com",
-    # TODO can use find_packages?
-    packages=[
-        'mdc3',
-        'mdc3.board',
-        'mdc3.events',
-        'mdc3.gallery',
-        'mdc3.invites',
-        'mdc3.moderation',
-        'mdc3.pms',
-        'mdc3.profiles',
-        'mdc3.search',
-        'mdc3.shenanigans',
-        'mdc3.tags',
-        'mdc3.themes',
-        'mdc3.util',
-    ],
+    packages = find_packages(),
     include_package_data = True,
     install_requires=[
 	'bbking==0.0.1',
