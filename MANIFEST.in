@@ -1,0 +1,2 @@
+recursive-include mdc3/templates *.html *.txt
+recursive-include mdc3/media *.css *.js *.png
