@@ -45,5 +45,5 @@ urlpatterns = patterns('',
         name='favorite'),
     url(r"^threads/favorites/$", views.list_threads,
             { 'fav' : True }, name='favorite-list'),
-    url(r"^threads/search/$", views.ghetto_search, name='search-threads'),
+    url(r"^threads/search/$", views.lol_search, name='search-threads'),
 )

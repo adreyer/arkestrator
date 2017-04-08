@@ -369,8 +369,8 @@ def favorite_thread(request, id):
 
 
 @login_required
-def ghetto_search(request):
-    'fuck this shit is ghetto'
+def lol_search(request):
+    'lol search'
 
     query = request.GET.get('query', 'rev is the best')
     
