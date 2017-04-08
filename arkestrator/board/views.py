@@ -11,7 +11,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Q
-from django.shortcuts import render_to_response,get_object_or_404
+from django.shortcuts import render_to_response,get_object_or_404, redirect
 from django.http import HttpResponseRedirect, Http404
 from django.template import RequestContext
 from django.views.generic import list_detail
@@ -107,6 +107,8 @@ class ThreadView(LoginRequiredMixin, TemplateView):
         expand = kwargs.get('expand', False)
         hide = kwargs.get('hide')
 
+        # TODO lastread / expand
+
         ctx = {
             'object_list': posts,
             'thread': thread,
@@ -119,9 +121,10 @@ class ThreadView(LoginRequiredMixin, TemplateView):
         return ctx
 
     def post(self, request, **kwargs):
-        thread = get_object_or_404(Thread, pk=kwargs['thread_id'])
+        thread_id = kwargs['thread_id']
+        thread = get_object_or_404(Thread, pk=thread_id)
         if thread.locked:
-            return HttpResponseRedirect(reverse('list-threads'))
+            return redirect(reverse('list-threads'))
         post = Post(
             thread = thread,
             creator = request.user,
@@ -131,9 +134,8 @@ class ThreadView(LoginRequiredMixin, TemplateView):
         if form.is_valid():
             form.save()
             request.posting_users.add_to_set(request.user.id)
-            return HttpResponseRedirect(reverse('list-threads'))
-        # TODO basically we're just preventing blank posting. error will
-        # happen.
+            return redirect(reverse('list-threads'))
+        return redirect(reverse('view-thread', args=[thread_id]))
 
 @login_required
 def view_thread(request,id,start=False,expand=False,hide=None):
