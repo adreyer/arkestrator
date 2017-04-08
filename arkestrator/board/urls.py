@@ -6,7 +6,9 @@ import models
 
 urlpatterns = patterns('',
     url(r"^$",views.ThreadList.as_view(), name='list-threads'),
-    url(r"^threads/(?P<id>\d+)/$",views.view_thread,name='view-thread'),
+    #url(r"^threads/(?P<id>\d+)/$",views.view_thread,name='view-thread'),
+    url(r"^threads/(?P<id>\d+)/$",views.ThreadView.as_view(), name='view-thread'),
+
     url(r"^threads/(?P<id>\d+)/(?P<start>\d+)/$",views.view_thread,
         name='view-thread-start'),
     url(r"^threads/(?P<id>\d+)/full/$",views.view_thread,{

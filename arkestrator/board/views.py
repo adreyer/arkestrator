@@ -16,6 +16,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.template import RequestContext
 from django.views.generic import list_detail
 from django.views.generic.list import ListView
+from django.views.generic.base import TemplateView
 from django.db.models.signals import post_save
 from django.db.models import Sum, Count, Max, F
 from django.core.cache import cache
@@ -95,6 +96,28 @@ class ThreadsByList(ThreadList):
     def get_queryset(self):
         return Thread.objects.filter(creator_id = self.args[0])
 
+class ThreadView(LoginRequiredMixin, TemplateView):
+    template_name = 'board/post_list.html'
+
+    def get_context_data(self, **kwargs):
+        thread_id = kwargs['id']
+        thread = get_object_or_404(Thread, pk=thread_id)
+        posts = thread.post_set.order_by('id').select_related('creator')
+        start = kwargs.get('start', 0)
+        expand = kwargs.get('expand', False)
+        hide = kwargs.get('hide')
+
+        ctx = {
+            'object_list': posts,
+            'thread': thread,
+            'form': None, # TODO
+            'expand': expand,
+            'hide': hide,
+            'start': start,
+            'fav': False, # TODO
+        }
+        return ctx
+
 @login_required
 def view_thread(request,id,start=False,expand=False,hide=None):
     """ display thread  id for a user
@@ -158,6 +181,7 @@ def view_thread(request,id,start=False,expand=False,hide=None):
         if event:
             cache.delete('event-count:%d'%(request.user.id))
     if not expand and not start and queryset.count() < 10:
+        # TODO hm.
         queryset = thread.default_post_list
         queryset = queryset=thread.post_set.order_by(
             "created_at").select_related('creator')
@@ -221,7 +245,7 @@ def view_post(request, id):
     """  view a thread starting with post num post id """
     post = get_object_or_404(Post, pk=id)
     return view_thread(request, id=post.thread.id,start=id)
-    
+
 
 @login_required
 @transaction.commit_on_success
