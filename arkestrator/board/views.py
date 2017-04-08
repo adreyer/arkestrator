@@ -110,13 +110,30 @@ class ThreadView(LoginRequiredMixin, TemplateView):
         ctx = {
             'object_list': posts,
             'thread': thread,
-            'form': None, # TODO
+            'form': forms.PostForm(),
             'expand': expand,
             'hide': hide,
             'start': start,
             'fav': False, # TODO
         }
         return ctx
+
+    def post(self, request, **kwargs):
+        thread = get_object_or_404(Thread, pk=kwargs['thread_id'])
+        if thread.locked:
+            return HttpResponseRedirect(reverse('list-threads'))
+        post = Post(
+            thread = thread,
+            creator = request.user,
+            posted_from = get_client_ip(request)
+        )
+        form = forms.PostForm(request.POST, instance=post)
+        if form.is_valid():
+            form.save()
+            request.posting_users.add_to_set(request.user.id)
+            return HttpResponseRedirect(reverse('list-threads'))
+        # TODO basically we're just preventing blank posting. error will
+        # happen.
 
 @login_required
 def view_thread(request,id,start=False,expand=False,hide=None):
