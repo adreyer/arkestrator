@@ -100,7 +100,7 @@ class ThreadView(LoginRequiredMixin, TemplateView):
     template_name = 'board/post_list.html'
 
     def get_context_data(self, **kwargs):
-        thread_id = kwargs['id']
+        thread_id = kwargs['thread_id']
         thread = get_object_or_404(Thread, pk=thread_id)
         posts = thread.post_set.order_by('id').select_related('creator')
         start = kwargs.get('start', 0)
