@@ -9,7 +9,7 @@ To hack on Arkestrator, you will need some basic components installed on your sy
 - A recent Python (we recommend 2.7)
 - Virtualenv
 - Pip
-- A relational database supported by Django
+- Postgresql
 
 On a Debian Wheezy system, for example, you should be able to get these things by running:
 
@@ -65,8 +65,8 @@ You will need to sync and migrate your database. You may need to edit `pg_hba.co
 To use the provided dev settings create the following user and database in postgres:
 
 ```sql
-CREATE USER mdc3_dev WITH PASSWORD 'mdc3_dev';
-CREATE DATABASE mdc3_dev WITH OWNER mdc3_dev;
+CREATE USER arkestrator_dev WITH PASSWORD 'g4mm4r4y';
+CREATE DATABASE arkestrator_dev WITH OWNER arkestrator_dev;
 ```
 
 To sync and migrate the database, run:
