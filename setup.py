@@ -16,6 +16,7 @@ setup(
         'pytz==2014.7',
         'django-haystack==1.2.7',
         'simplejson==2.3.0',
+        'psycopg2==2.6.1',
         'pysolr==2.1.0-beta',
         'multiprocessing==2.6.2.1',
         'BeautifulSoup==3.2.0',
