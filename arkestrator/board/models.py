@@ -110,6 +110,13 @@ class LastRead(models.Model):
     def post_count(self):
         return Post.objects.filter(thread=self.thread, creator=self.user).count()
 
+class Favorite(models.Model):
+    """ Explicitly declare this linking table but mimic the old schema """
+    class Meta:
+        db_table = 'board_thread_favorite'
+
+    thread = models.ForeignKey(Thread, related_name='favorites')
+    user = models.ForeignKey(User)
 
 
 def update_thread(sender, instance, signal, *args, **kwargs):
