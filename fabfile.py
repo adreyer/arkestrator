@@ -9,16 +9,16 @@ env.user = 'deploy'
 
 def dev():
     "The Development Environment"
-    env.remote_dir = '/var/mdc3_dev'
+    env.remote_dir = '/var/arkestrator_dev'
     env.repo = 'git://github.com/adreyer/arkestrator.git'
-    env.settings_module = "mdc3.settings_dev"
+    env.settings_module = "arkestrator.settings_dev"
     _set_extra_dirs()
 
 def prod():
     "The Production Environment"
-    env.remote_dir = '/var/mdc3'
+    env.remote_dir = '/var/arkestrator'
     env.repo = 'git://github.com/adreyer/arkestrator.git'
-    env.settings_module = "mdc3.settings_prod"
+    env.settings_module = "arkestrator.settings_prod"
     _set_extra_dirs()
 
 def _set_extra_dirs():
@@ -38,7 +38,7 @@ def rebuild_virtualenv():
         source %(virtualenv)s/bin/activate;
         pip install -r %(current_symlink)s/requirements.txt
         """%env)
-    
+
 def graceful_servers():
     "Gracefully restart the web servers"
     # graceful the web servers
@@ -120,4 +120,3 @@ def cleanup():
     # remove all but the last 5 releases
     with cd("%(releases_dir)s"%env):
         run("rm -fr `ls -t | awk 'NR>5'`")
-
