@@ -35,7 +35,8 @@ urlpatterns = patterns('',
         views.StickyView.as_view(),
         name='sticky'),
 
-    url(r"^threads/(?P<id>\d+)/lock/$",views.lock_thread,
+    url(r"^threads/(?P<thread_id>\d+)/lock/$",
+        views.LockThreadView.as_view(),
         name='lock-thread'),
 
     url(r"^threads/(?P<thread_id>\d+)/history/$",
@@ -67,7 +68,9 @@ urlpatterns = patterns('',
 
     url(r"^threads/(?P<id>\d+)/favorite/$", views.favorite_thread,
         name='favorite'),
+
     url(r"^threads/favorites/$", views.FavoritesList.as_view(),
             { 'fav' : True }, name='favorite-list'),
+
     url(r"^threads/search/$", views.lol_search, name='search-threads'),
 )

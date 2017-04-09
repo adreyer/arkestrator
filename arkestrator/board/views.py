@@ -14,6 +14,7 @@ from django.db.models import Q
 from django.shortcuts import render_to_response,get_object_or_404, redirect
 from django.http import HttpResponseRedirect, Http404
 from django.template import RequestContext
+from django.utils.decorators import method_decorator
 from django.views.generic import list_detail
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView, View
@@ -327,18 +328,16 @@ def get_quote(request, id):
             'user': user,
     })
 
-@login_required
-@permission_required('board.can_lock')
-def lock_thread(request, id):
-    """ lock thread id if the requester has perms"""
-    thread = get_object_or_404(Thread,pk=id)
-    if request.method == 'POST':
+class LockThreadView(LoginRequiredMixin, View):
+    @method_decorator(permission_required('board.can_lock'))
+    def post(self, request, **kwargs):
+        thread = get_object_or_404(Thread,pk=kwargs['thread_id'])
         if request.POST['lock'] == 'lock':
             thread.locked = True
         elif request.POST['lock'] == 'unlock':
             thread.locked = False
-    thread.save()
-    return HttpResponseRedirect(reverse('list-threads'))
+        thread.save()
+        return redirect(reverse('list-threads'))
 
 
 @login_required
