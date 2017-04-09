@@ -1,138 +1,131 @@
 from copy import copy
 import re
-from django.contrib.auth.decorators import login_required
-from django.contrib.sites.models import Site
-from django.shortcuts import render_to_response,get_object_or_404
+
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponseRedirect, Http404
-from django.template import RequestContext
-from django.views.generic import list_detail
-from django.core.paginator import Paginator, InvalidPage
-from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.core.urlresolvers import reverse
+from django.views.generic.base import TemplateView, View
+from django.views.generic.edit import FormView
 
-
-
+import forms
 from models import PM, Recipient
 from arkestrator.profiles.models import Profile
-import forms
+from arkestrator.views import LoginRequiredMixin
 
-@login_required
-def new_pm(request, rec_id=0): 
+class NewPM(LoginRequiredMixin, FormView):
     """ create a new pm """
+    template_name = 'pms/new_pm.html'
+    form_class = forms.NewPMForm
 
-    if request.method == 'POST':
-        form =forms.NewPMForm(request.POST)
-        if form.is_valid():
-            pm = form.save(request.user)
-            pm.root_parent = pm
-            pm.save()
-            return HttpResponseRedirect(reverse('inbox'))
-    else:
-        rec=''
-        if rec_id:
-            try:
-                rec= User.objects.get(pk=rec_id)
-            except User.DoesNotExist:
-                pass
-        form =forms.NewPMForm(initial={ 'recs':rec })
-    return render_to_response('pms/new_pm.html',
-            { 'form' : form },
-            context_instance = RequestContext(request))
+    def get_success_url(self):
+        return reverse('inbox')
+
+    def form_valid(self, form):
+        pm = form.save(self.request.user)
+        pm.root_parent = pm
+        pm.save()
+        return super(NewPM, self).form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        ctx =  super(NewPM, self).get_context_data(**kwargs)
+        rec = self.request.GET.get('recipient')
+        if rec:
+            ctx['form'].initial['recs'] = rec
+        #import ipdb; ipdb.set_trace()
+        return ctx
+
+class Outbox(LoginRequiredMixin, TemplateView):
+    template_name = 'pms/outbox.html'
+
+    def get_context_data(self, **kwargs):
+        try:
+            page = int(self.request.GET.get('page', 1))
+        except ValueError:
+            raise Http404
+
+        queryset = PM.objects.filter(sender=self.request.user,
+                    deleted=False).order_by('-created_at')
+
+        paginator = Paginator(queryset, 50, allow_empty_first_page=True)
+        page_obj = paginator.page(page)
+
+        pm_list = page_obj.object_list
+
+        rec_list = list(Recipient.objects.filter(message__in=pm_list).order_by(
+            '-message__created_at').select_related('recipient'))
+
+        for pm in pm_list:
+            pm_rec_list = []
+            while rec_list and pm.id == rec_list[0].message_id:
+                pm_rec_list.append(rec_list[0])
+                rec_list = rec_list[1:]
+            pm.rec_list = pm_rec_list
+            if pm.root_parent != pm:
+                pm.reply = 'Re: '
+
+        ctx = { 'pm_rec_list' : pm_list,
+              'page_obj' : page_obj }
+        return ctx
+
+class Inbox(LoginRequiredMixin, TemplateView):
+    template_name = 'pms/inbox.html'
+
+    def get_context_data(self, **kwargs):
+        try:
+            page = int(self.request.GET.get('page', 1))
+        except ValueError:
+            raise Http404
+
+        queryset = Recipient.objects.filter(recipient=self.request.user,
+                deleted=False).order_by("-message__created_at").select_related(
+                        'message', 'message__sender')
+
+        paginator = Paginator(queryset, 50, allow_empty_first_page=True)
+        page_obj = paginator.page(page)
+
+        pm_list = page_obj.object_list
+        for pm in pm_list:
+            if pm.message.root_parent != pm.message:
+                pm.reply = 'Re: '
+
+        ctx = { 'pm_list' : pm_list,
+                'page_obj' : page_obj }
+        return ctx
 
 
-@login_required
-def outbox(request):
-    """ all outgoing messages """
-    try:
-        page = int(request.GET.get('page', 1))
-    except ValueError:
-        raise Http404
-
-    queryset = PM.objects.filter(sender=request.user,
-                deleted=False).order_by('-created_at')
-
-    paginator = Paginator(queryset, 50, allow_empty_first_page=True)
-    page_obj = paginator.page(page)
-
-    pm_list = page_obj.object_list
-
-    rec_list = list(Recipient.objects.filter(message__in=pm_list).order_by(
-        '-message__created_at').select_related('recipient'))
-
-    for pm in pm_list:
-        pm_rec_list = []
-        while rec_list and pm.id == rec_list[0].message_id:
-            pm_rec_list.append(rec_list[0])
-            rec_list = rec_list[1:]
-        pm.rec_list = pm_rec_list
-        if pm.root_parent != pm:
-            pm.reply = 'Re: '
-
-    return render_to_response('pms/outbox.html',
-            { 'pm_rec_list' : pm_list,
-              'page_obj' : page_obj },
-            context_instance = RequestContext(request))
-
-@login_required
-def inbox(request):
-    """ all incoming messages """
-    try:
-        page = int(request.GET.get('page', 1))
-    except ValueError:
-        raise Http404
-
-    queryset = Recipient.objects.filter(recipient=request.user,
-        deleted=False).order_by("-message__created_at").select_related(
-        'message', 'message__sender')
-
-    paginator = Paginator(queryset, 50, allow_empty_first_page=True)
-    page_obj = paginator.page(page)
-
-    pm_list = page_obj.object_list
-    for pm in pm_list:
-        if pm.message.root_parent != pm.message:
-            pm.reply = 'Re: '
-    
-    return render_to_response('pms/inbox.html',
-            { 'pm_list' : pm_list,
-              'page_obj' : page_obj },
-            context_instance = RequestContext(request))
-
-@login_required
-def mark_read(request):
-    """ mark all recipients the user has read """
-    if request.method == 'POST' and request.POST['confirm'] == 'true':
+class MarkRead(LoginRequiredMixin, View):
+    def post(self, request, **kwargs):
         unread_list = Recipient.objects.filter(
                         recipient=request.user,
                         read=False).update(read=True)
-    return HttpResponseRedirect(reverse('inbox'))
+        return HttpResponseRedirect(reverse('inbox'))
 
-@login_required
-def view_pm(request, pm_id):
-    """ display pm pm_id and if appropriate it's parent """
-    pm = get_object_or_404(PM,pk=pm_id)
-    #make sure only the sender and recipients can read it
-    if pm.sender != request.user:
-        read = get_object_or_404(Recipient,message=pm,recipient=request.user)
-        if not read.read:
-            read.read = True
-            read.save()
-    #this else is to make sure pms sent to oneself get marked read
-    else:
-        try:
-            recip = Recipient.objects.get(message=pm,
-                    recipient=request.user, read=False)
-            recip.read=True
-            recip.save()
-        except Recipient.DoesNotExist:
-            pass
-    
-    reply = copy(pm)
-    reply.body = ''
-    
-        
-    if request.method == 'POST':
+class PMDetail(LoginRequiredMixin, TemplateView):
+    template_name = "pms/view_pm.html"
+
+    def read_pm(self, pm_id, user):
+        pm = get_object_or_404(PM,pk=pm_id)
+        #make sure only the sender and recipients can read it
+        if pm.sender != user:
+            read = get_object_or_404(Recipient,message=pm,recipient=user)
+            if not read.read:
+                read.read = True
+                read.save()
+        #this else is to make sure pms sent to oneself get marked read
+        else:
+            try:
+                recip = Recipient.objects.get(message=pm, recipient=user, read=False)
+                recip.read = True
+                recip.save()
+            except Recipient.DoesNotExist:
+                pass
+        return pm
+
+    def post(self, request, **kwargs):
+        pm = self.read_pm(kwargs['pm_id'], request.user)
+        reply = copy(pm)
         form =forms.NewPMForm(request.POST,
                 instance=reply)
         if form.is_valid():
@@ -141,94 +134,89 @@ def view_pm(request, pm_id):
             new_pm.parent = pm
             new_pm.save()
             return HttpResponseRedirect(reverse('inbox'))
-    else:
+
+    def get_context_data(self, **kwargs):
+        user = self.request.user
+        pm = self.read_pm(kwargs['pm_id'], user)
+        reply = copy(pm)
+        reply.body = ''
+
         form =forms.NewPMForm(instance=reply,
                 initial={'recs' : pm.sender.username })
-    rec_str = pm.get_rec_str()
-    parent = pm.parent
-    parent_rec_str = ''
-    if parent:
-        if parent.check_privacy(request.user) and parent.not_deleted(request.user):
-            parent_rec_str = parent.get_rec_str()
-        else:
-            parent=None
-    hide=False
-    if not Profile.objects.get(user=request.user).show_images:
-        hide=True
-    return render_to_response("pms/view_pm.html",
-            { 'pm' : pm ,
-              'parent' : parent,
-              'rec_str' : rec_str,
-              'parent_rec_str' : parent_rec_str,
-              'form' : form ,
-              'reply_all' : pm.get_reply_all(request.user),
-               'rec_str': rec_str,
-               'hide' : hide, },
-            context_instance = RequestContext(request))
+        rec_str = pm.get_rec_str()
+        parent = pm.parent
+        parent_rec_str = ''
+        if parent:
+            if parent.check_privacy(user) and parent.not_deleted(user):
+                parent_rec_str = parent.get_rec_str()
+            else:
+                parent = None
+        hide = False
+        if not Profile.objects.get(user=user).show_images:
+            hide = True
+        ctx = { 'pm' : pm ,
+                'parent' : parent,
+                'rec_str' : rec_str,
+                'parent_rec_str' : parent_rec_str,
+                'form' : form ,
+                'reply_all' : pm.get_reply_all(user),
+                'rec_str': rec_str,
+                'hide' : hide, }
+        return ctx
 
-def pm_thread(request, pm_id):
-    """ view all appropriate pms with the same root_parent as pm_id """
-    pm = get_object_or_404(PM,pk=pm_id)
+class PMThread(PMDetail):
+    template_name = 'pms/show_thread.html'
 
-    
-    queryset = PM.objects.filter(root_parent=pm.root_parent).filter(Q(
-        Q(sender=request.user) | Q(
-        recipient__recipient=request.user))).order_by(
-        'created_at').select_related('body', 'subject',
-            'deleted','sender__username').distinct()
+    # TODO: take advantage of super
+    def get_context_data(self, **kwargs):
+        user = self.request.user
+        pm = self.read_pm(kwargs['pm_id'], user)
 
-    
-    pm_list = list(queryset)
-    img_start = re.compile('\[img', re.IGNORECASE)
-    img_end = re.compile('\[/img\]', re.IGNORECASE)
-    for i, tpm in enumerate(pm_list):
-        popped = False
-        if tpm.sender==request.user and tpm.deleted:
-            pm_list.pop(i)
-            popped=True
-        try:
-            recip = Recipient.objects.get(message=tpm,
-                    recipient=request.user, read=False)
-            if not popped and recip.deleted:
+        queryset = PM.objects.filter(root_parent=pm.root_parent).filter(Q(
+            Q(sender=user) | Q(
+            recipient__recipient=user))).order_by(
+            'created_at').select_related('body', 'subject',
+                'deleted','sender__username').distinct()
+
+        pm_list = list(queryset)
+        img_start = re.compile('\[img', re.IGNORECASE)
+        img_end = re.compile('\[/img\]', re.IGNORECASE)
+        for i, tpm in enumerate(pm_list):
+            popped = False
+            if tpm.sender == user and tpm.deleted:
                 pm_list.pop(i)
-            recip.read=True
-            recip.save()
-        except Recipient.DoesNotExist:
-            pass
-        
-    reply = copy(pm)
-    reply.body = ''
-    reply.root_parent = pm.root_parent
-    reply_recs = pm.sender.username
-        
-    if request.method == 'POST':
-        form =forms.NewPMForm(request.POST,
-                instance=reply)
-        if form.is_valid():
-            new_pm = form.save(request.user)
-            new_pm.root_parent = pm.root_parent
-            new_pm.save()
-            return HttpResponseRedirect(reverse('inbox'))
-    else:
+                popped=True
+            try:
+                recip = Recipient.objects.get(message=tpm,
+                        recipient=user, read=False)
+                if not popped and recip.deleted:
+                    pm_list.pop(i)
+                recip.read=True
+                recip.save()
+            except Recipient.DoesNotExist:
+                pass
+
+        reply = copy(pm)
+        reply.body = ''
         form =forms.NewPMForm(instance=reply,
-                initial={'recs' : reply_recs})
-    hide = False
-    if not request.user.get_profile().show_images:
-        hide=True
-    return render_to_response("pms/show_thread.html",
-            { 'pm_list' : queryset,
-              'pm' : pm,
-              'form' : form,
-              'thread' : True,
-              'reply_all' : pm.get_reply_all(request.user), 
-              'hide' : hide, },
-            context_instance = RequestContext(request))
-    
-        
-def del_pm(request, pm_id):
-    """ delete pm pm_id for a user """
-    pm = get_object_or_404(PM,pk=pm_id)
-    if request.method == 'POST' and request.POST['confirm'] == 'true':
+                initial={'recs' : pm.sender.username })
+
+        hide = False
+        if not user.get_profile().show_images:
+            hide=True
+        ctx = { 'pm_list' : queryset,
+                'pm' : pm,
+                'form' : form,
+                'thread' : True,
+                #TODO: This isn't displayed
+                'reply_all' : pm.get_reply_all(user),
+                'hide' : hide, }
+        return ctx
+
+class DeletePM(LoginRequiredMixin, View):
+    # Should this be a DELETE?
+    def post(self, request, **kwargs):
+        pm = get_object_or_404(PM,pk=kwargs['pm_id'])
         if pm.sender == request.user:
             pm.deleted = True
             pm.save()
@@ -238,17 +226,15 @@ def del_pm(request, pm_id):
             pm.body = ''
             pm.subject = 'deleted'
             pm.save()
-    return HttpResponseRedirect(reverse('inbox'))
+        return HttpResponseRedirect(reverse('inbox'))
 
-@login_required
-def get_quote(request, id):
-    """ if allowed get a quote of pm id """
-    pm = get_object_or_404(PM, pk=id)
-    if not pm.check_privacy(request.user):
-        raise Http404
-    user = pm.sender
+class PMQuote(LoginRequiredMixin, TemplateView):
+    template_name = "pms/get_quote.html"
 
-    return render_to_response("pms/get_quote.html", {
-            'pm': pm,
-            'user': user,
-    })
+    def get_context_data(self, **kwargs):
+        pm = get_object_or_404(PM, pk=kwargs['pm_id'])
+        if not pm.check_privacy(self.request.user):
+            raise Http404
+        user = pm.sender
+
+        return { 'pm': pm, 'user': user,}

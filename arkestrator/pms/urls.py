@@ -1,14 +1,14 @@
 from django.conf.urls.defaults import *
+import views
 
 
 urlpatterns = patterns('arkestrator.pms',
-    url(r"^new_pm/$", 'views.new_pm', name='new-pm'),
-    url(r"^new_pm/(?P<rec_id>\d+)/$", 'views.new_pm', name='new-pm'),
-    url(r"^inbox/$", 'views.inbox', name='inbox'),
-    url(r"^outbox/$", 'views.outbox', name='outbox'),
-    url(r"^mark_read/$", 'views.mark_read', name='mark-read'),
-    url(r"^(?P<pm_id>\d+)/$", 'views.view_pm',name='view-pm'),
-    url(r"^(?P<pm_id>\d+)/show_thread/$", 'views.pm_thread',name='pm-thread'),
-    url(r"^del/(?P<pm_id>\d+)/$", 'views.del_pm',name='del-pm'),
-    url(r"^quote/(?P<id>\d+)/$", 'views.get_quote', name='get-pm-quote'),
+    url(r"^new_pm/$", views.NewPM.as_view(), name='new-pm'),
+    url(r"^inbox/$", views.Inbox.as_view(), name='inbox'),
+    url(r"^outbox/$", views.Outbox.as_view(), name='outbox'),
+    url(r"^mark_read/$", views.MarkRead.as_view(), name='mark-read'),
+    url(r"^(?P<pm_id>\d+)/$", views.PMDetail.as_view(), name='view-pm'),
+    url(r"^(?P<pm_id>\d+)/show_thread/$", views.PMThread.as_view(), name='pm-thread'),
+    url(r"^del/(?P<pm_id>\d+)/$", views.DeletePM.as_view(), name='del-pm'),
+    url(r"^quote/(?P<pm_id>\d+)/$", views.PMQuote.as_view(), name='get-pm-quote'),
 )

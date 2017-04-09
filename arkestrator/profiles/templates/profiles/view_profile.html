@@ -12,7 +12,7 @@
     <div id="submenu">
         <ul>
             {% if not view_user.id == user.id %}
-                <li class="submenuitem"><a href="{% url new-pm view_user.id %}" title="Send {{view_user.username }} a pm">Send {{ view_user.username }} a message</a></li>
+            <li class="submenuitem"><a href="{% url new-pm %}?recipient={{ view_user.username }}" title="Send {{view_user.username }} a pm">Send {{ view_user.username }} a message</a></li>
                 <li class="submenuitem"><a href="{% url threads-by view_user.id %}" title="View threads by {{ view_user.username }}">Threads by {{view_user.username}} ({{ view_user.get_profile.total_threads }})</a></li>
                 <li class="submenuitem"><a href="{% url posts-by view_user.id %}" title="View posts by {{ view_user.username }}">Posts by {{view_user.username}} ({{ view_user.get_profile.total_posts }})</a></li>
             {% else %}
