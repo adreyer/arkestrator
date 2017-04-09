@@ -46,7 +46,10 @@ urlpatterns = patterns('',
         views.NewThreadView.as_view(),
         name='new-thread'),
 
-    url(r"^threads/mark_read/$",views.mark_read,name='mark-threads-read'),
+    url(r"^threads/mark_read/$",
+        views.MarkReadView.as_view(),
+        name='mark-threads-read'),
+
     url(r"^profiles/(?P<by>\d+)/threads/$", views.ThreadsByList.as_view(),
             name='threads-by'),
     url(r"^profiles/(?P<id>\d+)/posts/$", views.posts_by,

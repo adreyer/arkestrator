@@ -263,29 +263,29 @@ class StickyView(LoginRequiredMixin, View):
         return redirect(reverse('list-threads'))
 
 
-@login_required
-def mark_read(request):
-    """ mark all threads on the first page read """
-    if request.method == 'POST' and request.POST['confirm'] == 'true':
-        queryset = Thread.objects.order_by("-stuck","-last_post")
-        count = queryset.count()
-        if count > THREADS_PER_PAGE:
-            thread_list = queryset[0:THREADS_PER_PAGE]
-        else:
-            thread_list = queryset[0:count]
-        for t in thread_list:
-            try:
-                lr = LastRead.objects.get(
-                        user = request.user,thread = t)
-                lr.timestamp = datetime.datetime.now()
-                lr.post = t.last_post
-            except LastRead.DoesNotExist:
-                lr = LastRead(user = request.user,
-                        thread = t,
-                        post = t.last_post,
-                        read_count = 0)
-            lr.save()
-    return HttpResponseRedirect(reverse('list-threads'))
+class MarkReadView(LoginRequiredMixin, View):
+    # TODO untested
+    def post(self, request, **kwargs):
+        if request.POST['confirm'] == 'true':
+            queryset = Thread.objects.order_by("-stuck","-last_post")
+            count = queryset.count()
+            if count > THREADS_PER_PAGE:
+                thread_list = queryset[0:THREADS_PER_PAGE]
+            else:
+                thread_list = queryset[0:count]
+            for t in thread_list:
+                try:
+                    lr = LastRead.objects.get(
+                            user = request.user,thread = t)
+                    lr.timestamp = datetime.datetime.now()
+                    lr.post = t.last_post
+                except LastRead.DoesNotExist:
+                    lr = LastRead(user = request.user,
+                            thread = t,
+                            post = t.last_post,
+                            read_count = 0)
+                lr.save()
+        return redirect(reverse('list-threads'))
 
 
 @login_required
