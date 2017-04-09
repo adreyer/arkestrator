@@ -178,6 +178,7 @@ class PostList(LoginRequiredMixin, TemplateView):
         }
         return ctx
 
+    @transaction.commit_on_success
     def post(self, request, **kwargs):
         thread_id = kwargs['thread_id']
         thread = get_object_or_404(Thread, pk=thread_id)
@@ -203,36 +204,37 @@ class PostView(PostList):
         return super(PostView, self).get_context_data(**kwargs)
 
 
-@login_required
-@transaction.commit_on_success
-def new_thread(request):
-    """ create a new thead """
-    if request.method == 'POST':
+class NewThreadView(LoginRequiredMixin, TemplateView):
+    template_name ="board/new_thread.html"
+
+    @transaction.commit_on_success
+    def post(self, request, **kwargs):
         thread = Thread(
-            creator = request.user,
-            site = Site.objects.get_current(),
+            creator=request.user,
+            site=Site.objects.get_current(),
         )
         post = Post(
-            thread = thread,
-            creator = request.user,
-            posted_from = get_client_ip(request)
+            thread=thread,
+            creator=request.user,
+            posted_from=get_client_ip(request)
         )
-        thread_form = forms.ThreadForm(request.POST, instance = thread)
+        thread_form = forms.ThreadForm(request.POST, instance=thread)
         post_form = forms.PostForm(request.POST, instance = post)
         if thread_form.is_valid() and post_form.is_valid():
             thread = thread_form.save()
             post.thread = thread
-            post_form = forms.PostForm(request.POST, instance = post)
+            post_form = forms.PostForm(request.POST, instance=post)
             post_form.save()
             request.posting_users.add_to_set(request.user.id)
-            return HttpResponseRedirect(reverse('list-threads'))
-    else:
-        thread_form = forms.ThreadForm()
-        post_form = forms.PostForm()
-    return render_to_response("board/new_thread.html",{
-            'thread_form' : thread_form,
-            'post_form' : post_form,
-        }, context_instance = RequestContext(request))
+            return redirect(reverse('list-threads'))
+        else:
+            return redirect(reverse('new-thread'))
+
+    def get_context_data(self, **kwargs):
+        return {
+            'thread_form': forms.ThreadForm(),
+            'post_form': forms.PostForm(),
+        }
 
 @super_no_cache
 @login_required

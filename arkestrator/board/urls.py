@@ -37,7 +37,11 @@ urlpatterns = patterns('',
         name='lock-thread'),
     url(r"^threads/(?P<id>\d+)/history/$",views.thread_history,
         name='thread-history'),
-    url(r"^threads/new/$",views.new_thread,name='new-thread'),
+
+    url(r"^threads/new/$",
+        views.NewThreadView.as_view(),
+        name='new-thread'),
+
     url(r"^threads/mark_read/$",views.mark_read,name='mark-threads-read'),
     url(r"^profiles/(?P<by>\d+)/threads/$", views.ThreadsByList.as_view(),
             name='threads-by'),
