@@ -15,11 +15,11 @@ urlpatterns = patterns('',
     (r'^profiles/', include('arkestrator.profiles.urls')),
     (r'^invites/', include('arkestrator.invites.urls')),
     (r'^pms/', include('arkestrator.pms.urls')),
+    # TODO REGRESSION restore event support
     (r'^events/', include('arkestrator.events.urls')),
     (r'^gallery/', include('arkestrator.gallery.urls')),
     (r'^mod/', include('arkestrator.moderation.urls')),
     url(r'^active/$', 'arkestrator.util.views.active_users',
         name='active-users'),
-    url(r'^quote/(?P<id>\d+)/$', 'arkestrator.board.views.get_quote', name='get-quote'),
     (r'^search/', include('haystack.urls')),
 )

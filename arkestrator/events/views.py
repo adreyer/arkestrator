@@ -15,8 +15,6 @@ from django.views.generic import list_detail
 from django.core.paginator import Paginator, InvalidPage
 from django.contrib.auth.models import User
 
-from arkestrator.board.views import view_thread
-
 from models import Event, Market
 import forms
 
@@ -24,6 +22,7 @@ import forms
 @login_required
 def view_event(request, ev_id):
     """ view event ev_id """
+    # TODO REGRESSION we need to re-add support for events
     event = get_object_or_404(Event,pk=ev_id)
     return view_thread(request,event.thread.id)
 
