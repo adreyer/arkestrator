@@ -102,12 +102,70 @@ class ThreadView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         thread_id = kwargs['thread_id']
         thread = get_object_or_404(Thread, pk=thread_id)
-        posts = thread.post_set.order_by('id').select_related('creator')
         start = kwargs.get('start', 0)
         expand = kwargs.get('expand', False)
         hide = kwargs.get('hide')
 
-        # TODO lastread / expand
+        posts = thread.post_set.order_by('id').select_related('creator')
+        # TODO REGRESSION we broke re-collapsing; threads are collapsed correctly
+        # and can then be "show all"'d but you can't collapse again. all of
+        # that should be ported to query paramters, anyway, and this can be
+        # fixed then.
+
+        # TODO REGRESSION handle events
+
+        # TODO get or create, yo
+        lastread = LastRead(
+            user=self.request.user,
+            thread=thread,
+            read_count=0)
+        try:
+            lastread = LastRead.objects.get(
+                user=self.request.user,
+                thread=thread)
+        except LastRead.DoesNotExist:
+            if event:
+                cache.delete('event-count:%d'%(self.request.user.id))
+
+        if not expand:
+            collapse_size = self.request.user.get_profile().collapse_size
+            # TODO we're literally fetching all the posts we *do not* want to display
+            if start:
+                temp_posts = posts.filter(pk__lte=start).reverse()
+            else:
+                temp_posts = posts.filter(created_at__lte=lastread.timestamp).reverse()
+            if temp_posts.count() > collapse_size:
+                post_start = temp_posts[collapse_size].id
+                posts = posts.filter(pk__gte=post_start)
+            else:
+                expand = True
+
+        posts = list(posts)
+
+        try:
+            # TODO clean this up
+            if (not hide is False) and (hide or not self.request.user.get_profile().show_images):
+                hide = True
+        except ObjectDoesNotExist:
+            pass
+
+        lastread.timestamp = datetime.datetime.now()
+        lastread.read_count += 1
+        lastread.post = posts[-1]
+        lastread.save()
+        # This del is confusing; seems to interact with the instance_memcache
+        # decorator.
+        del thread.total_views
+
+        fav = False
+        if thread.favorite.filter(id=self.request.user.id):
+            fav = True
+
+        if len(posts)< 10:
+            expand = True
+
+        if not start and posts:
+            start = posts[0].id
 
         ctx = {
             'object_list': posts,
@@ -116,7 +174,7 @@ class ThreadView(LoginRequiredMixin, TemplateView):
             'expand': expand,
             'hide': hide,
             'start': start,
-            'fav': False, # TODO
+            'fav': fav,
         }
         return ctx
 
@@ -137,134 +195,13 @@ class ThreadView(LoginRequiredMixin, TemplateView):
             return redirect(reverse('list-threads'))
         return redirect(reverse('view-thread', args=[thread_id]))
 
-@login_required
-def view_thread(request,id,start=False,expand=False,hide=None):
-    """ display thread  id for a user
-
-        args:
-        id: the thread id
-        start:  the first post to show otherwise prefs and collapsing are used
-        expand: show all posts in the thread
-        hide:  hide images in the thread
-
-    """
-    thread = get_object_or_404(Thread,pk=id)
-    try:
-        event = Event.objects.get(thread=thread)
-    except Event.DoesNotExist:
-        event = None
-
-    #try to make a new post in the thread
-    if request.method == 'POST':
-        if thread.locked:
-            return HttpResponseRedirect(reverse('list-threads'))
-        post = Post(
-            thread = thread,
-            creator = request.user,
-            posted_from = get_client_ip(request)
-        )
-        form = forms.PostForm(request.POST, instance = post)
-        if form.is_valid():
-            form.save()
-            request.posting_users.add_to_set(request.user.id)
-            return HttpResponseRedirect(reverse('list-threads'))
-    else:
-        form = forms.PostForm()
-
-    queryset=thread.post_set.order_by(
-        "id").select_related('creator')
-
-    #try to collapse the thread appriately
-    try:
-        lastread = LastRead.objects.get(
-            user = request.user,
-            thread = thread
-        )
-        if not expand:
-            coll_size = request.user.get_profile().collapse_size
-            if start:
-                tset = queryset.filter(pk__lte=start).reverse()
-            else:
-                tset = queryset.filter(
-                    created_at__lte=lastread.timestamp).reverse()
-            if tset.count() >coll_size:
-                tstart = tset[coll_size].id
-                queryset = queryset.filter(pk__gte=tstart)
-            else:
-                expand = True
-    except LastRead.DoesNotExist:
-        lastread = LastRead(user = request.user,
-            thread = thread,
-            read_count = 0,
-        )
-        if event:
-            cache.delete('event-count:%d'%(request.user.id))
-    if not expand and not start and queryset.count() < 10:
-        # TODO hm.
-        queryset = thread.default_post_list
-        queryset = queryset=thread.post_set.order_by(
-            "created_at").select_related('creator')
-        queryset = queryset[max(0,queryset.count()-10):]
-
-    post_list = list(queryset)
-
-    #hide images in the thread if appropriate
-    try:
-        if (not hide is False) and (hide or not request.user.get_profile().show_images):
-            hide = True
-    except ObjectDoesNotExist:
-        pass
-
-    lastread.timestamp = datetime.datetime.now()
-    lastread.read_count += 1
-    lastread.post = post_list[-1]
-    lastread.save()
-    del thread.total_views
-
-    fav = False
-    if thread.favorite.filter(id=request.user.id):
-        fav = True
-
-    if len(post_list)< 10:
-        expand = True
-
-    if not start and post_list:
-        start = post_list[0].id
-
-    #if this is an event display it as such
-    if event:
-        event = Event.objects.get(thread=thread)
-        return render_to_response("events/view_event.html", {
-        'object_list' : post_list,
-        'thread' : thread,
-        'form' : form,
-        'expand': expand,
-        'hide': hide,
-        'start': start,
-        'fav' : fav,
-        'event' : event,
-        'rsvp_form' : RSVPForm(),
-        'rsvp_list' : event.rsvp_list(),
-        },
-        context_instance = RequestContext(request))
-
-    return render_to_response("board/post_list.html", {
-        'object_list' : post_list,
-        'thread' : thread,
-        'form' : form,
-        'expand': expand,
-        'hide': hide,
-        'start': start,
-        'fav' : fav,
-        },
-        context_instance = RequestContext(request))
-
-@login_required
-def view_post(request, id):
-    """  view a thread starting with post num post id """
-    post = get_object_or_404(Post, pk=id)
-    return view_thread(request, id=post.thread.id,start=id)
-
+class PostView(ThreadList):
+    def get_context_data(self, **kwargs):
+        # TODO REGRESSION why isn't post_id in kwargs? it is captured in the
+        # url.
+        post = get_object_or_404(Post, pk=kwargs['post_id'])
+        kwargs['start'] = post.id
+        return super(PostView, self).get_context_data(thread_id, **kwargs)
 
 @login_required
 @transaction.commit_on_success
