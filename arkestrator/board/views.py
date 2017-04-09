@@ -305,6 +305,17 @@ class PostsByView(LoginRequiredMixin, ListView):
         context['poster'] = self.poster.username
         return context
 
+class GetQuoteView(LoginRequiredMixin, TemplateView):
+    template_name = 'board/get_quote.html'
+    def get_context_data(self, **kwargs):
+        post = get_object_or_404(Post, pk=kwargs['post_id'])
+        user = get_object_or_404(User, pk=post.creator.id)
+        return {
+            'post': post,
+            'user': user,
+        }
+
+# TODO delete this once other apps are ported
 @login_required
 def get_quote(request, id):
     """ get a quote of post id """

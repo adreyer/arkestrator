@@ -57,8 +57,14 @@ urlpatterns = patterns('',
         views.PostsByView.as_view(),
         name='posts-by'),
 
-    url(r"^posts/(?P<post_id>\d+)/$",views.PostView.as_view(), name='view-post'),
-    url(r"^quote/(?P<id>\d+)/$", views.get_quote, name='get-quote'),
+    url(r"^posts/(?P<post_id>\d+)/$",
+        views.PostView.as_view(),
+        name='view-post'),
+
+    url(r"^quote/(?P<post_id>\d+)/$",
+        views.GetQuoteView.as_view(),
+        name='get-quote'),
+
     url(r"^threads/(?P<id>\d+)/favorite/$", views.favorite_thread,
         name='favorite'),
     url(r"^threads/favorites/$", views.FavoritesList.as_view(),
