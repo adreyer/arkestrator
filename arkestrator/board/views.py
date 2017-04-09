@@ -236,19 +236,19 @@ class NewThreadView(LoginRequiredMixin, TemplateView):
             'post_form': forms.PostForm(),
         }
 
-@super_no_cache
-@login_required
-def thread_history(request,id=None):
-    """ show who has read a thread and when they last did """
-    thread = get_object_or_404(Thread,pk=id)
 
-    queryset = LastRead.objects.filter(thread = thread).order_by("-timestamp")
-    queryset = queryset.select_related('user')
+class ThreadHistoryView(LoginRequiredMixin, TemplateView):
+    template_name='board/thread_history.html'
 
-    return render_to_response("board/thread_history.html", {
-        'thread' : thread,
-        'read_list' : queryset.all(),
-    }, context_instance = RequestContext(request))
+    def get_context_data(self, **kwargs):
+        thread = get_object_or_404(Thread,pk=kwargs['thread_id'])
+
+        queryset = LastRead.objects.filter(thread = thread).order_by("-timestamp")
+        queryset = queryset.select_related('user')
+        return {
+            'thread': thread,
+            'read_list': queryset.all(),
+        }
 
 @login_required
 @permission_required('board.can_sticky')

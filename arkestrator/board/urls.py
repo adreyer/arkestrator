@@ -35,7 +35,9 @@ urlpatterns = patterns('',
         name='sticky'),
     url(r"^threads/(?P<id>\d+)/lock/$",views.lock_thread,
         name='lock-thread'),
-    url(r"^threads/(?P<id>\d+)/history/$",views.thread_history,
+
+    url(r"^threads/(?P<thread_id>\d+)/history/$",
+        views.ThreadHistoryView.as_view(),
         name='thread-history'),
 
     url(r"^threads/new/$",

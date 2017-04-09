@@ -72,6 +72,7 @@ def instance_memcache(key, timeout=None):
         return InstanceMethodCache(key, fn, timeout)
     return _instance_memcache
 
+# TODO can probably delete this.
 def super_no_cache(fn):
     def _super_no_cache(*args, **kwargs):
         response = fn(*args, **kwargs)
