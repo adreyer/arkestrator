@@ -31,8 +31,10 @@ urlpatterns = patterns('',
         'expand' : False, 'hide' : False,
     }, name='view-thread-show'),
 
-    url(r"^threads/(?P<id>\d+)/sticky/$",views.sticky,
+    url(r"^threads/(?P<thread_id>\d+)/sticky/$",
+        views.StickyView.as_view(),
         name='sticky'),
+
     url(r"^threads/(?P<id>\d+)/lock/$",views.lock_thread,
         name='lock-thread'),
 

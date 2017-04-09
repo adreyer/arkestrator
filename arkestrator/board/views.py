@@ -16,7 +16,7 @@ from django.http import HttpResponseRedirect, Http404
 from django.template import RequestContext
 from django.views.generic import list_detail
 from django.views.generic.list import ListView
-from django.views.generic.base import TemplateView
+from django.views.generic.base import TemplateView, View
 from django.db.models.signals import post_save
 from django.db.models import Sum, Count, Max, F
 from django.core.cache import cache
@@ -250,18 +250,18 @@ class ThreadHistoryView(LoginRequiredMixin, TemplateView):
             'read_list': queryset.all(),
         }
 
-@login_required
-@permission_required('board.can_sticky')
-def sticky(request,id):
-    """ if the user has permissions sticky thread id """
-    thread = get_object_or_404(Thread,pk=id)
-    if request.method == 'POST':
+class StickyView(LoginRequiredMixin, View):
+    # TODO REGRESSION adapt permission_required for class view
+    # @permission_required('board.can_sticky')
+    def post(self, request, **kwargs):
+        thread = get_object_or_404(Thread,pk=kwargs['thread_id'])
         if request.POST['sticky'] == 'sticky':
             thread.stuck = True
         elif request.POST['sticky'] == 'unsticky':
             thread.stuck = False
         thread.save()
-    return HttpResponseRedirect(reverse('list-threads'))
+        return redirect(reverse('list-threads'))
+
 
 @login_required
 def mark_read(request):
