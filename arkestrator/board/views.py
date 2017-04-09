@@ -77,9 +77,9 @@ class ThreadList(LoginRequiredMixin, ListView):
 
     def favorites(self, thread_list, user):
         """ annotate a queryset of threads with a users favorites """
-        favs = Favorite.objects.filter(
-                                thread__in=thread_list,
-                                user=user).values('thread__id')
+        favs = [f['thread__id'] for f in Favorite.objects.filter(
+            thread__in=thread_list,
+            user=user).values('thread__id')]
 
         for thread in thread_list:
             thread.fav = thread.id in favs
@@ -89,7 +89,7 @@ class FavoritesList(ThreadList):
     """ subclass of ThreadList that displays the current users favorites """
 
     def get_queryset(self):
-        return Thread.objects.filter(favorite__user=self.request.user)
+        return Thread.objects.filter(favorites__user=self.request.user)
 
 class ThreadsByList(ThreadList):
     """ Thread list takes a single argument the user id of the user """
@@ -339,18 +339,14 @@ class LockThreadView(LoginRequiredMixin, View):
         thread.save()
         return redirect(reverse('list-threads'))
 
-
-@login_required
-def favorite_thread(request, id):
-    """ add thread id to the users favorited """
-    thread = get_object_or_404(Thread,pk=id)
-    if request.method == 'POST':
+class FavoriteThreadView(LoginRequiredMixin, View):
+    def post(self, request, **kwargs):
+        thread = get_object_or_404(Thread,pk=kwargs['thread_id'])
         if request.POST['fav'] == 'add':
             thread.favorite.add(request.user)
         elif request.POST['fav'] == 'remove':
             thread.favorite.remove(request.user)
-    return HttpResponseRedirect(reverse('list-threads'))
-
+        return redirect(reverse('list-threads'))
 
 @login_required
 def lol_search(request):

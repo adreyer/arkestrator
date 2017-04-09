@@ -66,7 +66,8 @@ urlpatterns = patterns('',
         views.GetQuoteView.as_view(),
         name='get-quote'),
 
-    url(r"^threads/(?P<id>\d+)/favorite/$", views.favorite_thread,
+    url(r"^threads/(?P<thread_id>\d+)/favorite/$",
+        views.FavoriteThreadView.as_view(),
         name='favorite'),
 
     url(r"^threads/favorites/$", views.FavoritesList.as_view(),
