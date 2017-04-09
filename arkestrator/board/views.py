@@ -288,20 +288,22 @@ class MarkReadView(LoginRequiredMixin, View):
         return redirect(reverse('list-threads'))
 
 
-@login_required
-def posts_by(request, id):
-    """ list all posts by user id """
-    poster = get_object_or_404(User,pk=id)
-    queryset = Post.objects.filter(creator = poster).order_by(
-        '-created_at').select_related('thread__subject')
+class PostsByView(LoginRequiredMixin, ListView):
+    """List all posts by a given user."""
+    template_name = 'board/posts_by.html'
+    paginate_by = 49
 
-    return list_detail.object_list(
-            request,
-            queryset = queryset,
-            paginate_by = 49,
-            template_name = "board/posts_by.html",
-            extra_context = {"poster" : poster.username}
-            )
+    def get_queryset(self):
+        poster = get_object_or_404(User,pk=self.kwargs['user_id'])
+        self.poster = poster
+        return Post.objects.filter(creator=poster)\
+                           .order_by('-created_at')\
+                           .select_related('thread__subject')
+
+    def get_context_data(self, **kwargs):
+        context = super(PostsByView, self).get_context_data(**kwargs)
+        context['poster'] = self.poster.username
+        return context
 
 @login_required
 def get_quote(request, id):

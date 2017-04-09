@@ -52,8 +52,11 @@ urlpatterns = patterns('',
 
     url(r"^profiles/(?P<by>\d+)/threads/$", views.ThreadsByList.as_view(),
             name='threads-by'),
-    url(r"^profiles/(?P<id>\d+)/posts/$", views.posts_by,
-            name='posts-by'),
+
+    url(r"^profiles/(?P<user_id>\d+)/posts/$",
+        views.PostsByView.as_view(),
+        name='posts-by'),
+
     url(r"^posts/(?P<post_id>\d+)/$",views.PostView.as_view(), name='view-post'),
     url(r"^quote/(?P<id>\d+)/$", views.get_quote, name='get-quote'),
     url(r"^threads/(?P<id>\d+)/favorite/$", views.favorite_thread,
