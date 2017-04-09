@@ -73,5 +73,7 @@ urlpatterns = patterns('',
     url(r"^threads/favorites/$", views.FavoritesList.as_view(),
             { 'fav' : True }, name='favorite-list'),
 
-    url(r"^threads/search/$", views.lol_search, name='search-threads'),
+    url(r"^threads/search/$",
+        views.ThreadSearch.as_view(),
+        name='search-threads'),
 )

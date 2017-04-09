@@ -12,8 +12,6 @@ from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Q
 from django.shortcuts import render_to_response,get_object_or_404, redirect
-from django.http import HttpResponseRedirect, Http404
-from django.template import RequestContext
 from django.utils.decorators import method_decorator
 from django.views.generic import list_detail
 from django.views.generic.list import ListView
@@ -348,24 +346,18 @@ class FavoriteThreadView(LoginRequiredMixin, View):
             thread.favorite.remove(request.user)
         return redirect(reverse('list-threads'))
 
-@login_required
-def lol_search(request):
-    'lol search'
+class ThreadSearch(ThreadList):
+    object_name = 'thread'
+    def get_queryset(self):
+        query = self.request.GET.get('query', 'sigh')
+        self.query = query
+        return Thread.objects\
+                     .filter(subject__icontains=query)\
+                     .order_by('-last_post__id')\
+                     .select_related("creator","last_post","last_post__creator","favorite")
 
-    query = request.GET.get('query', 'rev is the best')
-    
-    queryset = Thread.objects.filter(subject__icontains=query).order_by(
-        '-last_post__id')
-    
-    return list_detail.object_list(
-        request,
-        queryset = queryset,
-        template_object_name = 'thread',
-        paginate_by = 49,
-        template_name = "board/thread_list.html",
-        extra_context = { 
-            'search_query' : query,
-            'paginator_query' : urllib.urlencode({ 'query' : query })
-        },
-    )
-
+    def get_context_data(self, **kwargs):
+        ctx = super(ThreadSearch, self).get_context_data(**kwargs)
+        ctx['search_query'] = self.query
+        ctx['paginator_query'] = urllib.urlencode({ 'query' : self.query })
+        return ctx
