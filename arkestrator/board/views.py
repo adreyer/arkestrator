@@ -1,18 +1,13 @@
 import datetime
-import random
-import sys
-import string
-import re
 import urllib
 
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import permission_required
 from django.contrib.sites.models import Site
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.db import transaction
-from django.shortcuts import render_to_response,get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.utils.decorators import method_decorator
-from django.views.generic import list_detail
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView, View
 from django.core.cache import cache
