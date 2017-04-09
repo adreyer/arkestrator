@@ -307,18 +307,6 @@ class GetQuoteView(LoginRequiredMixin, TemplateView):
             'user': user,
         }
 
-# TODO delete this once other apps are ported
-@login_required
-def get_quote(request, id):
-    """ get a quote of post id """
-    post = get_object_or_404(Post, pk=id)
-    user = get_object_or_404(User, pk=post.creator.id)
-
-    return render_to_response("board/get_quote.html", {
-            'post': post,
-            'user': user,
-    })
-
 class LockThreadView(LoginRequiredMixin, View):
     @method_decorator(permission_required('board.can_lock'))
     def post(self, request, **kwargs):
