@@ -96,7 +96,7 @@ class ThreadsByList(ThreadList):
     def get_queryset(self):
         return Thread.objects.filter(creator_id = self.args[0])
 
-class ThreadView(LoginRequiredMixin, TemplateView):
+class PostList(LoginRequiredMixin, TemplateView):
     template_name = 'board/post_list.html'
 
     def get_context_data(self, **kwargs):
@@ -195,13 +195,13 @@ class ThreadView(LoginRequiredMixin, TemplateView):
             return redirect(reverse('list-threads'))
         return redirect(reverse('view-thread', args=[thread_id]))
 
-class PostView(ThreadList):
+class PostView(PostList):
     def get_context_data(self, **kwargs):
-        # TODO REGRESSION why isn't post_id in kwargs? it is captured in the
-        # url.
         post = get_object_or_404(Post, pk=kwargs['post_id'])
         kwargs['start'] = post.id
-        return super(PostView, self).get_context_data(thread_id, **kwargs)
+        kwargs['thread_id'] = post.thread.id
+        return super(PostView, self).get_context_data(**kwargs)
+
 
 @login_required
 @transaction.commit_on_success

@@ -16,7 +16,7 @@ urlpatterns = patterns('',
     (r'^invites/', include('arkestrator.invites.urls')),
     (r'^pms/', include('arkestrator.pms.urls')),
     # TODO REGRESSION restore event support
-    # (r'^events/', include('arkestrator.events.urls')),
+    (r'^events/', include('arkestrator.events.urls')),
     (r'^gallery/', include('arkestrator.gallery.urls')),
     (r'^mod/', include('arkestrator.moderation.urls')),
     url(r'^active/$', 'arkestrator.util.views.active_users',
