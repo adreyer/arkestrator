@@ -1,6 +1,6 @@
 from django.conf.urls.defaults import *
 from django.views.decorators.cache import cache_page, cache_control
-from django.views.generic.list_detail import object_detail
+from django.views.generic.list import ListView
 from django.views.generic.simple import direct_to_template
 from django.db.models.signals import post_save
 
@@ -8,7 +8,7 @@ from models import Theme
 from views import edit_theme
 from arkestrator.decorators import better_cache
 
-theme_css = better_cache('theme-css', 600)(object_detail)
+theme_css = better_cache('theme-css', 600)(ListView.as_view)
 def invalidate_theme(sender, instance, signal, *args, **kwargs):
     theme_css.invalidate(instance.id)
 post_save.connect(invalidate_theme, sender = Theme)
