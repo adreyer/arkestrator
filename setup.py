@@ -10,7 +10,7 @@ setup(
     include_package_data = True,
     install_requires=[
 	'bbking==0.0.1',
-        'django==1.5.12',
+        'django==1.6.11',
         'south==0.7.3',
         'python-memcached==1.48',
         'pytz==2014.7',
