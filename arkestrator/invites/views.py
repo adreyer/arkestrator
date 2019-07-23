@@ -34,6 +34,7 @@ class InviteListView(ListView):
                 approved=False).order_by('-created_on')
 
     def get_context_data(self, **kwargs):
+        ctx = super(InviteListView, self).get_context_data(**kwargs)
         request = self.request
         if request.method == 'POST':
             form = forms.NewInviteForm(request.POST)
@@ -44,7 +45,8 @@ class InviteListView(ListView):
         else:
             form = forms.NewInviteForm()
 
-        return {'form': form}
+        ctx['form'] = form
+        return ctx
 
 
 @transaction.commit_on_success()
