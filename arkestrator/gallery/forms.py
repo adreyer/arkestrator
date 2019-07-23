@@ -1,9 +1,9 @@
+import json
 import urllib
 import base64
 
 from django.contrib.auth.models import User
 from django import forms
-from django.utils import simplejson
 
 from arkestrator.gallery.models import Image
 from arkestrator.gallery.key_file import key
@@ -25,7 +25,7 @@ class IMGForm(forms.Form):
                     'key': key,
                     'image' : base64.b64encode(image)})
         response = urllib.urlopen('http://imgur.com/api/upload.json',data)
-        rsp = simplejson.loads(response.read())['rsp']
+        rsp = json.loads(response.read())['rsp']
         print rsp
         if rsp['stat'] == 'fail':
             raise forms.ValidationError('imgur error:' + rsp['error_msg'])
