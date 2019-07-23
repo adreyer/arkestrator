@@ -17,7 +17,7 @@
             <link rel="stylesheet" href="{{ user.theme.get_absolute_url }}"
                 type="text/css" media="screen" />
         {% else %}
-            <link rel="stylesheet" href="{% url default-theme-css %}"
+            <link rel="stylesheet" href="{% url 'default-theme-css' %}"
                 type="text/css" media="screen" />
         {% endif %}
     {% endblock %}
@@ -32,13 +32,13 @@
     <h1>{{ site_name }}</h1>
     {% endblock %}
     <div id="search_box">
-    <form method="get" action="{% url search-threads %}">
+    <form method="get" action="{% url 'search-threads' %}">
         <input type="text" name="query" value="{{ search_query }}" />
         <input type="submit" value="Search" />
     </form>
     </div>
     <div id="status">{{ thread_count }} thread{{ thread_count|pluralize }}, 
-        <a href="{% url active-users %}" title="View active users">{% spaceless %}
+        <a href="{% url 'active-users' %}" title="View active users">{% spaceless %}
             {{ online_users }} active user{{ online_users|pluralize }},
             {{ posting_users }} posting user{{ posting_users|pluralize }}
         {% endspaceless %}</a>
@@ -46,33 +46,33 @@
     {% if user.is_authenticated %}
     <div id="user">
         <ul>
-            <li class="menuitem"><a href="{% url view-profile user.id %}" title="View and edit your profile">{{ user.username }}</a></li>
-            <li class="menuitem"><a href="{% url django.contrib.auth.views.logout %}" title="Log out">Log out</a></li>
+            <li class="menuitem"><a href="{% url 'view-profile' user.id %}" title="View and edit your profile">{{ user.username }}</a></li>
+            <li class="menuitem"><a href="{% url 'django.contrib.auth.views.logout' %}" title="Log out">Log out</a></li>
         </ul>
     </div>
     {% endif %}
     <div id="menu">
         <ul>
-            <li class="menuitem"><a href="{% url list-threads %}" title="Thread list">Index</a></li>
-            <li class="menuitem"><a href="{% url inbox %}" title="Private messages">
+            <li class="menuitem"><a href="{% url 'list-threads' %}" title="Thread list">Index</a></li>
+            <li class="menuitem"><a href="{% url 'inbox' %}" title="Private messages">
                 {% if new_pms %}
                     <span class="urgent">Messages ({{ new_pms }})</span>
                 {% else %}Messages{% endif %}</a></li>
-            <li class="menuitem"><a href="{% url list-events %}" title="Event list">
+            <li class="menuitem"><a href="{% url 'list-events' %}" title="Event list">
                 {% if new_events %}
                     <span class="urgent">Events ({{ new_events }})</span>
                 {% else %}Events{% endif %}</a></li>
-            <li class="menuitem"><a href="{% url list-users %}" title="User list">User list</a></li>
+            <li class="menuitem"><a href="{% url 'list-users' %}" title="User list">User list</a></li>
             <li class="menuitem"><a href="http://wiki.mdc2.org/index.php/Main_Page" title="MDC wiki">Wiki</a></li>
-            <li class="menuitem"><a href="{% url invite-list %}" title="Invite a new user">
+            <li class="menuitem"><a href="{% url 'invite-list' %}" title="Invite a new user">
                 {% if new_invites and perms.invites.can_approve %}
                     <span class="urgent">Invites ({{ new_invites }})</span>
                  {% else %}Invite{% endif %}</a></li>
             {% if perms.board.can_lock %}
-                <li class="menuitem"><a href="{% url ban %}" title="Manage bans">Bans</a></li>
+                <li class="menuitem"><a href="{% url 'ban' %}" title="Manage bans">Bans</a></li>
             {% endif %}
             {% if user.is_staff %}
-            <li class="menuitem"><a href="{% url admin:index %}" title="Admin panel">Admin</a></li>
+            <li class="menuitem"><a href="{% url 'admin:index' %}" title="Admin panel">Admin</a></li>
             {% endif %}
         </ul>
     </div>

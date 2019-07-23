@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <form method="post" action="{% url new-event %}">
+    <form method="post" action="{% url 'new-event' %}">
         {% csrf_token %}
         <table>
         {{ form.as_table }}

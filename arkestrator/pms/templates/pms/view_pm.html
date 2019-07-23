@@ -11,14 +11,14 @@
 
 {% block extrasubmenu %}
 <li class="submenuitem">
-<form name="delf" action="{% url del-pm pm.id %}" method="post">
+<form name="delf" action="{% url 'del-pm' pm.id %}" method="post">
     {% csrf_token %}
     <input type="hidden" name="confirm" value="true">
     <a href="javascript:void(1);" onClick="document.delf.submit();" title="Delete this pm">Delete</a>
 </form>
 </li>
 {% if not thread %}
-    <li class="submenuitem"><a href="{% url pm-thread pm.id %}" title="View all related messages as a thread">Show Thread</a></li>
+    <li class="submenuitem"><a href="{% url 'pm-thread' pm.id %}" title="View all related messages as a thread">Show Thread</a></li>
 {% endif %}
 {% endblock %}
 
@@ -33,7 +33,7 @@
     {% else %}
         <div class="row2">
     {% endif %}
-        <span id="info_{{ parent.id}}"><strong><a href="{% url view-profile parent.sender.id %}" title="View {{ parent.sender.username }}'s profile">{{ parent.sender.username }}</a></strong> sent this on {% mdctime parent.created_at long %} to {{ parent_rec_str }}</span><br />
+        <span id="info_{{ parent.id}}"><strong><a href="{% url 'view-profile' parent.sender.id %}" title="View {{ parent.sender.username }}'s profile">{{ parent.sender.username }}</a></strong> sent this on {% mdctime parent.created_at long %} to {{ parent_rec_str }}</span><br />
          <strong>Subject: </strong>{{ parent.subject }}
          </div>
 
@@ -49,7 +49,7 @@
     {% else %}
         <div class="row2">
     {% endif %}
-        <span id="info_{{ pm.id}}"><strong><a href="{% url view-profile pm.sender.id %}" title="View {{pm.sender.username }}'s profile">{{ pm.sender.username }}</a></strong> sent this on {% mdctime pm.created_at long %} to {{ rec_str }}</span><br />
+        <span id="info_{{ pm.id}}"><strong><a href="{% url 'view-profile' pm.sender.id %}" title="View {{pm.sender.username }}'s profile">{{ pm.sender.username }}</a></strong> sent this on {% mdctime pm.created_at long %} to {{ rec_str }}</span><br />
          <strong>Subject: </strong>{{ pm.subject }}
          </div>
 
@@ -61,7 +61,7 @@
 {% block bottombezel %}
     <div id="bottombezel">
         <ul>
-            <li class="submenuitem"><a href="javascript:;" onclick="quote('{% url get-pm-quote pm.id %}')" title="Quote this message in a reply">Quote</a></li>
+            <li class="submenuitem"><a href="javascript:;" onclick="quote('{% url "get-pm-quote" pm.id %}')" title="Quote this message in a reply">Quote</a></li>
             <li class="submenuitem"><a href="javascript:;" onClick="getElementById('id_recs').value='{{ reply_all }}'" title="Reply to all">Reply All </a></li>
         </ul>
     </div>
@@ -70,7 +70,7 @@
 
 {% block replyform %}
 
-<form method="post" action="{% url view-pm pm.pk %}" onSubmit="document.getElementById('postbutton').style.display='none';">
+<form method="post" action="{% url 'view-pm' pm.pk %}" onSubmit="document.getElementById('postbutton').style.display='none';">
 {% csrf_token %}
 <table class="replyform">
     <tr>

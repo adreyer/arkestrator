@@ -3,10 +3,10 @@
 {% block extramenu %}
     <div id="submenu">
         <ul>
-            <li class="submenuitem"><a href="{% url edit-prefs %}" title="Edit your preferences">Preferences</a></li>
-            <li class="submenuitem"><a href="{% url edit-info %}" title="Edit your profile">Edit profile</a></li>
-            <li class="submenuitem" title="Edit your color theme"><a href="{% url edit-theme %}">Edit theme</a></li>
-            <li class="submenuitem" title="Change your password"><a href="{% url django.contrib.auth.views.password_change %}">Change password</a></li>
+            <li class="submenuitem"><a href="{% url 'edit-prefs' %}" title="Edit your preferences">Preferences</a></li>
+            <li class="submenuitem"><a href="{% url 'edit-info' %}" title="Edit your profile">Edit profile</a></li>
+            <li class="submenuitem" title="Edit your color theme"><a href="{% url 'edit-theme' %}">Edit theme</a></li>
+            <li class="submenuitem" title="Change your password"><a href="{% url 'django.contrib.auth.views.password_change' %}">Change password</a></li>
         </ul>
     </div>
 {% endblock %}

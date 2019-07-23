@@ -13,11 +13,11 @@
     <div id="submenu">
         <ul>
             {% if not expand %}
-                <li class="submenuitem"><a href="{% url view-thread-full thread.id %}">Show all ({{ thread.total_posts }})</a></li>
+                <li class="submenuitem"><a href="{% url 'view-thread-full' thread.id %}">Show all ({{ thread.total_posts }})</a></li>
             {% endif %}
             <li class="submenuitem"><a href="/this/does/nothing/lol">Hide images</a></li>
-            <li class="submenuitem"><a href="{% url thread-history thread.id %}">Thread history</a></li>
-            <li class="submenuitem"><a href="{% url delete-thread thread.id %}">Delete thread</a></li>
+            <li class="submenuitem"><a href="{% url 'thread-history' thread.id %}">Thread history</a></li>
+            <li class="submenuitem"><a href="{% url 'delete-thread' thread.id %}">Delete thread</a></li>
             <li class="submenuitem floatright"><a href="#pagebottom">Jump to bottom</a></li>
         </ul>
     </div>
@@ -33,9 +33,9 @@
             {% else %}
                 <div class="row2">
             {% endif %}
-                <span id="info_{{ post.id}}"><strong><a href="{% url view-profile post.creator.id %}">{{ post.creator.username }}</a></strong> posted this on {{ post.created_at|date:"D, d-M-Y \a\t h:i:s a"}}</span>
-                <strong><a href="javascript:;" onclick="quote('{% url get-quote post.id %}')">#{{ post.id }}</a></strong>
-                <span class="button"><a href="{% url delete-post post.id %}">Delete</a></span>
+                <span id="info_{{ post.id}}"><strong><a href="{% url 'view-profile' post.creator.id %}">{{ post.creator.username }}</a></strong> posted this on {{ post.created_at|date:"D, d-M-Y \a\t h:i:s a"}}</span>
+                <strong><a href="javascript:;" onclick="quote('{% url "get-quote" post.id %}')">#{{ post.id }}</a></strong>
+                <span class="button"><a href="{% url 'delete-post' post.id %}">Delete</a></span>
             </div>
             <div class="body" id="post_{{ post.id }}">
                 <p>{% bbcode post.bbcode %}</p>
@@ -47,7 +47,7 @@
 {% block bottombezel %}
     <div id="bottombezel">
         <ul>
-            <li class="submenuitem"><a href="{% url list-pms %}">Go back</a></li>
+            <li class="submenuitem"><a href="{% url 'list-pms' %}">Go back</a></li>
             <li class="submenuitem floatright"><a href="#pagetop">Jump to top</a></li>
         </ul>
     </div>

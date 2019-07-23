@@ -5,16 +5,16 @@
 {% block extramenu %}
     <div id="submenu">
         <ul>
-            <li class="submenuitem"><a href="{% url new-thread %}" title="New thread">New thread</a></li>
+            <li class="submenuitem"><a href="{% url 'new-thread' %}" title="New thread">New thread</a></li>
             <li class="submenuitem">
-                <form name="markf" action="{% url mark-threads-read %}" method="post">
+                <form name="markf" action="{% url 'mark-threads-read' %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="confirm" value="true">
                     <a href="javascript:void(1);" onClick="document.markf.submit();" title="Mark all read">
                         Mark all read</a>
                  </form>
             </li>
-            <li class="submenuitem"><a href="{% url favorite-list%}" title="View favorites">Favorites</a></li>
+            <li class="submenuitem"><a href="{% url 'favorite-list' %}" title="View favorites">Favorites</a></li>
         </ul>
     </div>
 {% endblock extramenu %}
@@ -29,12 +29,12 @@
             {% else %}
                 <tr class="{{ row_color }}">
             {% endif %}
-            <td nowrap="nowrap"><a href="{% url view-profile thread.creator.id %}" title="View {{ thread.creator.username }}'s profile">{{ thread.creator.username }}</a></td>
+            <td nowrap="nowrap"><a href="{% url 'view-profile' thread.creator.id %}" title="View {{ thread.creator.username }}'s profile">{{ thread.creator.username }}</a></td>
 {# icons column #}
             {% spaceless %}<td nowrap="nowrap" class="icons">
             {% if thread.locked %}
                     {% if perms.board.can_lock %}
-                    <form class="icons" name="lockf{{ thread.id }}" action="{% url lock-thread thread.id %}" method="post">
+                    <form class="icons" name="lockf{{ thread.id }}" action="{% url 'lock-thread' thread.id %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="lock" value="unlock">
                     <a href="javascript:void(1);" onClick="document.lockf{{ thread.id }}.submit();" title="Unsticky this thread">
@@ -44,7 +44,7 @@
             {% endif %}
             {% if thread.stuck %}
                 {% if perms.board.can_sticky %}
-                    <form class="icons" name="stickyf{{ thread.id }}" action="{% url sticky thread.id %}" method="post">
+                    <form class="icons" name="stickyf{{ thread.id }}" action="{% url 'sticky' thread.id %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="sticky" value="unsticky">
                     <a href="javascript:void(1);" onClick="document.stickyf{{ thread.id }}.submit();" title="Unsticky this thread">
@@ -53,7 +53,8 @@
                 {% else %}&#9733;{% endif %}
             {% endif %}
             {% if thread.fav %}
-                <form class="icons" name="favf{{ thread.id }}" class="icon" action="{% url favorite thread.id %}" method="post">
+                <form class="icons" name="favf{{ thread.id }}" class="icon" action="{% url
+                  'favorite' thread.id %}" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="fav" value="remove">
                 <a href="javascript:void(1);" onClick="document.favf{{ thread.id }}.submit();" title="Remove from favorites">
@@ -62,13 +63,13 @@
             {% endif %} </td>{% endspaceless %}
 {# subject column #}
             <td class="wwwwwwww"><div class="wwwwwwww">{% if thread.unread %}
-                    <a class="unread" href="{% url view-thread thread.id %}{% spaceless %}
+                    <a class="unread" href="{% url 'view-thread' thread.id %}{% spaceless %}
                         {% if thread.last_post_read %}
                                 #{{ thread.last_post_read }}
                             {% endif %}{% endspaceless %}" title="View thread">
                         {{ thread.subject|wordfilter }}</a>
                 {% else %}
-                    <a href="{% url view-thread thread.id %}{% spaceless %}
+                    <a href="{% url 'view-thread' thread.id %}{% spaceless %}
                         {% if thread.last_post_read %}
                                 #{{ thread.last_post_read }}
                             {% endif %}{% endspaceless %}" title="View thread">
@@ -76,9 +77,9 @@
                 {% endif %}
             </div></td>
 {# post count column #}
-            <td nowrap="nowrap" class="count"><a href="{% url thread-history thread.id %}" title="Thread history">{{ thread.total_posts }}</a></td>
+            <td nowrap="nowrap" class="count"><a href="{% url 'thread-history' thread.id %}" title="Thread history">{{ thread.total_posts }}</a></td>
 {# last post column #}
-            <td nowrap="nowrap" class="right-align smallfont"><a href="{% url view-profile thread.last_post.creator.id %}" title="View {{ thread.last_post.creator.username }}'s profile">{{ thread.last_post.creator.username }}</a> {% mdctime thread.last_post.created_at short %}</td>
+            <td nowrap="nowrap" class="right-align smallfont"><a href="{% url 'view-profile' thread.last_post.creator.id %}" title="View {{ thread.last_post.creator.username }}'s profile">{{ thread.last_post.creator.username }}</a> {% mdctime thread.last_post.created_at short %}</td>
             </tr>
             {% nextcycle row_color %}
         {% endfor %}
