@@ -11,7 +11,6 @@ setup(
     install_requires=[
 	'bbking==0.0.1',
         'django==1.6.11',
-        'south==0.7.3',
         'python-memcached==1.48',
         'pytz==2014.7',
         'simplejson==2.3.0',
@@ -21,6 +20,5 @@ setup(
         'unittest2==0.5.1',
         'mock==0.7.2',
         'django-oembed==0.1.3',
-        'django-debug-toolbar==0.11.0',
       ],
     )

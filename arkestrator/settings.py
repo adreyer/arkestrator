@@ -110,7 +110,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.admin',
     'django.contrib.staticfiles',
-    'south',
     'arkestrator.board',
     'arkestrator.themes',
     'arkestrator.profiles',
