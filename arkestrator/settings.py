@@ -122,7 +122,6 @@ INSTALLED_APPS = (
     'arkestrator.moderation',
     'oembed',
     'bbking',
-    'haystack',
 )
 
 AUTH_PROFILE_MODULE = 'profiles.Profile'
@@ -158,10 +157,6 @@ BBKING_TAG_LIBRARIES = (
 BBKING_USE_WORDFILTERS = True
 
 PARSER_DIR='/var/arkestrator_dev/parser'
-
-HAYSTACK_SITECONF = 'arkestrator.search_sites'
-HAYSTACK_SEARCH_ENGINE = 'solr'
-HAYSTACK_SOLR_URL = 'http://127.0.0.1:8080/solr-arkestrator_dev'
 
 OEMBED_MAX_WIDTH = 640
 OEMBED_MAX_HEIGHT = 640

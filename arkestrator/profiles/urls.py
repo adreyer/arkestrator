@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url
 from django.contrib.auth.views import password_change, password_reset
 import views
 

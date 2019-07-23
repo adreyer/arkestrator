@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, include, url
 from django.conf import settings
 
 # Uncomment the next two lines to enable the admin:
@@ -21,5 +21,4 @@ urlpatterns = patterns('',
     url(r'^active/$', 'arkestrator.util.views.active_users',
         name='active-users'),
     url(r'^quote/(?P<id>\d+)/$', 'arkestrator.board.views.get_quote', name='get-quote'),
-    (r'^search/', include('haystack.urls')),
 )
