@@ -20,6 +20,7 @@ from django.db.models import Sum, Count, Max, F
 from django.core.cache import cache
 from django.core.paginator import Paginator, InvalidPage
 from django.contrib.auth.models import User
+from django.utils.decorators import method_decorator
 
 from arkestrator.profiles.models import Profile
 from arkestrator.events.models import Event
@@ -357,24 +358,25 @@ def favorite_thread(request, id):
     return HttpResponseRedirect(reverse('list-threads'))
 
 
-@login_required
-def lol_search(request):
-    'lol search'
+class ThreadTitleSearchView(ListView):
+    "lol search"
 
-    query = request.GET.get('query', 'rev is the best')
-    
-    queryset = Thread.objects.filter(subject__icontains=query).order_by(
-        '-last_post__id')
-    
-    return ListView.as_view()(
-        request,
-        queryset = queryset,
-        template_object_name = 'thread',
-        paginate_by = 49,
-        template_name = "board/thread_list.html",
-        extra_context = { 
-            'search_query' : query,
-            'paginator_query' : urllib.urlencode({ 'query' : query })
-        },
-    )
+    paginate_by = 49
+    template_name = 'board/thread_list.html'
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(ThreadTitleSearchView, self).dispatch(*args, **kwargs)
+
+    @property
+    def query(self):
+        return self.request.GET.get('query', 'rev is the best')
+
+    def get_queryset(self):
+        return Thread.objects.filter(subject__icontains=self.query).order_by('-last_post__id')
+
+    def get_context_data(self, **kwargs):
+        ctx = super(ThreadTitleSearchView, self).get_context_data(**kwargs)
+        ctx['search_query'] = self.query
+        ctx['paginator_query'] = urllib.urlencode({'query': self.query})
+        return ctx
