@@ -14,13 +14,13 @@ from django.db.models import Q
 from django.shortcuts import render_to_response,get_object_or_404
 from django.http import HttpResponseRedirect, Http404
 from django.template import RequestContext
-from django.views.generic import list_detail
 from django.views.generic.list import ListView
 from django.db.models.signals import post_save
 from django.db.models import Sum, Count, Max, F
 from django.core.cache import cache
 from django.core.paginator import Paginator, InvalidPage
 from django.contrib.auth.models import User
+from django.utils.decorators import method_decorator
 
 from arkestrator.profiles.models import Profile
 from arkestrator.events.models import Event
@@ -87,13 +87,13 @@ class FavoritesList(ThreadList):
     """ subclass of ThreadList that displays the current users favorites """
 
     def get_queryset(self):
-        return Thread.objects.filter(favorite__user=self.request.user)
+        return Thread.objects.filter(favorite=self.request.user)
 
 class ThreadsByList(ThreadList):
     """ Thread list takes a single argument the user id of the user """
 
     def get_queryset(self):
-        return Thread.objects.filter(creator_id = self.args[0])
+        return Thread.objects.filter(creator_id = self.kwargs['by'])
 
 @login_required
 def view_thread(request,id,start=False,expand=False,hide=None):
@@ -305,21 +305,24 @@ def mark_read(request):
             lr.save()
     return HttpResponseRedirect(reverse('list-threads'))
 
+class PostsByListView(LoginRequiredMixin, ListView):
+    template_name = 'board/posts_by.html'
+    paginate_by = 49
 
-@login_required
-def posts_by(request, id):
-    """ list all posts by user id """
-    poster = get_object_or_404(User,pk=id)
-    queryset = Post.objects.filter(creator = poster).order_by(
-        '-created_at').select_related('thread__subject')
+    @property
+    def poster(self):
+        return get_object_or_404(User, pk=self.kwargs['id'])
 
-    return list_detail.object_list(
-            request,
-            queryset = queryset,
-            paginate_by = 49,
-            template_name = "board/posts_by.html",
-            extra_context = {"poster" : poster.username}
-            )
+    def get_queryset(self):
+        queryset = Post.objects.filter(creator=self.poster).order_by(
+            '-created_at').select_related('thread__subject')
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        ctx = super(PostsByListView, self).get_context_data(**kwargs)
+        ctx['poster'] = self.poster.username
+        return ctx
+
 
 @login_required
 def get_quote(request, id):
@@ -358,24 +361,25 @@ def favorite_thread(request, id):
     return HttpResponseRedirect(reverse('list-threads'))
 
 
-@login_required
-def lol_search(request):
-    'lol search'
+class ThreadTitleSearchView(ListView):
+    "lol search"
 
-    query = request.GET.get('query', 'rev is the best')
-    
-    queryset = Thread.objects.filter(subject__icontains=query).order_by(
-        '-last_post__id')
-    
-    return list_detail.object_list(
-        request,
-        queryset = queryset,
-        template_object_name = 'thread',
-        paginate_by = 49,
-        template_name = "board/thread_list.html",
-        extra_context = { 
-            'search_query' : query,
-            'paginator_query' : urllib.urlencode({ 'query' : query })
-        },
-    )
+    paginate_by = 49
+    template_name = 'board/thread_list.html'
 
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(ThreadTitleSearchView, self).dispatch(*args, **kwargs)
+
+    @property
+    def query(self):
+        return self.request.GET.get('query', 'rev is the best')
+
+    def get_queryset(self):
+        return Thread.objects.filter(subject__icontains=self.query).order_by('-last_post__id')
+
+    def get_context_data(self, **kwargs):
+        ctx = super(ThreadTitleSearchView, self).get_context_data(**kwargs)
+        ctx['search_query'] = self.query
+        ctx['paginator_query'] = urllib.urlencode({'query': self.query})
+        return ctx

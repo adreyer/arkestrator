@@ -10,7 +10,7 @@
 
 {% block content %}
 <div id="theme_editor">
-<form method="post" action="{% url edit-theme %}">
+<form method="post" action="{% url 'edit-theme' %}">
     {% csrf_token %}
     <table>
     {{ form.as_table }}
@@ -23,7 +23,7 @@
 {% if extra_themes %}
 <div id="known_themes">
     {% for theme in extra_themes %}
-    <a href="{% url edit-existing-theme theme.id %}">[{{ theme.name }}]</a>
+    <a href="{% url 'edit-existing-theme' theme.id %}">[{{ theme.name }}]</a>
     {% endfor %}
 </div>
 {% endif %}

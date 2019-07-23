@@ -20,7 +20,7 @@
             {% else %}
                 <div class="row2">
             {% endif %}
-                <span id="info_{{ pm.id}}"><strong><a href="{% url view-profile pm.sender.id %}" title="View {{ pm.sender.username }}'s profile">{{ pm.sender.username }}</a></strong> sent this on {% mdctime pm.created_at long %} to {{ pm.get_rec_str }}</span><strong><a href="javascript:;" onclick="quote('{% url get-pm-quote pm.id %}')" title="Quote this message">#{{ pm.id }}</a></strong><br />
+                <span id="info_{{ pm.id}}"><strong><a href="{% url 'view-profile' pm.sender.id %}" title="View {{ pm.sender.username }}'s profile">{{ pm.sender.username }}</a></strong> sent this on {% mdctime pm.created_at long %} to {{ pm.get_rec_str }}</span><strong><a href="javascript:;" onclick="quote('{% url get-pm-quote pm.id %}')" title="Quote this message">#{{ pm.id }}</a></strong><br />
                 <strong>Subject:</strong>{{ pm.subject }}
                 </div>
 
@@ -33,7 +33,7 @@
 {% block bottombezel %}
     <div id="bottombezel">
         <ul>
-            <li class="submenuitem"><a href="{% url inbox %}" title="Go back to your inbox">Go back</a></li>
+            <li class="submenuitem"><a href="{% url 'inbox' %}" title="Go back to your inbox">Go back</a></li>
             <li class="submenuitem floatright"><a href="#pagetop" title="Jump to the top of the page">Jump to top</a></li>
         </ul>
 {% endblock %}

@@ -2,7 +2,7 @@
 
 {% load mdctime %}
 {% block content %}
-    <form method="post" action="{% url ban %}">
+    <form method="post" action="{% url 'ban' %}">
         {% csrf_token %}
         <table>
         {{ form.as_table }}

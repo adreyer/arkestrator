@@ -57,9 +57,8 @@ MEDIA_ROOT = "%s/media"%BASE_DIR
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = '/media/'
 
-# TODO: should these be the same?
-STATIC_ROOT = MEDIA_ROOT
-STATIC_URL = MEDIA_URL
+STATIC_ROOT = "%s/static" % BASE_DIR 
+STATIC_URL = '/static/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'c8-s2vc_*&(c(^!se3m3gi-lu)i+uod*!qb*ld^%06*a40443('
@@ -110,6 +109,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.admin',
+    'django.contrib.staticfiles',
     'south',
     'arkestrator.board',
     'arkestrator.themes',
@@ -122,7 +122,6 @@ INSTALLED_APPS = (
     'arkestrator.moderation',
     'oembed',
     'bbking',
-    'haystack',
 )
 
 AUTH_PROFILE_MODULE = 'profiles.Profile'
@@ -158,10 +157,6 @@ BBKING_TAG_LIBRARIES = (
 BBKING_USE_WORDFILTERS = True
 
 PARSER_DIR='/var/arkestrator_dev/parser'
-
-HAYSTACK_SITECONF = 'arkestrator.search_sites'
-HAYSTACK_SEARCH_ENGINE = 'solr'
-HAYSTACK_SOLR_URL = 'http://127.0.0.1:8080/solr-arkestrator_dev'
 
 OEMBED_MAX_WIDTH = 640
 OEMBED_MAX_HEIGHT = 640

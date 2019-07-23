@@ -6,5 +6,5 @@
 {% block loginbezel %}<div id="submenu"><br /></div>{% endblock %}
 
 {% block content %}
-<a href="{% url django.contrib.auth.views.login %}">You've been logged out. You can click anywhere on this entire line to log back in.</a>
+<a href="{% url 'django.contrib.auth.views.login' %}">You've been logged out. You can click anywhere on this entire line to log back in.</a>
 {% endblock %}

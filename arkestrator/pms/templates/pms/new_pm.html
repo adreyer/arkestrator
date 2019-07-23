@@ -1,7 +1,7 @@
 {% extends "pms/pm_base.html" %}
 
 {% block content %}
-    <form method="post" action="{% url new-pm %}" onSubmit="document.getElementById('postbutton').style.display='none';">
+    <form method="post" action="{% url 'new-pm' %}" onSubmit="document.getElementById('postbutton').style.display='none';">
         {% csrf_token %}
         <table>
             <tr>

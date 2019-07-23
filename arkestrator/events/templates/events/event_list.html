@@ -3,16 +3,16 @@
 {% block extrasubmenu %}
 {% if local %}
     {% if upcoming %}
-        <li class="submenuitem"><a href="{% url list-ew-events %}" title="Show events for all cities">Show all cities</a> </li>
+        <li class="submenuitem"><a href="{% url 'list-ew-events' %}" title="Show events for all cities">Show all cities</a> </li>
     {% else %}
-        <li class="submenuitem"><a href="{% url list-past-ew-events %}" title="Show events for all cities">>Show all cities</a> </li>
+        <li class="submenuitem"><a href="{% url 'list-past-ew-events' %}" title="Show events for all cities">>Show all cities</a> </li>
     {% endif %}
 {% endif %}
 {% if upcoming %}
     {% if local %}
-        <li class="submenuitem"><a href="{% url list-past-events %}" title="Show events that have already occured">Show past events</a> </li>
+        <li class="submenuitem"><a href="{% url 'list-past-events' %}" title="Show events that have already occured">Show past events</a> </li>
     {% else %}
-        <li class="submenuitem"><a href="{% url list-past-ew-events %}" title="Show events that have already occured">Show past events</a> </li>
+        <li class="submenuitem"><a href="{% url 'list-past-ew-events' %}" title="Show events that have already occured">Show past events</a> </li>
     {% endif %}
 {% endif %}
 {% endblock extrasubmenu %}
@@ -29,8 +29,8 @@
             {% else %}
                 <tr class="{{ row_color }}">
             {% endif %}
-            <td nowrap="nowrap"><a href="{% url view-profile event.creator.id %}">{{ event.creator.username }}</a></td>
-            <td><a href="{% url view-event event.id %}" title="View this event">{{ event.thread.subject }}</a></td>
+            <td nowrap="nowrap"><a href="{% url 'view-profile' event.creator.id %}">{{ event.creator.username }}</a></td>
+            <td><a href="{% url 'view-event' event.id %}" title="View this event">{{ event.thread.subject }}</a></td>
             <td nowrap="nowrap">{% mdctime event.time short event.market.timezone %}</td>
             </tr>
             {% nextcycle row_color %}

@@ -3,11 +3,11 @@
 {% block extramenu %}
     <div id="submenu">
         <ul>
-            <li class="submenuitem"><a href="{% url new-pm %}" title="Send a private message">New message</a> </li>
-            <li class="submenuitem"><a href="{% url inbox %}" title="View your inbox">Inbox</a> </li>
-            <li class="submenuitem"><a href="{% url outbox %}" title="View your outbox">Outbox</a> </li>
+            <li class="submenuitem"><a href="{% url 'new-pm' %}" title="Send a private message">New message</a> </li>
+            <li class="submenuitem"><a href="{% url 'inbox' %}" title="View your inbox">Inbox</a> </li>
+            <li class="submenuitem"><a href="{% url 'outbox' %}" title="View your outbox">Outbox</a> </li>
             <li class="submenuitem">
-                <form name="markf" action="{% url mark-read %}" method="post">
+                <form name="markf" action="{% url 'mark-read' %}" method="post">
                 {% csrf_token %}
                 <input type="hidden" name="confirm" value="true">
                 <a href="javascript:void(1);" onClick="document.markf.submit()" title="Mark all PMs read">

@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url
 
 urlpatterns = patterns('arkestrator.moderation.views',
         url(r"^ban/$", 'ban_user', name='ban'),

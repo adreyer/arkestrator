@@ -3,7 +3,7 @@
 {% block extramenu %}
     <div id="submenu">
         <ul>
-            <li class="submenuitem"><a href="{% url new-event %}" title="Create a new event">New event</a></li>
+            <li class="submenuitem"><a href="{% url 'new-event' %}" title="Create a new event">New event</a></li>
             {% block extrasubmenu %}
             {% endblock %}
         </ul>

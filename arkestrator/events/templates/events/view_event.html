@@ -2,7 +2,7 @@
 
 {% block extrapostmenu %}
     {% if perms.events.can_edit or event.creator == user %}
-        <li class="submenuitem"><a href="{% url edit-event event.id %}" title="Edit this event">Edit event</a></li>
+        <li class="submenuitem"><a href="{% url 'edit-event' event.id %}" title="Edit this event">Edit event</a></li>
     {% endif %}
 {% endblock %}
 {% load mdctime %}
@@ -19,7 +19,7 @@
         {% if rsvp.attending == 'Maybe' %}<em>{{ rsvp.user.username }}?</em>{% endif %}{% endif %}
     {% endfor %}
     <br />{% endspaceless %}
-    <form action="{% url update-rsvp event.id %}" method="post">
+    <form action="{% url 'update-rsvp' event.id %}" method="post">
         {% csrf_token %}
         <p>
         {{rsvp_form.attend.label }} {{ rsvp_form.attend }}

@@ -1,3 +1,4 @@
+*.swp
 *.pyc
 local.db
 *.egg-info

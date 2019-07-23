@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <form method="post" action="{% url edit-prefs %}">
+    <form method="post" action="{% url 'edit-prefs' %}">
         {% csrf_token %}
         <table>
         {{ prefs_form.as_table }}

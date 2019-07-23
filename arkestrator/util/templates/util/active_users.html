@@ -14,7 +14,7 @@
 {{ posting_users }} user{{ posting_users|pluralize }} posting<br />
 </p>
 <p>{% for user in user_list %}
-<a href="{% url view-profile user.id %}">{% spaceless %}
+<a href="{% url 'view-profile' user.id %}">{% spaceless %}
     {% if user.is_posting %}
         <b>&nbsp;{{ user.username }}&nbsp;</b>
     {% else %}

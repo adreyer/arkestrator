@@ -11,14 +11,54 @@ from django.db.models import Q
 from django.shortcuts import render_to_response,get_object_or_404
 from django.http import HttpResponseRedirect, Http404
 from django.template import RequestContext
-from django.views.generic import list_detail
+from django.views.generic.list import ListView
 from django.core.paginator import Paginator, InvalidPage
 from django.contrib.auth.models import User
+from django.utils.decorators import method_decorator
 
 from arkestrator.board.views import view_thread
 
 from models import Event, Market
 import forms
+
+class EventListView(ListView):
+    paginate_by=50
+
+    @property
+    def upcoming(self):
+        return self.kwargs.get('upcoming', True)
+
+    @property
+    def local(self):
+        return self.kwargs.get('local', True)
+
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(EventListView, self).dispatch(*args, **kwargs)
+
+    def get_queryset(self):
+        request = self.request
+        queryset = Event.objects.all()
+        if self.upcoming:
+            queryset = queryset.filter(time__gte=datetime.datetime.now)
+
+        usr_mrk = request.user.get_profile().market
+        if usr_mrk:
+            if self.local:
+                queryset = queryset.filter(Q(
+                    Q(market=usr_mrk) | Q(all_markets=True)))
+        queryset = queryset.order_by('time')
+
+        request.user.get_profile().last_events_view = datetime.datetime.now()
+        request.user.get_profile().save()
+        cache.delete('event-count:%d'%(request.user.id))
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        ctx = super(EventListView, self).get_context_data(**kwargs)
+        ctx['upcoming'] = self.upcoming
+        ctx['local'] = self.local
+        return ctx
 
 
 @login_required
@@ -26,42 +66,6 @@ def view_event(request, ev_id):
     """ view event ev_id """
     event = get_object_or_404(Event,pk=ev_id)
     return view_thread(request,event.thread.id)
-
-@login_required
-def list_events(request, upcoming=True, local=True):
-    """ list events 
-         
-        args:
-        upcoming: if true only future events will be listed
-        local:    if true only events in the users market or
-                   events where all_markets are true will be 
-                   shown
-    """
-
-    queryset = Event.objects.all()
-    if upcoming:
-        queryset = queryset.filter(time__gte=datetime.datetime.now)
-        
-    usr_mrk = request.user.get_profile().market
-    if usr_mrk:
-        if local:
-            queryset = queryset.filter(Q(
-                Q(market=usr_mrk) | Q(all_markets=True)))
-    queryset = queryset.order_by('time')
-
-    request.user.get_profile().last_events_view = datetime.datetime.now()
-    request.user.get_profile().save()
-    cache.delete('event-count:%d'%(request.user.id))
-    return list_detail.object_list(
-        request,
-        queryset = queryset,
-        paginate_by = 50,
-        extra_context={
-            'upcoming' : upcoming,
-            'local' : local,
-            }
-        )
-
 
 @login_required
 def new_event(request):

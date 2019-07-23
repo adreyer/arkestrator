@@ -10,37 +10,43 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.sites.models import Site
 from django.core.mail import send_mail
 from django.db import transaction
-from django.views.generic import list_detail
+from django.views.generic.list import ListView
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.conf import settings
+from django.utils.decorators import method_decorator
 
 from arkestrator.invites.models import Invite
 from arkestrator.profiles.models import Profile
 from arkestrator.decorators import moderator_required
 import forms
 
-@login_required
-def invite_list(request):
-    """ if the user has perms list all open invites """
-    if request.method == 'POST':
-        form = forms.NewInviteForm(request.POST)
-        if form.is_valid():
-            form.save(request.user)
-            cache.delete('inv_count')
-            return HttpResponseRedirect(reverse('list-threads'))
-    else:
-        form = forms.NewInviteForm()
+class InviteListView(ListView):
+    paginate_by=10
 
-    queryset = Invite.objects.filter(rejected=False,
-        approved=False).order_by('-created_on')
-    return list_detail.object_list(
-        request,
-        queryset = queryset,
-        paginate_by = 10,
-        extra_context={
-            'form':form,
-        })
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(InviteListView, self).dispatch(*args, **kwargs)
+
+    def get_queryset(self):
+        return Invite.objects.filter(
+                rejected=False, 
+                approved=False).order_by('-created_on')
+
+    def get_context_data(self, **kwargs):
+        ctx = super(InviteListView, self).get_context_data(**kwargs)
+        request = self.request
+        if request.method == 'POST':
+            form = forms.NewInviteForm(request.POST)
+            if form.is_valid():
+                form.save(request.user)
+                cache.delete('inv_count')
+                return HttpResponseRedirect(reverse('list-threads'))
+        else:
+            form = forms.NewInviteForm()
+
+        ctx['form'] = form
+        return ctx
 
 
 @transaction.commit_on_success()
