@@ -57,9 +57,8 @@ MEDIA_ROOT = "%s/media"%BASE_DIR
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = '/media/'
 
-# TODO: should these be the same?
-STATIC_ROOT = MEDIA_ROOT
-STATIC_URL = MEDIA_URL
+STATIC_ROOT = "%s/static" % BASE_DIR 
+STATIC_URL = '/static/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'c8-s2vc_*&(c(^!se3m3gi-lu)i+uod*!qb*ld^%06*a40443('
@@ -110,6 +109,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.admin',
+    'django.contrib.staticfiles',
     'south',
     'arkestrator.board',
     'arkestrator.themes',
