@@ -14,7 +14,6 @@ from django.db.models import Q
 from django.shortcuts import render_to_response,get_object_or_404
 from django.http import HttpResponseRedirect, Http404
 from django.template import RequestContext
-from django.views.generic import list_detail
 from django.views.generic.list import ListView
 from django.db.models.signals import post_save
 from django.db.models import Sum, Count, Max, F
@@ -313,7 +312,7 @@ def posts_by(request, id):
     queryset = Post.objects.filter(creator = poster).order_by(
         '-created_at').select_related('thread__subject')
 
-    return list_detail.object_list(
+    return ListView.as_view()(
             request,
             queryset = queryset,
             paginate_by = 49,
@@ -367,7 +366,7 @@ def lol_search(request):
     queryset = Thread.objects.filter(subject__icontains=query).order_by(
         '-last_post__id')
     
-    return list_detail.object_list(
+    return ListView.as_view()(
         request,
         queryset = queryset,
         template_object_name = 'thread',

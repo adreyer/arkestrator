@@ -11,7 +11,7 @@ from django.db.models import Q
 from django.shortcuts import render_to_response,get_object_or_404
 from django.http import HttpResponseRedirect, Http404
 from django.template import RequestContext
-from django.views.generic import list_detail
+from django.views.generic.list import ListView
 from django.core.paginator import Paginator, InvalidPage
 from django.contrib.auth.models import User
 
@@ -52,7 +52,7 @@ def list_events(request, upcoming=True, local=True):
     request.user.get_profile().last_events_view = datetime.datetime.now()
     request.user.get_profile().save()
     cache.delete('event-count:%d'%(request.user.id))
-    return list_detail.object_list(
+    return ListView.as_view()(
         request,
         queryset = queryset,
         paginate_by = 50,

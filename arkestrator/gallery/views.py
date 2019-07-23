@@ -6,7 +6,6 @@ from django.db.models import Q
 from django.shortcuts import render_to_response,get_object_or_404
 from django.http import HttpResponseRedirect, Http404
 from django.template import RequestContext
-from django.views.generic import list_detail
 from django.db.models.signals import post_save
 from django.db.models import Sum, Count, Max, F
 from django.core.cache import cache

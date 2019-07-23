@@ -10,7 +10,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.sites.models import Site
 from django.core.mail import send_mail
 from django.db import transaction
-from django.views.generic import list_detail
+from django.views.generic.list import ListView
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.conf import settings
@@ -34,10 +34,10 @@ def invite_list(request):
 
     queryset = Invite.objects.filter(rejected=False,
         approved=False).order_by('-created_on')
-    return list_detail.object_list(
+    return ListView.as_view()(
         request,
-        queryset = queryset,
-        paginate_by = 10,
+        queryset=queryset,
+        paginate_by=10,
         extra_context={
             'form':form,
         })
