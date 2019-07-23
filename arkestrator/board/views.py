@@ -93,7 +93,7 @@ class ThreadsByList(ThreadList):
     """ Thread list takes a single argument the user id of the user """
 
     def get_queryset(self):
-        return Thread.objects.filter(creator_id = self.args[0])
+        return Thread.objects.filter(creator_id = self.kwargs['by'])
 
 @login_required
 def view_thread(request,id,start=False,expand=False,hide=None):
@@ -305,21 +305,24 @@ def mark_read(request):
             lr.save()
     return HttpResponseRedirect(reverse('list-threads'))
 
+class PostsByListView(LoginRequiredMixin, ListView):
+    template_name = 'board/posts_by.html'
+    paginate_by = 49
 
-@login_required
-def posts_by(request, id):
-    """ list all posts by user id """
-    poster = get_object_or_404(User,pk=id)
-    queryset = Post.objects.filter(creator = poster).order_by(
-        '-created_at').select_related('thread__subject')
+    @property
+    def poster(self):
+        return get_object_or_404(User, pk=self.kwargs['id'])
 
-    return ListView.as_view()(
-            request,
-            queryset = queryset,
-            paginate_by = 49,
-            template_name = "board/posts_by.html",
-            extra_context = {"poster" : poster.username}
-            )
+    def get_queryset(self):
+        queryset = Post.objects.filter(creator=self.poster).order_by(
+            '-created_at').select_related('thread__subject')
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        ctx = super(PostsByListView, self).get_context_data(**kwargs)
+        ctx['poster'] = self.poster.username
+        return ctx
+
 
 @login_required
 def get_quote(request, id):
