@@ -86,7 +86,7 @@ class FavoritesList(ThreadList):
     """ subclass of ThreadList that displays the current users favorites """
 
     def get_queryset(self):
-        return Thread.objects.filter(favorite__user=self.request.user)
+        return Thread.objects.filter(favorite=self.request.user)
 
 class ThreadsByList(ThreadList):
     """ Thread list takes a single argument the user id of the user """
