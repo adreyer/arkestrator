@@ -17,7 +17,7 @@ def new_events(request):
         
     if request.user.is_authenticated():
         try:
-            profile = request.user.get_profile()
+            profile = request.user.profile
         except Profile.DoesNotExist:
             return{ 'new_events' : 0 }
         cache_key = 'event-count:%d'%(request.user.id)

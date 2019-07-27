@@ -212,7 +212,7 @@ def pm_thread(request, pm_id):
         form =forms.NewPMForm(instance=reply,
                 initial={'recs' : reply_recs})
     hide = False
-    if not request.user.get_profile().show_images:
+    if not request.user.profile.show_images:
         hide=True
     return render_to_response("pms/show_thread.html",
             { 'pm_list' : queryset,

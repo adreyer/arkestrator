@@ -42,15 +42,15 @@ class EventListView(ListView):
         if self.upcoming:
             queryset = queryset.filter(time__gte=datetime.datetime.now)
 
-        usr_mrk = request.user.get_profile().market
+        usr_mrk = request.user.profile.market
         if usr_mrk:
             if self.local:
                 queryset = queryset.filter(Q(
                     Q(market=usr_mrk) | Q(all_markets=True)))
         queryset = queryset.order_by('time')
 
-        request.user.get_profile().last_events_view = datetime.datetime.now()
-        request.user.get_profile().save()
+        request.user.profile.last_events_view = datetime.datetime.now()
+        request.user.profile.save()
         cache.delete('event-count:%d'%(request.user.id))
         return queryset
 
@@ -165,7 +165,7 @@ def calendar(request, mstring=None, local=True):
     cal = calendar.monthcalendar(year,month)
     events = Event.objects.filter(time__year=year,
                 time__month=month)
-    usr_mrk = request.user.get_profile().market
+    usr_mrk = request.user.profile.market
     if usr_mrk:
         if local:
             events = events.filter(Q(

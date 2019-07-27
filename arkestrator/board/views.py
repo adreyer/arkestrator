@@ -139,7 +139,7 @@ def view_thread(request,id,start=False,expand=False,hide=None):
             thread = thread
         )
         if not expand:
-            coll_size = request.user.get_profile().collapse_size
+            coll_size = request.user.profile.collapse_size
             if start:
                 tset = queryset.filter(pk__lte=start).reverse()
             else:
@@ -167,7 +167,7 @@ def view_thread(request,id,start=False,expand=False,hide=None):
 
     #hide images in the thread if appropriate
     try:
-        if (not hide is False) and (hide or not request.user.get_profile().show_images):
+        if (not hide is False) and (hide or not request.user.profile.show_images):
             hide = True
     except ObjectDoesNotExist:
         pass
