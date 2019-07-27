@@ -49,7 +49,7 @@ class InviteListView(ListView):
         return ctx
 
 
-@transaction.commit_on_success()
+@transaction.atomic
 def register(request,code):
     """ register a new user with invite_code code 404 bad codes """
     invite = get_object_or_404(Invite,invite_code=code)

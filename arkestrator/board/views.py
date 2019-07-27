@@ -224,7 +224,7 @@ def view_post(request, id):
     
 
 @login_required
-@transaction.commit_on_success
+@transaction.atomic
 def new_thread(request):
     """ create a new thead """
     if request.method == 'POST':
