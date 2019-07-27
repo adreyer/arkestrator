@@ -75,10 +75,9 @@ class ThreadList(LoginRequiredMixin, ListView):
 
     def favorites(self, thread_list, user):
         """ annotate a queryset of threads with a users favorites """
-        favs = Favorite.objects.filter(
-                                thread__in=thread_list,
-                                user=user).values('thread__id')
-
+        favs = [f['thread__id'] for f in Favorite.objects.filter(
+                                         thread__in=thread_list,
+                                         user=user).values('thread__id')]
         for thread in thread_list:
             thread.fav = thread.id in favs
         return thread_list
