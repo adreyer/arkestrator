@@ -1,6 +1,6 @@
 import itertools
 from django.core.cache import cache
-from django.template import Node, Library, TemplateSyntaxError, Variable
+from django.template.base import Node, Library, TemplateSyntaxError, Variable
 
 register = Library()
 
