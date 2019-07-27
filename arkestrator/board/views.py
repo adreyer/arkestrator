@@ -40,7 +40,7 @@ class ThreadList(LoginRequiredMixin, ListView):
     paginate_by = THREADS_PER_PAGE
     queryset = Thread.objects.order_by(
             "-stuck","-last_post__id").select_related(
-            "creator","last_post","last_post__creator","favorite")
+            "creator","last_post","last_post__creator")
 
     def get_context_data(self, **kwargs):
         """ set up extra context data """
