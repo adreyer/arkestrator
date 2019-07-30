@@ -4,6 +4,8 @@ from django.db import models
 from django.db.models.signals import post_save, post_delete
 
 class WordFilter(models.Model):
+    class Meta:
+        app_label = 'bbking'
     name = models.CharField(max_length=40)
     base_re = models.CharField(max_length=500)
     base_replace = models.CharField(max_length=500)

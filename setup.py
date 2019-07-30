@@ -9,7 +9,7 @@ setup(
     packages = find_packages(),
     include_package_data = True,
     install_requires=[
-	'bbking==0.0.1',
+        'ply==3.4',
         'django==1.8.19',
         'python-memcached==1.48',
         'pytz==2014.7',

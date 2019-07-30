@@ -110,6 +110,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.admin',
     'django.contrib.staticfiles',
+    'bbking',
+    'oembed',
     'arkestrator.board',
     'arkestrator.themes',
     'arkestrator.profiles',
@@ -119,8 +121,6 @@ INSTALLED_APPS = (
     'arkestrator.shenanigans',
     'arkestrator.events',
     'arkestrator.moderation',
-    'oembed',
-    'bbking',
 )
 
 AUTH_PROFILE_MODULE = 'profiles.Profile'
