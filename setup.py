@@ -10,7 +10,7 @@ setup(
     include_package_data = True,
     install_requires=[
         'ply==3.4',
-        'django==1.8.19',
+        'django==1.9.13',
         'python-memcached==1.48',
         'pytz==2014.7',
         'simplejson==2.3.0',
