@@ -4,7 +4,8 @@ from django.contrib.sites.models import Site
 from django import forms
 from django.db.models import Q
 from arkestrator.board.models import Thread, Post, LastRead
-import bbking
+import bbking.errors
+import bbking.tags
 
 class ThreadForm(forms.ModelForm):
     """ a form for a new thread must be used with PostForm """
@@ -18,7 +19,7 @@ class ThreadForm(forms.ModelForm):
     def clean_subject(self):
         """ remove leading and trailing whitespace from a subject """
         subj = self.cleaned_data["subject"]
-        subj = subj.strip(bbking.NON_PRINTING)
+        subj = subj.strip(bbking.tags.NON_PRINTING)
         if subj  == '':
             raise forms.ValidationError("whitespace is not a subject")
         return subj
@@ -34,16 +35,16 @@ class PostForm(forms.ModelForm):
         }
 
     def clean_body(self):
-        naked = self.cleaned_data['body'].strip(bbking.NON_PRINTING)
+        naked = self.cleaned_data['body'].strip(bbking.tags.NON_PRINTING)
 
         if not naked: # lol
             raise forms.ValidationError("This post doesn't say enough.")
 
         try:
-            compiled = bbking.compile(naked)
+            compiled = bbking.tags.compile(naked)
             if len(compiled) < 1:
                 raise forms.ValidationError("This post doesn't say enough.")
-        except bbking.CompilationError:
+        except bbking.errors.CompilationError:
             pass
 
         return naked

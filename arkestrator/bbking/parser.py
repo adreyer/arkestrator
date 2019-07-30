@@ -6,6 +6,7 @@ from string import lower
 import ply.yacc as yacc
 
 from bbking.lexer import tokens
+import bbking.errors
 
 def validate_tag_name(name):
     import bbking
@@ -13,7 +14,7 @@ def validate_tag_name(name):
     try:
         bbking.get_tag(name.lower())
         return True
-    except bbking.TagDoesNotExist:
+    except bbking.errors.TagDoesNotExist:
         return False
 
 def flatten(items):

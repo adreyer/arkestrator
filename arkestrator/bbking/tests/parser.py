@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-import bbking
+import bbking.tags
 from bbking import parser
 
 __all__ = ['ParserTestCase', 'MalformedCodeTestCase']
@@ -124,7 +124,7 @@ class MalformedCodeTestCase(TestCase):
 
 class CompiledTagsTestCase(TestCase):
     def test_literal_len(self):
-        lt = bbking.LiteralTag("abcdefg")
+        lt = bbking.tags.LiteralTag("abcdefg")
         self.assertEqual(len(lt), 7)
 
     def test_bbtag_len(self):
@@ -133,9 +133,9 @@ class CompiledTagsTestCase(TestCase):
         self.assertEqual(len(bbtag), 7)
 
     def test_block_len(self):
-        lt = bbking.LiteralTag("abcdefg")
+        lt = bbking.tags.LiteralTag("abcdefg")
         tag = get_tag("b")
         bbtag = tag("abcdefg")
-        btag = bbking.BlockTag([lt,tag])
+        btag = bbking.tags.BlockTag([lt,tag])
 
         self.assertEqual(len(btag), 14)

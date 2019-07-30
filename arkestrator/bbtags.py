@@ -1,4 +1,4 @@
-from bbking import BBTag
+from bbking.tags import BBTag
 
 __all__ = ['BBTagHidden']
 

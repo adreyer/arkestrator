@@ -3,7 +3,8 @@ import hashlib
 from django.core.cache import cache
 from django.db.models import signals
 
-import bbking
+import bbking.errors
+import bbking.tags
 
 class BBCodeField(object):
     def __init__(self, text_field='body', hash_field=None):
@@ -36,16 +37,16 @@ class BBCodeField(object):
             if hash_key:
                 compiled = cache.get('bbking:%s' % hash_key)
             else:
-                compiled = bbking.LiteralTag(raw)
+                compiled = bbking.tags.LiteralTag(raw)
         else:
             hash_key = None
             compiled = None
 
         if not compiled:
             try:
-                compiled = bbking.compile(raw)
-            except bbking.CompilationError:
-                compiled = bbking.LiteralTag(raw)
+                compiled = bbking.tags.compile(raw)
+            except bbking.errors.CompilationError:
+                compiled = bbking.tags.LiteralTag(raw)
 
             if hash_key:
                 cache.set('bbking:%s' % hash_key, compiled)
@@ -58,11 +59,11 @@ class BBCodeField(object):
         raw = getattr(instance, self.text_field)
 
         try:
-            compiled = bbking.compile(raw)
-        except bbking.CompilationError:
-            compiled = bbking.LiteralTag(raw)
+            compiled = bbking.tags.compile(raw)
+        except bbking.errors.CompilationError:
+            compiled = bbking.tags.LiteralTag(raw)
 
-        if isinstance(compiled, bbking.LiteralTag):
+        if isinstance(compiled, bbking.tags.LiteralTag):
             hash_key = ''
         else:
             hash_key = hashlib.sha1(raw.encode('utf-8')).hexdigest()

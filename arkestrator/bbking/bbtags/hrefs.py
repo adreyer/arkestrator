@@ -2,7 +2,7 @@ import re
 from urlparse import urlparse
 from django.utils.safestring import mark_safe
 
-from bbking import BBTag
+from bbking.tags import BBTag
 
 __all__ = ['BBTagURL', 'BBTagImg', 'BBTagYouTube']
 
