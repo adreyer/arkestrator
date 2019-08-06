@@ -40,7 +40,7 @@ class EventListView(ListView):
         request = self.request
         queryset = Event.objects.all()
         if self.upcoming:
-            queryset = queryset.filter(time__gte=datetime.datetime.now)
+            queryset = queryset.filter(time__gte=datetime.datetime.now())
 
         usr_mrk = request.user.profile.market
         if usr_mrk:

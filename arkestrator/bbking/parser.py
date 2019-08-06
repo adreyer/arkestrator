@@ -5,6 +5,7 @@ from string import lower
 
 import ply.yacc as yacc
 
+import bbking.tags
 from bbking.lexer import tokens
 import bbking.errors
 
@@ -12,7 +13,7 @@ def validate_tag_name(name):
     import bbking
 
     try:
-        bbking.get_tag(name.lower())
+        bbking.tags.get_tag(name.lower())
         return True
     except bbking.errors.TagDoesNotExist:
         return False

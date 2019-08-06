@@ -1,6 +1,7 @@
 import itertools
 
-from django.template.base import Node, Library, TemplateSyntaxError
+from django.template import Library
+from django.template.base import Node, TemplateSyntaxError
 
 register = Library()
 
