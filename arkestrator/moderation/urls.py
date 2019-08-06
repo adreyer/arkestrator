@@ -1,7 +1,9 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
-urlpatterns = patterns('arkestrator.moderation.views',
-        url(r"^ban/$", 'ban_user', name='ban'),
-        url(r"^ban/list/$", 'ban_list', name='ban-list'),
-        url(r"^$", 'mod_panel', name='mod-panel'),
-)
+from arkestrator.moderation import views
+
+urlpatterns = [
+        url(r"^ban/$", views.ban_user, name='ban'),
+        url(r"^ban/list/$", views.ban_list, name='ban-list'),
+        url(r"^$", views.mod_panel, name='mod-panel'),
+]
