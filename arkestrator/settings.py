@@ -2,7 +2,6 @@
 import os
 
 DEBUG = True
-TEMPLATE_DEBUG = DEBUG
 
 BASE_DIR=os.path.dirname(os.path.abspath(__file__))
 
@@ -63,12 +62,29 @@ STATIC_URL = '/static/'
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'c8-s2vc_*&(c(^!se3m3gi-lu)i+uod*!qb*ld^%06*a40443('
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
-)
+TEMPLATES = [
+        { 'BACKEND': 'django.template.backends.django.DjangoTemplates',
+          'APP_DIRS': True,
+          'DIRS': [
+              "%s/templates" % BASE_DIR,
+          ],
+          'OPTIONS': {
+              'debug': DEBUG,
+              'context_processors': [
+                  'django.contrib.auth.context_processors.auth',
+                  'django.core.context_processors.debug',
+                  'django.core.context_processors.i18n',
+                  'django.core.context_processors.media',
+                  'django.contrib.messages.context_processors.messages',
+                  'arkestrator.context_processors.site_name',
+                  'arkestrator.pms.context_processors.new_pm',
+                  'arkestrator.context_processors.online_users',
+                  'arkestrator.board.context_processors.thread_count',
+                  'arkestrator.board.context_processors.posting_users',
+                  'arkestrator.invites.context_processors.new_invites',
+                  'arkestrator.events.context_processors.new_events',
+              ]}},
+]
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -81,26 +97,7 @@ MIDDLEWARE_CLASSES = (
     'arkestrator.board.middleware.PostingUsersMiddleware',
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    "django.contrib.auth.context_processors.auth",
-    "django.core.context_processors.debug",
-    "django.core.context_processors.i18n",
-    "django.core.context_processors.media",
-    "django.contrib.messages.context_processors.messages",
-    "arkestrator.context_processors.site_name",
-    "arkestrator.pms.context_processors.new_pm",
-    "arkestrator.context_processors.online_users",
-    "arkestrator.board.context_processors.thread_count",
-    "arkestrator.board.context_processors.posting_users",
-    "arkestrator.invites.context_processors.new_invites",
-    "arkestrator.events.context_processors.new_events",
-)
-
 ROOT_URLCONF = 'arkestrator.urls'
-
-TEMPLATE_DIRS = (
-    "%s/templates"%BASE_DIR,
-)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
