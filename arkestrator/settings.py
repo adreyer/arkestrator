@@ -72,9 +72,9 @@ TEMPLATES = [
               'debug': DEBUG,
               'context_processors': [
                   'django.contrib.auth.context_processors.auth',
-                  'django.core.context_processors.debug',
-                  'django.core.context_processors.i18n',
-                  'django.core.context_processors.media',
+                  'django.template.context_processors.debug',
+                  'django.template.context_processors.i18n',
+                  'django.template.context_processors.media',
                   'django.contrib.messages.context_processors.messages',
                   'arkestrator.context_processors.site_name',
                   'arkestrator.pms.context_processors.new_pm',

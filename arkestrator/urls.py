@@ -10,6 +10,7 @@ from arkestrator.board.views import get_quote
 from arkestrator.util.views import active_users
 
 urlpatterns = [
+    url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^media/(?P<path>.*)/$', django.views.static.serve,
         {'document_root': settings.MEDIA_ROOT}),

@@ -47,7 +47,7 @@
     <div id="user">
         <ul>
             <li class="menuitem"><a href="{% url 'view-profile' user.id %}" title="View and edit your profile">{{ user.username }}</a></li>
-            <li class="menuitem"><a href="{% url 'django.contrib.auth.views.logout' %}" title="Log out">Log out</a></li>
+            <li class="menuitem"><a href="{% url 'logout' %}" title="Log out">Log out</a></li>
         </ul>
     </div>
     {% endif %}
