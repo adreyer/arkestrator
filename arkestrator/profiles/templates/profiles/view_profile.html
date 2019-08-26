@@ -19,7 +19,7 @@
                 <li class="submenuitem"><a href="{% url 'edit-prefs' %}" title="Edit your preferences">Preferences</a></li>
                 <li class="submenuitem"><a href="{% url 'edit-info' %}" title="Edit your profile">Profile</a></li>
                 <li class="submenuitem"><a href="{% url 'edit-theme' %}" title="Edit your theme">Theme</a></li>
-                <li class="submenuitem"><a href="{% url 'django.contrib.auth.views.password_change' %}" title="Change your password">Password</a></li>
+                <li class="submenuitem"><a href="{% url 'password_change' %}" title="Change your password">Password</a></li>
                 <li class="submenuitem"><a href="{% url 'threads-by' view_user.id %}" title="View thread you've created">My threads ({{ view_user.profile.total_threads }})</a></li>
                 <li class="submenuitem"><a href="{% url 'posts-by' view_user.id %}" title="View posts you've made">My posts ({{ view_user.profile.total_posts }})</a></li>
             {% endif %}
