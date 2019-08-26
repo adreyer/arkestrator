@@ -4,7 +4,7 @@ import hashlib
 
 from django.contrib.auth.models import User, Group
 from django.http import HttpResponseRedirect,  HttpResponse
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.template.base import RequestContext
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.sites.models import Site
@@ -77,11 +77,10 @@ def register(request,code):
         user_form = forms.UserRegistrationForm()
         profile_form = forms.ProfileRegistrationForm(
                 instance = temp_profile)
-    return render_to_response ("invites/register.html",
+    return render(request, "invites/register.html",
         { 'user_form' : user_form,
           'profile_form' : profile_form,
-          'code' : code },
-         context_instance = RequestContext(request))
+          'code' : code })
 
 @login_required
 @permission_required('invites.can_approve','/')

@@ -8,7 +8,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.db.models import Q
-from django.shortcuts import render_to_response,get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, Http404
 from django.template.base import RequestContext
 from django.views.generic.list import ListView
@@ -81,11 +81,8 @@ def new_event(request):
             return HttpResponseRedirect(reverse('list-threads'))
     else:
         form = forms.NewEventForm()
-    return render_to_response('events/new_event.html',
-        {
-            'form': form,
-        },
-        context_instance = RequestContext(request))
+    return render(request, 'events/new_event.html',
+        {'form': form})
 
 @login_required
 def edit_event(request, ev_id):
@@ -114,10 +111,9 @@ def edit_event(request, ev_id):
             initial={ 'time' : local_time,
                         'title' : event.thread.subject, },
             instance = event)
-    return render_to_response('events/edit_event.html',
+    return render(request, 'events/edit_event.html',
                 { 'form' : form ,
-                  'event' : event},
-                context_instance = RequestContext(request))                      
+                  'event' : event})
     
 @login_required
 def update_rsvp(request, ev_id):
@@ -182,12 +178,11 @@ def calendar(request, mstring=None, local=True):
                     evs.append(events[ecounter])
                 day = [day,evs]
     
-    return render_to_response('events/calendar.html',
+    return render(request, 'events/calendar.html',
                 { 'cal' : cal,
                   'month' : month,
                   'year' : year,
-                },
-                context_instance = RequestContext(request))
+                })
     
     
    

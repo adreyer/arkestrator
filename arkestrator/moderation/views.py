@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.template.base import RequestContext
 
 from forms import BanForm
@@ -22,24 +22,20 @@ def ban_user(request):
     else:
         form = BanForm()
 
-    return render_to_response("moderation/ban.html",
-            { 'form' : form, },
-            context_instance = RequestContext(request))
+    return render(request, "moderation/ban.html",
+            { 'form' : form, })
 
 
 @permission_required('moderation.can_ban')
 def ban_list(request):
     queryset = Ban.objects.all()
-    return render_to_response('moderation/ban_list.html',
-        { 'object_list' : queryset,},
-        context_instance = RequestContext(request))
+    return render(request, 'moderation/ban_list.html',
+        { 'object_list' : queryset,})
 
 @permission_required('moderation.can_ban')
 def mod_panel(request):
-    return render_to_response("moderation/mod_panel",
-        context_instance = RequestContext(request))
+    return render(request, "moderation/mod_panel")
 
 def ban_page(request, bans):
-    return render_to_response("moderation/ban_page.html",
-            { 'ban' : bans[0] },
-            context_instance = RequestContext(request))
+    return render(request, "moderation/ban_page.html",
+            { 'ban' : bans[0] })
