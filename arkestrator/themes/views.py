@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.template.base import RequestContext
 from django.http import HttpResponseRedirect
 from forms import ThemeForm
@@ -33,8 +33,8 @@ def edit_theme(request, theme_id=None):
     else:
         form = ThemeForm(instance=theme)
 
-    return render_to_response("themes/edit_theme.html", { 
+    return render(request, "themes/edit_theme.html", { 
         'form' : form,
         'theme' : theme,
         'extra_themes' : Theme.objects.exclude(name="").all(),
-    }, context_instance = RequestContext(request))
+    })

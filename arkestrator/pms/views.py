@@ -2,7 +2,7 @@ from copy import copy
 import re
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
-from django.shortcuts import render_to_response,get_object_or_404
+from django.shortcuts import render, get_object_or_404, render_to_response
 from django.http import HttpResponseRedirect, Http404
 from django.template.base import RequestContext
 from django.core.paginator import Paginator, InvalidPage
@@ -35,9 +35,7 @@ def new_pm(request, rec_id=0):
             except User.DoesNotExist:
                 pass
         form =forms.NewPMForm(initial={ 'recs':rec })
-    return render_to_response('pms/new_pm.html',
-            { 'form' : form },
-            context_instance = RequestContext(request))
+    return render(request, 'pms/new_pm.html', {'form': form})
 
 
 @login_required
@@ -68,10 +66,9 @@ def outbox(request):
         if pm.root_parent != pm:
             pm.reply = 'Re: '
 
-    return render_to_response('pms/outbox.html',
+    return render(request, 'pms/outbox.html',
             { 'pm_rec_list' : pm_list,
-              'page_obj' : page_obj },
-            context_instance = RequestContext(request))
+              'page_obj' : page_obj })
 
 @login_required
 def inbox(request):
@@ -93,10 +90,9 @@ def inbox(request):
         if pm.message.root_parent != pm.message:
             pm.reply = 'Re: '
     
-    return render_to_response('pms/inbox.html',
+    return render(request, 'pms/inbox.html',
             { 'pm_list' : pm_list,
-              'page_obj' : page_obj },
-            context_instance = RequestContext(request))
+              'page_obj' : page_obj })
 
 @login_required
 def mark_read(request):
@@ -154,7 +150,7 @@ def view_pm(request, pm_id):
     hide=False
     if not Profile.objects.get(user=request.user).show_images:
         hide=True
-    return render_to_response("pms/view_pm.html",
+    return render(request, "pms/view_pm.html",
             { 'pm' : pm ,
               'parent' : parent,
               'rec_str' : rec_str,
@@ -162,8 +158,7 @@ def view_pm(request, pm_id):
               'form' : form ,
               'reply_all' : pm.get_reply_all(request.user),
                'rec_str': rec_str,
-               'hide' : hide, },
-            context_instance = RequestContext(request))
+               'hide' : hide, })
 
 def pm_thread(request, pm_id):
     """ view all appropriate pms with the same root_parent as pm_id """
@@ -214,14 +209,13 @@ def pm_thread(request, pm_id):
     hide = False
     if not request.user.profile.show_images:
         hide=True
-    return render_to_response("pms/show_thread.html",
+    return render(request, "pms/show_thread.html",
             { 'pm_list' : queryset,
               'pm' : pm,
               'form' : form,
               'thread' : True,
               'reply_all' : pm.get_reply_all(request.user), 
-              'hide' : hide, },
-            context_instance = RequestContext(request))
+              'hide' : hide, })
     
         
 def del_pm(request, pm_id):

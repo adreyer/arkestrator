@@ -11,7 +11,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Q
-from django.shortcuts import render_to_response,get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, Http404
 from django.template.base import RequestContext
 from django.views.generic.list import ListView
@@ -190,7 +190,7 @@ def view_thread(request,id,start=False,expand=False,hide=None):
     #if this is an event display it as such
     if event:
         event = Event.objects.get(thread=thread)
-        return render_to_response("events/view_event.html", {
+        return render(request, "events/view_event.html", {
         'object_list' : post_list,
         'thread' : thread,
         'form' : form,
@@ -201,10 +201,9 @@ def view_thread(request,id,start=False,expand=False,hide=None):
         'event' : event,
         'rsvp_form' : RSVPForm(),
         'rsvp_list' : event.rsvp_list(),
-        },
-        context_instance = RequestContext(request))
+        })
 
-    return render_to_response("board/post_list.html", {
+    return render(request, "board/post_list.html", {
         'object_list' : post_list,
         'thread' : thread,
         'form' : form,
@@ -212,8 +211,7 @@ def view_thread(request,id,start=False,expand=False,hide=None):
         'hide': hide,
         'start': start,
         'fav' : fav,
-        },
-        context_instance = RequestContext(request))
+        })
 
 @login_required
 def view_post(request, id):
@@ -248,10 +246,10 @@ def new_thread(request):
     else:
         thread_form = forms.ThreadForm()
         post_form = forms.PostForm()
-    return render_to_response("board/new_thread.html",{
+    return render(request, "board/new_thread.html",{
             'thread_form' : thread_form,
             'post_form' : post_form,
-        }, context_instance = RequestContext(request))
+        })
 
 @super_no_cache
 @login_required
@@ -262,10 +260,10 @@ def thread_history(request,id=None):
     queryset = LastRead.objects.filter(thread = thread).order_by("-timestamp")
     queryset = queryset.select_related('user')
 
-    return render_to_response("board/thread_history.html", {
+    return render(request, "board/thread_history.html", {
         'thread' : thread,
         'read_list' : queryset.all(),
-    }, context_instance = RequestContext(request))
+    })
 
 @login_required
 @permission_required('board.can_sticky')
