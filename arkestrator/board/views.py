@@ -312,7 +312,7 @@ class PostsByListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = Post.objects.filter(creator=self.poster).order_by(
-            '-created_at').select_related('thread__subject')
+            '-created_at')
         return queryset
 
     def get_context_data(self, **kwargs):
