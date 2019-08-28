@@ -1,7 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render
-from django.template.base import RequestContext
 
 @login_required
 def active_users(request):

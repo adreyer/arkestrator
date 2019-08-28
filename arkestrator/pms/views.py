@@ -4,7 +4,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.sites.models import Site
 from django.shortcuts import render, get_object_or_404, render_to_response
 from django.http import HttpResponseRedirect, Http404
-from django.template.base import RequestContext
 from django.core.paginator import Paginator, InvalidPage
 from django.contrib.auth.models import User
 from django.db.models import Q

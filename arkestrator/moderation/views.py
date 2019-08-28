@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-from django.template.base import RequestContext
 
 from forms import BanForm
 from models import Ban
