@@ -86,7 +86,10 @@ class FavoritesList(ThreadList):
     """ subclass of ThreadList that displays the current users favorites """
 
     def get_queryset(self):
-        return Thread.objects.filter(favorite=self.request.user)
+        favs = Favorite.objects.filter(user=self.request.user)
+        thread_ids = [f.thread.id for f in favs]
+
+        return Thread.objects.filter(id__in=thread_ids).order_by('-stuck', '-last_post__id')
 
 class ThreadsByList(ThreadList):
     """ Thread list takes a single argument the user id of the user """
@@ -178,7 +181,7 @@ def view_thread(request,id,start=False,expand=False,hide=None):
     del thread.total_views
 
     fav = False
-    if thread.favorite.filter(id=request.user.id):
+    if thread.favorites.filter(user=request.user):
         fav = True
 
     if len(post_list)< 10:
@@ -352,9 +355,9 @@ def favorite_thread(request, id):
     thread = get_object_or_404(Thread,pk=id)
     if request.method == 'POST':
         if request.POST['fav'] == 'add':
-            thread.favorite.add(request.user)
+            Favorite.objects.create(thread=thread, user=request.user)
         elif request.POST['fav'] == 'remove':
-            thread.favorite.remove(request.user)
+            Favorite.objects.get(thread=thread, user=request.user).delete()
     return HttpResponseRedirect(reverse('list-threads'))
 
 
