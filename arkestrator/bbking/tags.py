@@ -38,7 +38,7 @@ def get_tag(name):
         _load_tags()
 
     if name not in _TAGS:
-        raise TagDoesNotExist, "%s is not a valid tag name" % name
+        raise(TagDoesNotExist, "%s is not a valid tag name" % name)
 
     return _TAGS[name]
 
