@@ -122,7 +122,7 @@ class BBTag(object):
             for key,value in self.kwargs.items():
                             context[key] = value
             self.update_context(context)
-            return self.get_template().render(context)
+            return self.get_template().render(context.flatten())
         finally:
             context.pop()
 
