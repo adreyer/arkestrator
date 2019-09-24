@@ -11,14 +11,9 @@ setup(
     install_requires=[
         'ply==3.4',
         'django==1.11.23',
-        'python-memcached==1.48',
+        'python-memcached==1.59',
         'pytz==2014.7',
-        'simplejson==2.3.0',
         'psycopg2-binary==2.8.3',
-        'multiprocessing==2.6.2.1',
-        'BeautifulSoup==3.2.0',
-        'unittest2==0.5.1',
-        'mock==0.7.2',
         'django-oembed==0.1.3',
       ],
     )
