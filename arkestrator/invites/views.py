@@ -29,20 +29,13 @@ class InviteListView(ListView):
 
     def get_queryset(self):
         return Invite.objects.filter(
-                rejected=False, 
+                rejected=False,
                 approved=False).order_by('-created_on')
 
     def get_context_data(self, **kwargs):
         ctx = super(InviteListView, self).get_context_data(**kwargs)
         request = self.request
-        if request.method == 'POST':
-            form = forms.NewInviteForm(request.POST)
-            if form.is_valid():
-                form.save(request.user)
-                cache.delete('inv_count')
-                return HttpResponseRedirect(reverse('list-threads'))
-        else:
-            form = forms.NewInviteForm()
+        form = forms.NewInviteForm()
 
         ctx['form'] = form
         return ctx
@@ -80,6 +73,15 @@ def register(request,code):
         { 'user_form' : user_form,
           'profile_form' : profile_form,
           'code' : code })
+
+@login_required
+def new_invite(request):
+    if request.method == 'POST':
+        form = forms.NewInviteForm(request.POST)
+        if form.is_valid():
+            form.save(request.user)
+            cache.delete('inv_count')
+            return HttpResponseRedirect(reverse('list-threads'))
 
 @login_required
 @permission_required('invites.can_approve','/')
