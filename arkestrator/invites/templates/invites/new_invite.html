@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+<!-- TODO PRETTY SURE THIS ISN'T USED it fucked me up for a minute -->
+
 {% block content %}
     <form method="post" action="{% url 'new-invite' %}">
         {% csrf_token %}
