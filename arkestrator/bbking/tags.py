@@ -36,7 +36,7 @@ def _load_tags():
 def get_tag(name):
     if not _TAGS:
         _load_tags()
-    
+
     if name not in _TAGS:
         raise TagDoesNotExist, "%s is not a valid tag name" % name
 
@@ -79,7 +79,7 @@ class LiteralTag(object):
         return self.length
 
 class BBTag(object):
-    
+
     default_arg = None
 
     def __init__(self, contents, raw, arg=None, **kwargs):
@@ -139,7 +139,7 @@ def load_tags(contents):
             if item.arg:
                 tags.append(tag(children, item.raw, item.arg))
             elif item.kwargs:
-                tags.append(tag(children, item.raw, **item.kwargs)) 
+                tags.append(tag(children, item.raw, **item.kwargs))
             else:
                 tags.append(tag(children, item.raw))
         else:
@@ -149,7 +149,7 @@ def load_tags(contents):
         return tags[0]
 
     return BlockTag(tags)
-                
+
 def compile(raw):
     parsed = parser.parser.parse(raw)
     if not parsed:
