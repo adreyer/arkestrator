@@ -14,6 +14,5 @@ setup(
         'python-memcached==1.59',
         'pytz==2014.7',
         'psycopg2-binary==2.8.3',
-        'django-oembed==0.1.3',
       ],
     )
