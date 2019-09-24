@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from arkestrator.board.models import Thread, Post
-from models import Event, RSVP, RSVP_CHOICES
+from .models import Event, RSVP, RSVP_CHOICES
 
 
 class EditEventForm(forms.ModelForm):

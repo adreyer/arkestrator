@@ -18,7 +18,7 @@ from django.utils.decorators import method_decorator
 from arkestrator.invites.models import Invite
 from arkestrator.profiles.models import Profile
 from arkestrator.decorators import moderator_required
-import forms
+from . import forms
 
 class InviteListView(ListView):
     paginate_by=10

@@ -1,5 +1,5 @@
 # "I am from the future!" -Sayid Jarrah
-from __future__ import with_statement
+
 
 from fabric.api import run, env, sudo, require, cd
 import datetime

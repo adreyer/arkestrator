@@ -1,5 +1,5 @@
 import re
-from urlparse import urlparse
+from urllib.parse import urlparse
 from django.utils.safestring import mark_safe
 
 from bbking.tags import BBTag

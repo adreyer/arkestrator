@@ -95,7 +95,7 @@ class Post(models.Model):
         return reverse('view-post', args=[self.id])
 
     def __unicode__(self):
-        return "%s: %s"%(unicode(self.thread),self.body[:20])
+        return "%s: %s"%(str(self.thread),self.body[:20])
     
 class LastRead(models.Model):
     """ when did a user last read a thread """

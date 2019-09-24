@@ -1,6 +1,6 @@
 from django.conf import settings
 
-import StringIO
+import io
 from string import lower
 
 import ply.yacc as yacc
@@ -46,7 +46,7 @@ class OpenTag(object):
         self.raw = raw
         self.arg = arg
         self.kwargs = kwargs
- 
+
 class Args(object):
     def __init__(self, args, raw):
         self.args = args
@@ -79,7 +79,7 @@ class Tagged(object):
 class Block(object):
     def __init__(self, contents):
         self.contents = contents
-        
+
     def __add__(self, other):
         if isinstance(other, Block):
             self.contents += other.contents
@@ -108,11 +108,11 @@ class Block(object):
                 compressed.append(item)
             else:
                 if not sio:
-                    sio = StringIO.StringIO()
+                    sio = io.StringIO()
                 sio.write(raw(item))
         if sio:
             compressed.append(sio.getvalue())
-        
+
         return compressed
 
 def p_main(p):
@@ -153,7 +153,7 @@ def p_empty(p):
     pass
 
 def p_text(p):
-    '''text : text term 
+    '''text : text term
             | term
     '''
     if len(p) == 3:
@@ -163,7 +163,7 @@ def p_text(p):
 
 def p_term(p):
     '''
-       term : WHITESPACE 
+       term : WHITESPACE
             | SYMBOL
             | MISC
             | SLASH

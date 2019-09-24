@@ -22,10 +22,10 @@ class WithCycleNode(Node):
     class CycleState(object):
         def __init__(self, values):
             self.iter = itertools.cycle(values)
-            self.next()
+            next(self)
 
-        def next(self):
-            self.current = self.iter.next()
+        def __next__(self):
+            self.current = next(self.iter)
 
         def __unicode__(self):
             return self.current
@@ -37,7 +37,7 @@ class NextCycleNode(Node):
     def render(self, context):
         try:
             cn = context[self.var_name]
-            cn.next()
+            next(cn)
         except KeyError:
             raise TemplateSyntaxError("cannot find cycle named '%s'" % self.var_name)
 

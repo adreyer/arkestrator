@@ -1,6 +1,6 @@
 from django.test import TestCase
-from models import Thread, Post
-from forms import ThreadForm, PostForm
+from .models import Thread, Post
+from .forms import ThreadForm, PostForm
 
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
@@ -24,7 +24,7 @@ class ThreadTest(TestCase):
             creator=self.user,
             site=self.site)
 
-        self.assertEquals(str(thread),"Hello, World")
+        self.assertEqual(str(thread),"Hello, World")
 
 class PostTest(TestCase):
     def setUp(self):
@@ -50,7 +50,7 @@ class PostTest(TestCase):
             body="Take and eat; this is my body."
         )
 
-        self.assertEquals(str(post),"%s: %s"%(str(post.thread),post.body[:20]))
+        self.assertEqual(str(post),"%s: %s"%(str(post.thread),post.body[:20]))
 
     def test_update_thread_signal(self):
         # timestamp 2 days in the future

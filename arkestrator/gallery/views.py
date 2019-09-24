@@ -11,15 +11,15 @@ from django.core.cache import cache
 from django.core.paginator import Paginator, InvalidPage
 from django.contrib.auth.models import User
 
-import forms
-from models import Image
+from . import forms
+from .models import Image
 
 @login_required
 def upload_image(request):
     if request.method == 'POST':
-        print request
-        print request.FILES
-        print request.FILES['img_file']
+        print(request)
+        print(request.FILES)
+        print(request.FILES['img_file'])
         form = forms.IMGForm(request.POST, request.FILES)
         if form.is_valid():
             image = form.save(request.user)

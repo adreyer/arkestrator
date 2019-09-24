@@ -3,7 +3,7 @@ from django.core.cache import cache
 
 from arkestrator.board.models import LastRead, Thread
 from arkestrator.profiles.models import Profile
-from models import Event
+from .models import Event
 
 def new_events(request):
     """ returns the number of new events

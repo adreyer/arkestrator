@@ -17,8 +17,8 @@ from django.utils.decorators import method_decorator
 
 from arkestrator.board.views import view_thread
 
-from models import Event, Market
-import forms
+from .models import Event, Market
+from . import forms
 
 class EventListView(ListView):
     paginate_by=50

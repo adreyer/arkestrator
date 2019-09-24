@@ -11,9 +11,9 @@ from django.core.urlresolvers import reverse
 
 
 
-from models import PM, Recipient
+from .models import PM, Recipient
 from arkestrator.profiles.models import Profile
-import forms
+from . import forms
 
 @login_required
 def new_pm(request, rec_id=0): 

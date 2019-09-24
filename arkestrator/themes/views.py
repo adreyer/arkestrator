@@ -1,8 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
-from forms import ThemeForm
-from models import Theme
+from .forms import ThemeForm
+from .models import Theme
 
 @login_required
 def edit_theme(request, theme_id=None):

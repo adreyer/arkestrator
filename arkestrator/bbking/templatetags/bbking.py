@@ -1,6 +1,6 @@
 from django import template
 
-import bbking
+from . import bbking
 
 register = template.Library()
 
@@ -21,7 +21,7 @@ def bbcode(parser, token):
     try:
         tagname, var = token.contents.split()
     except ValueError:
-        raise template.TemplateSyntaxError, "bbcode tag requires one argument"
+        raise template.TemplateSyntaxError("bbcode tag requires one argument")
     return BBCodeNode(var)
 
 

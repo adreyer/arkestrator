@@ -2,7 +2,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 import re
 
-from models import Theme
+from .models import Theme
 
 _COLOR_REGEX = re.compile("[0-9A-Fa-f]{6}")
 

@@ -5,8 +5,8 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 
 from arkestrator.themes.models import Theme
-from models import Profile
-import forms
+from .models import Profile
+from . import forms
 
 
 @login_required

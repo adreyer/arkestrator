@@ -1,5 +1,5 @@
 import json
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import base64
 
 from django.contrib.auth.models import User
@@ -21,12 +21,12 @@ class IMGForm(forms.Form):
 
     def save(self, user):
         image = self.cleaned_data['img_file'].read()
-        data = urllib.urlencode({
+        data = urllib.parse.urlencode({
                     'key': key,
                     'image' : base64.b64encode(image)})
-        response = urllib.urlopen('http://imgur.com/api/upload.json',data)
+        response = urllib.request.urlopen('http://imgur.com/api/upload.json',data)
         rsp = json.loads(response.read())['rsp']
-        print rsp
+        print(rsp)
         if rsp['stat'] == 'fail':
             raise forms.ValidationError('imgur error:' + rsp['error_msg'])
         image = Image(

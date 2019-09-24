@@ -4,8 +4,8 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 
-from forms import BanForm
-from models import Ban
+from .forms import BanForm
+from .models import Ban
 
 #using can_lock is temporary till moderation has some models
 @permission_required('moderation.can_ban')

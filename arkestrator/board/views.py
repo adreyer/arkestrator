@@ -3,7 +3,7 @@ import random
 import sys
 import string
 import re
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.sites.models import Site
@@ -26,8 +26,8 @@ from arkestrator.events.models import Event
 from arkestrator.events.forms import RSVPForm
 from arkestrator.util import get_client_ip
 from arkestrator.views import LoginRequiredMixin
-from models import Thread, Post, LastRead, Favorite
-import forms
+from .models import Thread, Post, LastRead, Favorite
+from . import forms
 
 from arkestrator.decorators import super_no_cache
 
@@ -380,5 +380,5 @@ class ThreadTitleSearchView(ListView):
     def get_context_data(self, **kwargs):
         ctx = super(ThreadTitleSearchView, self).get_context_data(**kwargs)
         ctx['search_query'] = self.query
-        ctx['paginator_query'] = urllib.urlencode({'query': self.query})
+        ctx['paginator_query'] = urllib.parse.urlencode({'query': self.query})
         return ctx
