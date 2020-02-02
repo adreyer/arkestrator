@@ -10,13 +10,13 @@ tokens = (
     'MISC',
 )
 
-t_LBRACKET = '\['
-t_RBRACKET = '\]'
-t_SLASH = '/'
-t_EQ = '='
-t_SYMBOL = '[A-Za-z_][A-Za-z0-9_]*'
-t_WHITESPACE = '[ \t\n]+'
-t_MISC = '[^\[\]/=A-Za-z \t\n_]+'
+t_LBRACKET = r'\['
+t_RBRACKET = r'\]'
+t_SLASH = r'/'
+t_EQ = r'='
+t_SYMBOL = r'[A-Za-z_][A-Za-z0-9_]*'
+t_WHITESPACE = r'[ \t\n]+'
+t_MISC = r'[^\[\]/=A-Za-z \t\n_]+'
 
 def t_error(t):
     t.lexer.skip(1)

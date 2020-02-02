@@ -4,9 +4,9 @@ import io
 
 import ply.yacc as yacc
 
-import bbking.tags
-from bbking.lexer import tokens
-import bbking.errors
+from . import tags
+from .lexer import tokens
+from . import errors
 
 def validate_tag_name(name):
     import bbking

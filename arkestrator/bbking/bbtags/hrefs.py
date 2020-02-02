@@ -47,7 +47,7 @@ class BBTagYouTube(BBTag):
             return
         
         context['valid_url'] = True
-	context['url'] = mark_safe(self._base_url % match.group(2))
+        context['url'] = mark_safe(self._base_url % match.group(2))
 
     @classmethod
     def usage(cls):
