@@ -1,0 +1,5 @@
+{% if valid_url %}
+<iframe type="text/html" width="640" height="385" src="{{ url }}" frameborder="0"></iframe>
+{% else %}
+    Invalid Youtube URL: {{ contents }}
+{% endif %}

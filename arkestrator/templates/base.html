@@ -47,7 +47,7 @@
     <div id="user">
         <ul>
             <li class="menuitem"><a href="{% url 'view-profile' user.id %}" title="View and edit your profile">{{ user.username }}</a></li>
-            <li class="menuitem"><a href="{% url 'django.contrib.auth.views.logout' %}" title="Log out">Log out</a></li>
+            <li class="menuitem"><a href="{% url 'logout' %}" title="Log out">Log out</a></li>
         </ul>
     </div>
     {% endif %}
@@ -63,7 +63,6 @@
                     <span class="urgent">Events ({{ new_events }})</span>
                 {% else %}Events{% endif %}</a></li>
             <li class="menuitem"><a href="{% url 'list-users' %}" title="User list">User list</a></li>
-            <li class="menuitem"><a href="http://wiki.mdc2.org/index.php/Main_Page" title="MDC wiki">Wiki</a></li>
             <li class="menuitem"><a href="{% url 'invite-list' %}" title="Invite a new user">
                 {% if new_invites and perms.invites.can_approve %}
                     <span class="urgent">Invites ({{ new_invites }})</span>

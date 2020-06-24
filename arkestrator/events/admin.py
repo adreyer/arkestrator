@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import Market, Event, RSVP
+from .models import Market, Event, RSVP
 
 class EventAdmin(admin.ModelAdmin):
     list_display=('thread','time','description','market',

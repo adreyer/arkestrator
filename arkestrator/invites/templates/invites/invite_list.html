@@ -15,18 +15,17 @@
         <div class="post">
         <div class="row2">
             <a href="{% url 'view-profile' invite.inviter.id %}">
-                {{ invite.inviter.username }}</a> invited {{ invite.invitee }} 
+                {{ invite.inviter.username }}</a> invited {{ invite.invitee }}
                 on {% mdctime invite.created_on short %}
                 {% if invite.approved %}
                     <br />
                     {{ invite.approved_by.username }}
-                    approved this on 
+                    approved this on
                     {% mdctime invite.approved_on short %}
                 {% else %}
                     {% if not invite.rejected %}
                         <span class="submenuitem">
-                        <form class="submenuitem" name="rejf{{ invite.id }}" action="{% url
-                          'reject-invite' invite.id %}" method="post">
+                        <form class="submenuitem" name="rejf{{ invite.id }}" action="{% url 'reject-invite' invite.id %}" method="post">
                         {% csrf_token %}
                         <input type="hidden" name="confirm" value="true">
                         <a href="javascript:void(1);"  onClick="document.rejf{{ invite.id }}.submit();" title="Reject this invite">
@@ -36,17 +35,16 @@
                     {% else %}
                         <br />
                         {{ invite.approved_by.username }}
-                        rejected this on 
+                        rejected this on
                         {% mdctime invite.approved_on short%}
                     {% endif %}
                     <span class="submenuitem">
-                    <form class="submenuitem" name="appf{{ invite.id }}" action="{% url
-                      'approve-invite' invite.id %}" method="post">
+                    <form class="submenuitem" name="appf{{ invite.id }}" action="{% url 'approve-invite' invite.id %}" method="post">
                     {% csrf_token %}
                     <input type="hidden" name="confirm" value="true">
                     <a href="javascript:void(1);" onClick="document.appf{{ invite.id }}.submit();" title="Approve this invite">
                     approve</a></form></span>
-                {% endif %} 
+                {% endif %}
             </div>
             <div class="body">
                 <p>{{ invite.explanation }}</p>
@@ -55,7 +53,7 @@
     {% endfor %}
 {% endif %}
 {% if not perms.invites.can_approve or not object_list %}
-    <form method="post" action="{% url 'invite-list' %}">
+    <form method="post" action="{% url 'new-invite' %}">
         {% csrf_token %}
         <table>
             <tr>

@@ -32,7 +32,6 @@ class Thread(models.Model):
     last_read = models.ManyToManyField(User,
         through = 'LastRead',
         related_name='last_read')
-    favorite = models.ManyToManyField(User, related_name='favorites')
     objects = CurrentSiteManager()
 
     def __unicode__(self):
@@ -96,7 +95,7 @@ class Post(models.Model):
         return reverse('view-post', args=[self.id])
 
     def __unicode__(self):
-        return "%s: %s"%(unicode(self.thread),self.body[:20])
+        return "%s: %s"%(str(self.thread),self.body[:20])
     
 class LastRead(models.Model):
     """ when did a user last read a thread """
@@ -112,9 +111,6 @@ class LastRead(models.Model):
 
 class Favorite(models.Model):
     """ Explicitly declare this linking table but mimic the old schema """
-    class Meta:
-        db_table = 'board_thread_favorite'
-
     thread = models.ForeignKey(Thread, related_name='favorites')
     user = models.ForeignKey(User)
 

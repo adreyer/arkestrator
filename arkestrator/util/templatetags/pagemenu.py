@@ -1,6 +1,7 @@
 import itertools
 from django.core.cache import cache
-from django.template import Node, Library, TemplateSyntaxError, Variable
+from django.template import Library
+from django.template import Node, TemplateSyntaxError, Variable
 
 register = Library()
 
@@ -10,7 +11,7 @@ page_offsets = [-20,-15,-10,-7,-5,-4,-3,-2,-1,0,1,2,3,4,5,7,10,15,20]
 def pick_pages(curr,last):
     page_list = []
     if last <= 20:
-        page_list = range(1,last+1)
+        page_list = list(range(1,last+1))
     else:
         page_list = [curr+off for off in page_offsets
                         if curr+off > 1 and curr+off<last]

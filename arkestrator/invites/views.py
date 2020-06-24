@@ -4,8 +4,7 @@ import hashlib
 
 from django.contrib.auth.models import User, Group
 from django.http import HttpResponseRedirect,  HttpResponse
-from django.shortcuts import render_to_response, get_object_or_404
-from django.template import RequestContext
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.sites.models import Site
 from django.core.mail import send_mail
@@ -19,7 +18,7 @@ from django.utils.decorators import method_decorator
 from arkestrator.invites.models import Invite
 from arkestrator.profiles.models import Profile
 from arkestrator.decorators import moderator_required
-import forms
+from . import forms
 
 class InviteListView(ListView):
     paginate_by=10
@@ -30,26 +29,19 @@ class InviteListView(ListView):
 
     def get_queryset(self):
         return Invite.objects.filter(
-                rejected=False, 
+                rejected=False,
                 approved=False).order_by('-created_on')
 
     def get_context_data(self, **kwargs):
         ctx = super(InviteListView, self).get_context_data(**kwargs)
         request = self.request
-        if request.method == 'POST':
-            form = forms.NewInviteForm(request.POST)
-            if form.is_valid():
-                form.save(request.user)
-                cache.delete('inv_count')
-                return HttpResponseRedirect(reverse('list-threads'))
-        else:
-            form = forms.NewInviteForm()
+        form = forms.NewInviteForm()
 
         ctx['form'] = form
         return ctx
 
 
-@transaction.commit_on_success()
+@transaction.atomic
 def register(request,code):
     """ register a new user with invite_code code 404 bad codes """
     invite = get_object_or_404(Invite,invite_code=code)
@@ -77,11 +69,19 @@ def register(request,code):
         user_form = forms.UserRegistrationForm()
         profile_form = forms.ProfileRegistrationForm(
                 instance = temp_profile)
-    return render_to_response ("invites/register.html",
+    return render(request, "invites/register.html",
         { 'user_form' : user_form,
           'profile_form' : profile_form,
-          'code' : code },
-         context_instance = RequestContext(request))
+          'code' : code })
+
+@login_required
+def new_invite(request):
+    if request.method == 'POST':
+        form = forms.NewInviteForm(request.POST)
+        if form.is_valid():
+            form.save(request.user)
+            cache.delete('inv_count')
+            return HttpResponseRedirect(reverse('list-threads'))
 
 @login_required
 @permission_required('invites.can_approve','/')

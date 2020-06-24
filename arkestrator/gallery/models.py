@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.db import models
 
 class Image(models.Model):
+    class Meta:
+        app_label = 'gallery'
     uploader    = models.ForeignKey(User)
     title       = models.CharField(max_length=160)
     description = models.TextField(null=True,blank=True)

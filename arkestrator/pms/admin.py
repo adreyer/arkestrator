@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import PM, Recipient
+from .models import PM, Recipient
 
 class PMAdmin(admin.ModelAdmin):
     list_display = ('sender', 'subject', 'created_at', 'parent', 'root_parent')

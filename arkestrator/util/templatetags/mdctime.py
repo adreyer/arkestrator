@@ -1,6 +1,7 @@
 import pytz
 from django.conf import settings
-from django.template import Library, Node, Variable, TemplateSyntaxError
+from django.template.base import Node, Variable, TemplateSyntaxError
+from django.template import Library
 
 register = Library()
 
@@ -19,7 +20,7 @@ class MDCTNode(Node):
         if self.tz_var is None:
             user = Variable('user').resolve(context)
             if user.is_authenticated():
-                tz_name = user.get_profile().time_zone
+                tz_name = user.profile.time_zone
         else:
             tz_name = self.tz_var.resolve(context)
             

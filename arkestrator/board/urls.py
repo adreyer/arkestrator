@@ -1,10 +1,9 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
+from arkestrator.board import views
+from arkestrator.board import models
 
-import views
-import models
-
-urlpatterns = patterns('',
+urlpatterns = [
     url(r"^$",views.ThreadList.as_view(), name='list-threads'),
     url(r"^threads/(?P<id>\d+)/$",views.view_thread,name='view-thread'),
     url(r"^threads/(?P<id>\d+)/(?P<start>\d+)/$",views.view_thread,
@@ -46,4 +45,4 @@ urlpatterns = patterns('',
     url(r"^threads/favorites/$", views.FavoritesList.as_view(),
             { 'fav' : True }, name='favorite-list'),
     url(r"^threads/search/$", views.ThreadTitleSearchView.as_view(), name='search-threads'),
-)
+]

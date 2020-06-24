@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from models import Thread, Post, LastRead
+from .models import Thread, Post, LastRead
 
 class PostInline(admin.StackedInline):
     model = Post

@@ -1,11 +1,11 @@
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
 from django.views.generic import TemplateView
 from django.db.models.signals import post_save
 
-from models import Theme
-from views import edit_theme
+from arkestrator.themes.models import Theme
+from arkestrator.themes.views import edit_theme
 
 
 class DefaultThemeView(TemplateView):
@@ -24,9 +24,9 @@ class ThemeView(DetailView):
     model = Theme
 
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r"^(?P<pk>\d+)/$", ThemeView.as_view(), name='theme-css'),
     url(r"^default/$", DefaultThemeView.as_view(), name='default-theme-css'),
     url(r"^edit/$", edit_theme, name="edit-theme"),
     url(r"^edit/(?P<theme_id>\d+)/$", edit_theme, name="edit-existing-theme"),
-)
+]

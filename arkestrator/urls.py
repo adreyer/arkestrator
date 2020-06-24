@@ -1,24 +1,28 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.conf import settings
+import django.views.static
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
 
-urlpatterns = patterns('',
-    (r'^admin/', include(admin.site.urls)),
-    (r'^media/(?P<path>.*)/$', 'django.views.static.serve',
+from arkestrator.board.views import get_quote
+from arkestrator.util.views import active_users
+
+urlpatterns = [
+    url(r'^accounts/', include('django.contrib.auth.urls')),
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^media/(?P<path>.*)/$', django.views.static.serve,
         {'document_root': settings.MEDIA_ROOT}),
-    (r'^accounts/', include('django.contrib.auth.urls')),
-    (r'^themes/', include('arkestrator.themes.urls')),
-    (r'', include('arkestrator.board.urls')),
-    (r'^profiles/', include('arkestrator.profiles.urls')),
-    (r'^invites/', include('arkestrator.invites.urls')),
-    (r'^pms/', include('arkestrator.pms.urls')),
-    (r'^events/', include('arkestrator.events.urls')),
-    (r'^gallery/', include('arkestrator.gallery.urls')),
-    (r'^mod/', include('arkestrator.moderation.urls')),
-    url(r'^active/$', 'arkestrator.util.views.active_users',
-        name='active-users'),
-    url(r'^quote/(?P<id>\d+)/$', 'arkestrator.board.views.get_quote', name='get-quote'),
-)
+    url(r'^accounts/', include('django.contrib.auth.urls')),
+    url(r'^themes/', include('arkestrator.themes.urls')),
+    url(r'', include('arkestrator.board.urls')),
+    url(r'^profiles/', include('arkestrator.profiles.urls')),
+    url(r'^invites/', include('arkestrator.invites.urls')),
+    url(r'^pms/', include('arkestrator.pms.urls')),
+    url(r'^events/', include('arkestrator.events.urls')),
+    url(r'^gallery/', include('arkestrator.gallery.urls')),
+    url(r'^mod/', include('arkestrator.moderation.urls')),
+    url(r'^active/$', active_users, name='active-users'),
+    url(r'^quote/(?P<id>\d+)/$', get_quote, name='get-quote'),
+]

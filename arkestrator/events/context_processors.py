@@ -3,7 +3,7 @@ from django.core.cache import cache
 
 from arkestrator.board.models import LastRead, Thread
 from arkestrator.profiles.models import Profile
-from models import Event
+from .models import Event
 
 def new_events(request):
     """ returns the number of new events
@@ -17,7 +17,7 @@ def new_events(request):
         
     if request.user.is_authenticated():
         try:
-            profile = request.user.get_profile()
+            profile = request.user.profile
         except Profile.DoesNotExist:
             return{ 'new_events' : 0 }
         cache_key = 'event-count:%d'%(request.user.id)

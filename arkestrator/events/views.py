@@ -8,9 +8,8 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.db.models import Q
-from django.shortcuts import render_to_response,get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, Http404
-from django.template import RequestContext
 from django.views.generic.list import ListView
 from django.core.paginator import Paginator, InvalidPage
 from django.contrib.auth.models import User
@@ -18,8 +17,8 @@ from django.utils.decorators import method_decorator
 
 from arkestrator.board.views import view_thread
 
-from models import Event, Market
-import forms
+from .models import Event, Market
+from . import forms
 
 class EventListView(ListView):
     paginate_by=50
@@ -40,17 +39,17 @@ class EventListView(ListView):
         request = self.request
         queryset = Event.objects.all()
         if self.upcoming:
-            queryset = queryset.filter(time__gte=datetime.datetime.now)
+            queryset = queryset.filter(time__gte=datetime.datetime.now())
 
-        usr_mrk = request.user.get_profile().market
+        usr_mrk = request.user.profile.market
         if usr_mrk:
             if self.local:
                 queryset = queryset.filter(Q(
                     Q(market=usr_mrk) | Q(all_markets=True)))
         queryset = queryset.order_by('time')
 
-        request.user.get_profile().last_events_view = datetime.datetime.now()
-        request.user.get_profile().save()
+        request.user.profile.last_events_view = datetime.datetime.now()
+        request.user.profile.save()
         cache.delete('event-count:%d'%(request.user.id))
         return queryset
 
@@ -81,11 +80,8 @@ def new_event(request):
             return HttpResponseRedirect(reverse('list-threads'))
     else:
         form = forms.NewEventForm()
-    return render_to_response('events/new_event.html',
-        {
-            'form': form,
-        },
-        context_instance = RequestContext(request))
+    return render(request, 'events/new_event.html',
+        {'form': form})
 
 @login_required
 def edit_event(request, ev_id):
@@ -114,10 +110,9 @@ def edit_event(request, ev_id):
             initial={ 'time' : local_time,
                         'title' : event.thread.subject, },
             instance = event)
-    return render_to_response('events/edit_event.html',
+    return render(request, 'events/edit_event.html',
                 { 'form' : form ,
-                  'event' : event},
-                context_instance = RequestContext(request))                      
+                  'event' : event})
     
 @login_required
 def update_rsvp(request, ev_id):
@@ -165,7 +160,7 @@ def calendar(request, mstring=None, local=True):
     cal = calendar.monthcalendar(year,month)
     events = Event.objects.filter(time__year=year,
                 time__month=month)
-    usr_mrk = request.user.get_profile().market
+    usr_mrk = request.user.profile.market
     if usr_mrk:
         if local:
             events = events.filter(Q(
@@ -182,12 +177,11 @@ def calendar(request, mstring=None, local=True):
                     evs.append(events[ecounter])
                 day = [day,evs]
     
-    return render_to_response('events/calendar.html',
+    return render(request, 'events/calendar.html',
                 { 'cal' : cal,
                   'month' : month,
                   'year' : year,
-                },
-                context_instance = RequestContext(request))
+                })
     
     
    

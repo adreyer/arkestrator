@@ -1,7 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 
 @login_required
 def active_users(request):
@@ -15,7 +14,7 @@ def active_users(request):
         else:
             user.is_posting = False
 
-    return render_to_response("util/active_users.html", {
+    return render(request, "util/active_users.html", {
         'user_list' : user_list,
-        }, context_instance = RequestContext(request))
+        })
         

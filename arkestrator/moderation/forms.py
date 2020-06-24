@@ -1,6 +1,6 @@
 
 from django import forms
-from models import Ban
+from .models import Ban
 
 class BanForm(forms.ModelForm):
     class Meta:

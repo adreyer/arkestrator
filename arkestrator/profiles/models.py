@@ -13,7 +13,7 @@ class Profile(models.Model):
 
     #data
     user = models.OneToOneField(User,null=False)
-    ip_signup = models.IPAddressField()
+    ip_signup = models.GenericIPAddressField()
     last_profile_update = models.DateTimeField(default=datetime.datetime.now)
     profile_views = models.IntegerField(default=0)
     last_events_view = models.DateTimeField(default=datetime.datetime.now)

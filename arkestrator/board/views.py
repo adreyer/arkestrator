@@ -3,7 +3,7 @@ import random
 import sys
 import string
 import re
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.sites.models import Site
@@ -11,9 +11,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.db import transaction
 from django.db.models import Q
-from django.shortcuts import render_to_response,get_object_or_404
+from django.shortcuts import render, get_object_or_404, render_to_response
 from django.http import HttpResponseRedirect, Http404
-from django.template import RequestContext
 from django.views.generic.list import ListView
 from django.db.models.signals import post_save
 from django.db.models import Sum, Count, Max, F
@@ -27,8 +26,8 @@ from arkestrator.events.models import Event
 from arkestrator.events.forms import RSVPForm
 from arkestrator.util import get_client_ip
 from arkestrator.views import LoginRequiredMixin
-from models import Thread, Post, LastRead, Favorite
-import forms
+from .models import Thread, Post, LastRead, Favorite
+from . import forms
 
 from arkestrator.decorators import super_no_cache
 
@@ -40,7 +39,7 @@ class ThreadList(LoginRequiredMixin, ListView):
     paginate_by = THREADS_PER_PAGE
     queryset = Thread.objects.order_by(
             "-stuck","-last_post__id").select_related(
-            "creator","last_post","last_post__creator","favorite")
+            "creator","last_post","last_post__creator")
 
     def get_context_data(self, **kwargs):
         """ set up extra context data """
@@ -75,10 +74,9 @@ class ThreadList(LoginRequiredMixin, ListView):
 
     def favorites(self, thread_list, user):
         """ annotate a queryset of threads with a users favorites """
-        favs = Favorite.objects.filter(
-                                thread__in=thread_list,
-                                user=user).values('thread__id')
-
+        favs = [f['thread__id'] for f in Favorite.objects.filter(
+                                         thread__in=thread_list,
+                                         user=user).values('thread__id')]
         for thread in thread_list:
             thread.fav = thread.id in favs
         return thread_list
@@ -87,7 +85,10 @@ class FavoritesList(ThreadList):
     """ subclass of ThreadList that displays the current users favorites """
 
     def get_queryset(self):
-        return Thread.objects.filter(favorite=self.request.user)
+        favs = Favorite.objects.filter(user=self.request.user)
+        thread_ids = [f.thread.id for f in favs]
+
+        return Thread.objects.filter(id__in=thread_ids).order_by('-stuck', '-last_post__id')
 
 class ThreadsByList(ThreadList):
     """ Thread list takes a single argument the user id of the user """
@@ -139,7 +140,7 @@ def view_thread(request,id,start=False,expand=False,hide=None):
             thread = thread
         )
         if not expand:
-            coll_size = request.user.get_profile().collapse_size
+            coll_size = request.user.profile.collapse_size
             if start:
                 tset = queryset.filter(pk__lte=start).reverse()
             else:
@@ -167,7 +168,7 @@ def view_thread(request,id,start=False,expand=False,hide=None):
 
     #hide images in the thread if appropriate
     try:
-        if (not hide is False) and (hide or not request.user.get_profile().show_images):
+        if (not hide is False) and (hide or not request.user.profile.show_images):
             hide = True
     except ObjectDoesNotExist:
         pass
@@ -179,7 +180,7 @@ def view_thread(request,id,start=False,expand=False,hide=None):
     del thread.total_views
 
     fav = False
-    if thread.favorite.filter(id=request.user.id):
+    if thread.favorites.filter(user=request.user):
         fav = True
 
     if len(post_list)< 10:
@@ -191,7 +192,7 @@ def view_thread(request,id,start=False,expand=False,hide=None):
     #if this is an event display it as such
     if event:
         event = Event.objects.get(thread=thread)
-        return render_to_response("events/view_event.html", {
+        return render(request, "events/view_event.html", {
         'object_list' : post_list,
         'thread' : thread,
         'form' : form,
@@ -202,10 +203,9 @@ def view_thread(request,id,start=False,expand=False,hide=None):
         'event' : event,
         'rsvp_form' : RSVPForm(),
         'rsvp_list' : event.rsvp_list(),
-        },
-        context_instance = RequestContext(request))
+        })
 
-    return render_to_response("board/post_list.html", {
+    return render(request, "board/post_list.html", {
         'object_list' : post_list,
         'thread' : thread,
         'form' : form,
@@ -213,8 +213,7 @@ def view_thread(request,id,start=False,expand=False,hide=None):
         'hide': hide,
         'start': start,
         'fav' : fav,
-        },
-        context_instance = RequestContext(request))
+        })
 
 @login_required
 def view_post(request, id):
@@ -224,7 +223,7 @@ def view_post(request, id):
     
 
 @login_required
-@transaction.commit_on_success
+@transaction.atomic
 def new_thread(request):
     """ create a new thead """
     if request.method == 'POST':
@@ -249,10 +248,10 @@ def new_thread(request):
     else:
         thread_form = forms.ThreadForm()
         post_form = forms.PostForm()
-    return render_to_response("board/new_thread.html",{
+    return render(request, "board/new_thread.html",{
             'thread_form' : thread_form,
             'post_form' : post_form,
-        }, context_instance = RequestContext(request))
+        })
 
 @super_no_cache
 @login_required
@@ -263,10 +262,10 @@ def thread_history(request,id=None):
     queryset = LastRead.objects.filter(thread = thread).order_by("-timestamp")
     queryset = queryset.select_related('user')
 
-    return render_to_response("board/thread_history.html", {
+    return render(request, "board/thread_history.html", {
         'thread' : thread,
         'read_list' : queryset.all(),
-    }, context_instance = RequestContext(request))
+    })
 
 @login_required
 @permission_required('board.can_sticky')
@@ -315,7 +314,7 @@ class PostsByListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = Post.objects.filter(creator=self.poster).order_by(
-            '-created_at').select_related('thread__subject')
+            '-created_at')
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -355,9 +354,9 @@ def favorite_thread(request, id):
     thread = get_object_or_404(Thread,pk=id)
     if request.method == 'POST':
         if request.POST['fav'] == 'add':
-            thread.favorite.add(request.user)
+            Favorite.objects.create(thread=thread, user=request.user)
         elif request.POST['fav'] == 'remove':
-            thread.favorite.remove(request.user)
+            Favorite.objects.get(thread=thread, user=request.user).delete()
     return HttpResponseRedirect(reverse('list-threads'))
 
 
@@ -381,5 +380,5 @@ class ThreadTitleSearchView(ListView):
     def get_context_data(self, **kwargs):
         ctx = super(ThreadTitleSearchView, self).get_context_data(**kwargs)
         ctx['search_query'] = self.query
-        ctx['paginator_query'] = urllib.urlencode({'query': self.query})
+        ctx['paginator_query'] = urllib.parse.urlencode({'query': self.query})
         return ctx
