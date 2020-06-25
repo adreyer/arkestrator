@@ -152,7 +152,7 @@ BBKING_TAG_LIBRARIES = (
 
 BBKING_USE_WORDFILTERS = True
 
-PARSER_DIR='/var/arkestrator_dev/parser'
+PARSER_DIR='/opt/arkestrator'
 
 OEMBED_MAX_WIDTH = 640
 OEMBED_MAX_HEIGHT = 640

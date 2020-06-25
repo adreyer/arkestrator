@@ -117,7 +117,7 @@ class Favorite(models.Model):
 
 def update_thread(sender, instance, signal, *args, **kwargs):
     """ a post was made in this thread clear cache appropriately """
-    if instance.id > instance.thread.last_post_id:
+    if (instance.thread.last_post_id) is None or (instance.id > instance.thread.last_post_id):
 
         instance.thread.last_post = instance
         instance.thread.save()
