@@ -77,7 +77,12 @@ class Tagged(object):
 
 class Block(object):
     def __init__(self, contents):
-        self.contents = contents
+        self.contents = []
+        for item in contents:
+            if isinstance(item, Block):
+                self.contents.extend(item.contents)
+            else:
+                self.contents.append(item)
 
     def __add__(self, other):
         if isinstance(other, Block):
@@ -273,7 +278,7 @@ def p_errors(p):
               | error
     '''
     if len(p) == 4:
-        p[0] = p[1] + p[2]
+        p[0] = Block(p[1:])
     else:
         p[0] = Block([])
 
@@ -285,7 +290,7 @@ def p_malformed_tags(p):
 
 def p_error(p):
     # ignore errors for now simply don't run bbcode if it does not parse
-    return p
+    return Text(p)
 
 
 outputdir = getattr(settings, 'PARSER_DIR', None)
