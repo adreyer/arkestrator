@@ -1,9 +1,9 @@
+import io
 import json
 import re
 import urllib.request, urllib.error, urllib.parse
 import gzip
 from heapq import heappush, heappop
-from io import StringIO
 from django.conf import settings
 from django.utils.http import urlencode
 from django.utils.safestring import mark_safe
@@ -28,7 +28,7 @@ def fetch(url, user_agent="django-oembed/0.1"):
     f = opener.open(request)
     result = f.read()
     if f.headers.get('content-encoding', '') == 'gzip':
-        result = gzip.GzipFile(fileobj=StringIO(result)).read()
+        result = gzip.GzipFile(fileobj=io.BytesIO(result)).read()
     f.close()
     return result
 

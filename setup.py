@@ -9,10 +9,10 @@ setup(
     packages = find_packages(),
     include_package_data = True,
     install_requires=[
-        'ply==3.4',
-        'django==1.11.23',
+        'ply==3.11',
+        'django==1.11.26',
         'python-memcached==1.59',
         'pytz==2014.7',
-        'psycopg2-binary==2.8.3',
+        'psycopg2-binary==2.8.5',
       ],
     )

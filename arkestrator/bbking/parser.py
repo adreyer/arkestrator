@@ -124,7 +124,7 @@ def p_content(p):
                | empty
     '''
     if len(p) == 3:
-        p[0] = p[1] + p[2]
+        p[0] = Block([p[1], p[2]])
     else:
         p[0] = Block([])
 

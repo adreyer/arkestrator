@@ -21,13 +21,12 @@
 
 {% block content %}
     <table class="thread_list">
-    {% withcycle "row1" "row2" as row_color %}
         {% for thread in thread_list %}
 {# user column #}
             {% if thread.creator == user %}
                 <tr class="my_post">
             {% else %}
-                <tr class="{{ row_color }}">
+                <tr class="{% cycle "row1" "row2" %}">
             {% endif %}
             <td nowrap="nowrap"><a href="{% url 'view-profile' thread.creator.id %}" title="View {{ thread.creator.username }}'s profile">{{ thread.creator.username }}</a></td>
 {# icons column #}
@@ -81,9 +80,7 @@
 {# last post column #}
             <td nowrap="nowrap" class="right-align smallfont"><a href="{% url 'view-profile' thread.last_post.creator.id %}" title="View {{ thread.last_post.creator.username }}'s profile">{{ thread.last_post.creator.username }}</a> {% mdctime thread.last_post.created_at short %}</td>
             </tr>
-            {% nextcycle row_color %}
         {% endfor %}
-    {% endwithcycle %}
     </table>
 {% endblock %}
 {% block bottombezel %}
