@@ -94,7 +94,13 @@ class Block(object):
 
     @property
     def raw(self):
-        return "".join(raw(item) for item in self.contents)
+        out = ""
+        for item in self.contents:
+            if item is self:
+                continue
+            out += raw(item)
+
+        return out
 
     def compress(self):
         compressed = []
