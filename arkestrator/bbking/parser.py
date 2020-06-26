@@ -94,8 +94,7 @@ class Block(object):
 
     @property
     def raw(self):
-        r = getattr(item, 'raw', getattr(item, 'value', item))
-        return "".join(r for item in self.contents)
+        return "".join(raw(item) for item in self.contents)
 
     def compress(self):
         compressed = []
