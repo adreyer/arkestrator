@@ -51,6 +51,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='pm',
             name='sender',
-            field=models.ForeignKey(default=b'(no subject)', on_delete=django.db.models.deletion.CASCADE, related_name='sent_pms', to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='sent_pms', to=settings.AUTH_USER_MODEL),
         ),
     ]

@@ -14,9 +14,10 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'arkestrator_dev',                      # Or path to database file if using sqlite3.
-        'USER': 'arkestrator_dev',                      # Not used with sqlite3.
-        'PASSWORD': 'g4mm4r4Y',                  # Not used with sqlite3.
+        #'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'arkestrator',                      # Or path to database file if using sqlite3.
+        'USER': 'arkestrator',                      # Not used with sqlite3.
+        'PASSWORD': 'hello12',                  # Not used with sqlite3.
         'HOST': '127.0.0.1',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '5432',                      # Set to empty string for default. Not used with sqlite3.
     }
@@ -152,7 +153,7 @@ BBKING_TAG_LIBRARIES = (
 
 BBKING_USE_WORDFILTERS = True
 
-PARSER_DIR='/opt/arkestrator'
+PARSER_DIR='/home/rev/src/arkestrator'
 
 OEMBED_MAX_WIDTH = 640
 OEMBED_MAX_HEIGHT = 640

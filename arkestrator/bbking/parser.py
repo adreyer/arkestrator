@@ -123,7 +123,7 @@ def p_content(p):
 def p_tagged(p):
     '''tagged : opentag content closetag
     '''
-    if p[1].name != p[3].name:
+    if getattr(p[1],'name',object()) != getattr(p[3],'name',object()):
         p[0] = Block(Text(p[1].raw), p[2], Text(p[3].raw))
         return
     p[0] = Tagged(p[1], p[2].compress(), p[3],
