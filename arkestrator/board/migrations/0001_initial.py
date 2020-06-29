@@ -24,9 +24,9 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
             ],
-            options={
-                'db_table': 'board_thread_favorite',
-            },
+            #options={
+            #    'db_table': 'board_thread_favorite',
+            #},
         ),
         migrations.CreateModel(
             name='LastRead',
