@@ -36,9 +36,6 @@ class Text(object):
         self.value = value
         self.raw = value
 
-    def __add__(self, other):
-        return Block([self, other])
-
 class OpenTag(object):
     def __init__(self, name, raw, arg=None, **kwargs):
         self.name = name.lower()
@@ -76,31 +73,20 @@ class Tagged(object):
         self.raw = raw
 
 class Block(object):
-    def __init__(self, contents):
-        self.contents = contents
-
-    def __add__(self, other):
-        if isinstance(other, Block):
-            self.contents += other.contents
-            return self
-        self.contents.append(other)
-        return self
-
-    def __radd__(self, other):
-        if isinstance(other, Block):
-            return other.__add__(self)
-        self.contents.insert(0, other)
-        return self
+    def __init__(self, *contents):
+        self.contents = []
+        for item in contents:
+            if isinstance(item, Block):
+                if not self.contents:
+                    self.contents = item.contents
+                else:
+                    self.contents.extend(item.contents)
+            else:
+                self.contents.append(item)
 
     @property
     def raw(self):
-        out = ""
-        for item in self.contents:
-            if item is self:
-                continue
-            out += raw(item)
-
-        return out
+        return "".join(raw(item) for item in self.contents)
 
     def compress(self):
         compressed = []
@@ -130,15 +116,15 @@ def p_content(p):
                | empty
     '''
     if len(p) == 3:
-        p[0] = Block([p[1], p[2]])
+        p[0] = Block(p[1], p[2])
     else:
-        p[0] = Block([])
+        p[0] = Block()
 
 def p_tagged(p):
     '''tagged : opentag content closetag
     '''
-    if p[1].name != p[3].name:
-        p[0] = Text(p[1].raw) + p[2] + Text(p[3].raw)
+    if getattr(p[1],'name',object()) != getattr(p[3],'name',object()):
+        p[0] = Block(Text(p[1].raw), p[2], Text(p[3].raw))
         return
     p[0] = Tagged(p[1], p[2].compress(), p[3],
         "".join(raw(item) for item in p[1:]))
@@ -162,7 +148,7 @@ def p_text(p):
             | term
     '''
     if len(p) == 3:
-        p[0] = p[1] + p[2]
+        p[0] = Block(p[1],p[2])
     else:
         p[0] = p[1]
 
@@ -182,7 +168,7 @@ def p_text_no_ws(p):
             | term_no_ws
     '''
     if len(p) == 3:
-        p[0] = p[1] + p[2]
+        p[0] = Block(p[1], p[2])
     else:
         p[0] = p[1]
 
@@ -279,9 +265,9 @@ def p_errors(p):
               | error
     '''
     if len(p) == 4:
-        p[0] = p[1] + p[2]
+        p[0] = Block(*p[1:])
     else:
-        p[0] = Block([])
+        p[0] = Block()
 
 def p_malformed_tags(p):
     '''untagged : malformed_opentag
@@ -291,7 +277,7 @@ def p_malformed_tags(p):
 
 def p_error(p):
     # ignore errors for now simply don't run bbcode if it does not parse
-    return p
+    return Text(p)
 
 
 outputdir = getattr(settings, 'PARSER_DIR', None)
